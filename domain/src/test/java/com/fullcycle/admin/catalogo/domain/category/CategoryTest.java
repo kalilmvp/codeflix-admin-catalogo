@@ -48,6 +48,5 @@ public class CategoryTest {
 
         Assertions.assertEquals(exceptedErrorCount, actualException.getErrors().size());
         Assertions.assertEquals(expectedErrorMessdage, actualException.getErrors().get(0).message());
-
     }
 }
