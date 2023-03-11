@@ -229,7 +229,7 @@ public class CategoryTest {
         final var createdAt = aCategory.getCreatedAt();
         final var updatedAt = aCategory.getUpdatedAt();
 
-        final var actualCategory = aCategory.updated(expectedName, expectedDescription, expectedIsActive);
+        final var actualCategory = aCategory.update(expectedName, expectedDescription, expectedIsActive);
 
         Assertions.assertDoesNotThrow(() -> actualCategory.validate(new ThrowsValidationHandler()));
 
@@ -260,7 +260,7 @@ public class CategoryTest {
         final var createdAt = aCategory.getCreatedAt();
         final var updatedAt = aCategory.getUpdatedAt();
 
-        final var actualCategory = aCategory.updated(expectedName, expectedDescription, expectedIsActive);
+        final var actualCategory = aCategory.update(expectedName, expectedDescription, expectedIsActive);
 
         Assertions.assertDoesNotThrow(() -> actualCategory.validate(new ThrowsValidationHandler()));
 
@@ -289,7 +289,7 @@ public class CategoryTest {
         final var createdAt = aCategory.getCreatedAt();
         final var updatedAt = aCategory.getUpdatedAt();
 
-        final var actualCategory = aCategory.updated(expectedName, expectedDescription, expectedIsActive);
+        final var actualCategory = aCategory.update(expectedName, expectedDescription, expectedIsActive);
 
         Assertions.assertEquals(aCategory.getId(), actualCategory.getId());
         Assertions.assertEquals(expectedName, actualCategory.getName());

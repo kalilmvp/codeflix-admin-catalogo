@@ -10,7 +10,7 @@ import java.time.Instant;
  * @date 2/15/23 14:07
  * @email kalilmvp@gmail.com
  */
-public class Category extends AggregateRoot<CategoryID> {
+public class Category extends AggregateRoot<CategoryID> implements Cloneable {
 
     private String name;
     private String description;
@@ -68,7 +68,7 @@ public class Category extends AggregateRoot<CategoryID> {
     }
 
 
-    public Category updated(final String aName, final String aDescription, final Boolean aIsActive) {
+    public Category update(final String aName, final String aDescription, final Boolean aIsActive) {
         if (aIsActive) {
             this.activate();
         } else {
@@ -106,4 +106,12 @@ public class Category extends AggregateRoot<CategoryID> {
         return deletedAt;
     }
 
+    @Override
+    public Category clone() {
+        try {
+            return (Category) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
 }
