@@ -1,8 +1,10 @@
 package com.fullcycle.admin.catalogo.application.category.update;
 
-import com.fullcycle.admin.catalogo.application.category.create.CreateCategoryCommand;
 import com.fullcycle.admin.catalogo.domain.category.Category;
 import com.fullcycle.admin.catalogo.domain.category.CategoryGateway;
+import com.fullcycle.admin.catalogo.domain.category.CategoryID;
+import com.fullcycle.admin.catalogo.domain.exceptions.DomainException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,7 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Objects;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Mockito.*;
 
@@ -30,6 +32,11 @@ public class UpdateCategoryUseCaseTest {
 
     @Mock
     private CategoryGateway categoryGatewayMock;
+
+    @BeforeEach
+    void cleanUp() {
+        reset(this.categoryGatewayMock);
+    }
 
     // 1. Teste do Caminho Feliz
     // 2. Teste passando uma propriedade inválida
@@ -69,5 +76,124 @@ public class UpdateCategoryUseCaseTest {
                 && Objects.equals(aCategory.getCreatedAt(), aUpdatedCategory.getCreatedAt())
                 && aCategory.getUpdatedAt().isBefore(aUpdatedCategory.getUpdatedAt())
                 && Objects.isNull(aUpdatedCategory.getDeletedAt())));
+    }
+
+    @Test
+    public void givenAnInvalidName_whenCallUpdateCategory_shouldReturnDomainException() {
+        final var aCategory = Category.newCategory("Filme", null, true);
+        final String expectedName = null;
+        final var expectedDescription = "A categoria mais assistida";
+        final var expectedIsActive = Boolean.TRUE;
+        final var expectedId = aCategory.getId();
+        final var expectedErrorMessage = "'name' should not be null";
+        final var expectedErrorCount = 1;
+
+        final var aCommand = UpdateCategoryCommand.with(expectedId.getValue(),
+                                                        expectedName,
+                                                        expectedDescription,
+                                                        expectedIsActive);
+
+        when(this.categoryGatewayMock.findById(eq(expectedId)))
+                .thenReturn(Optional.of(aCategory.clone()));
+
+        final var notification = this.defaultUpdateCategoryUseCase.execute(aCommand).getLeft();
+
+        assertEquals(expectedErrorCount, notification.getErrors().size());
+        assertEquals(expectedErrorMessage, notification.firstError().message());
+
+        verify(this.categoryGatewayMock, times(0)).update(any());
+    }
+
+    @Test
+    public void givenAValidInnactiveCommand_whenCallUpdateCategory_shouldReturnInactiveCategoryId() {
+        final var aCategory = Category.newCategory("Filme", null, true);
+
+        assertTrue(aCategory.isActive());
+        assertNull(aCategory.getDeletedAt());
+
+        final var expectedName = "Filmes";
+        final var expectedDescription = "A categoria mais assistida";
+        final var expectedIsActive = Boolean.FALSE;
+
+        final var expectedId = aCategory.getId();
+
+        final var aCommand = UpdateCategoryCommand.with(expectedId.getValue(), expectedName, expectedDescription, expectedIsActive);
+
+        when(this.categoryGatewayMock.findById(eq(expectedId)))
+                .thenReturn(Optional.of(aCategory.clone()));
+
+        when(this.categoryGatewayMock.update(any()))
+                .thenAnswer(returnsFirstArg());
+
+        final var actualOutput = this.defaultUpdateCategoryUseCase.execute(aCommand).get();
+
+        assertNotNull(actualOutput);
+        assertNotNull(actualOutput.id());
+
+        verify(this.categoryGatewayMock, times(1)).findById(eq(expectedId));
+
+        verify(this.categoryGatewayMock, times(1)).update(argThat(aUpdatedCategory -> Objects.equals(expectedName, aUpdatedCategory.getName())
+                && Objects.equals(expectedDescription, aUpdatedCategory.getDescription())
+                && Objects.equals(expectedIsActive, aUpdatedCategory.isActive())
+                && Objects.equals(expectedId, aUpdatedCategory.getId())
+                && Objects.equals(aCategory.getCreatedAt(), aUpdatedCategory.getCreatedAt())
+                && aCategory.getUpdatedAt().isBefore(aUpdatedCategory.getUpdatedAt())
+                && Objects.nonNull(aUpdatedCategory.getDeletedAt())));
+    }
+
+    @Test
+    public void givenAValidCommand_whenGatewayThrowsRandomException_shouldReturnAException() {
+        final var aCategory = Category.newCategory("Filme", null, true);
+        final var expectedName = "Filmes";
+        final var expectedDescription = "A categoria mais assistida";
+        final var expectedIsActive = Boolean.TRUE;
+        final var expectedId = aCategory.getId();
+        final var expectedErrorMessage = "Gateway Error";
+        final var expectedErrorCount = 1;
+
+        final var aCommand = UpdateCategoryCommand.with(expectedId.getValue(), expectedName, expectedDescription, expectedIsActive);
+
+        when(this.categoryGatewayMock.findById(eq(expectedId)))
+                .thenReturn(Optional.of(aCategory.clone()));
+
+        when(this.categoryGatewayMock.update(Mockito.any()))
+                .thenThrow(new IllegalStateException(expectedErrorMessage));
+
+        final var notification = this.defaultUpdateCategoryUseCase.execute(aCommand).getLeft();
+
+        assertEquals(expectedErrorCount, notification.getErrors().size());
+        assertEquals(expectedErrorMessage, notification.firstError().message());
+
+        verify(this.categoryGatewayMock, times(1)).update(argThat(aUpdatedCategory -> Objects.equals(expectedName, aUpdatedCategory.getName())
+                && Objects.equals(expectedDescription, aUpdatedCategory.getDescription())
+                && Objects.equals(expectedIsActive, aUpdatedCategory.isActive())
+                && Objects.equals(expectedId, aUpdatedCategory.getId())
+                && Objects.equals(aCategory.getCreatedAt(), aUpdatedCategory.getCreatedAt())
+                && aCategory.getUpdatedAt().isBefore(aUpdatedCategory.getUpdatedAt())
+                && Objects.isNull(aUpdatedCategory.getDeletedAt())));
+    }
+
+    @Test
+    public void givenACommandWithInvalidId_whenCallUpdateCategory_shouldReturnNotFoundException() {
+        final var expectedName = "Filmes";
+        final var expectedDescription = "A categoria mais assistida";
+        final var expectedIsActive = Boolean.FALSE;
+        final var expectedId = "123";
+        final var expectedErrorMessage = "Category with ID 123 was not found";
+        final var expectedErrorCount = 1;
+
+        final var aCommand = UpdateCategoryCommand.with(expectedId, expectedName, expectedDescription, expectedIsActive);
+
+        when(this.categoryGatewayMock.findById(eq(CategoryID.from(expectedId))))
+                .thenReturn(Optional.empty());
+
+        final var actualException = assertThrows(DomainException.class, () -> this.defaultUpdateCategoryUseCase.execute(aCommand));
+
+        assertEquals(expectedErrorCount, actualException.getErrors().size());
+        assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
+
+        verify(this.categoryGatewayMock, times(1)).findById(eq(CategoryID.from(expectedId)));
+
+        verify(this.categoryGatewayMock, times(0)).update(any());
     }
 }
