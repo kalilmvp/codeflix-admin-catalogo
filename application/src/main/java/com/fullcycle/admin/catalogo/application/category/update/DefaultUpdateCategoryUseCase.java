@@ -1,6 +1,7 @@
 package com.fullcycle.admin.catalogo.application.category.update;
 
 import com.fullcycle.admin.catalogo.application.category.create.CreateCategoryOutput;
+import com.fullcycle.admin.catalogo.application.category.utils.ExceptionUtils;
 import com.fullcycle.admin.catalogo.domain.category.Category;
 import com.fullcycle.admin.catalogo.domain.category.CategoryGateway;
 import com.fullcycle.admin.catalogo.domain.category.CategoryID;
@@ -35,8 +36,7 @@ public class DefaultUpdateCategoryUseCase extends UpdateCategoryUseCase {
 
         Category aCategory =
                 this.categoryGateway.findById(anId)
-                        .orElseThrow(() -> DomainException.with(
-                                new Error("Category with ID %s was not found".formatted(anId.getValue()))));
+                        .orElseThrow(ExceptionUtils.notFound(anId));
 
         final var notification = Notification.create();
 

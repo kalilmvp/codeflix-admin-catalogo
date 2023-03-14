@@ -1,6 +1,7 @@
 package com.fullcycle.admin.catalogo.domain.category.pagination;
 
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * @author kalil.peixoto
@@ -13,4 +14,8 @@ public record Pagination<T>(
         long total,
         List<T> items
 ) {
+    public <R> Pagination<R> map(final Function<T, R> mapper) {
+        List<R> aNewResult = this.items.stream().map(mapper).toList();
+        return new Pagination<>(currentPage(), perPage(), total(), aNewResult);
+    }
 }
