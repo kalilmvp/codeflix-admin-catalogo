@@ -1,24 +1,19 @@
 package com.fullcycle.admin.catalogo.application.category.retrieve.get;
 
-import com.fullcycle.admin.catalogo.application.category.update.DefaultUpdateCategoryUseCase;
-import com.fullcycle.admin.catalogo.application.category.update.UpdateCategoryCommand;
 import com.fullcycle.admin.catalogo.domain.category.Category;
 import com.fullcycle.admin.catalogo.domain.category.CategoryGateway;
 import com.fullcycle.admin.catalogo.domain.category.CategoryID;
 import com.fullcycle.admin.catalogo.domain.exceptions.DomainException;
+import com.fullcycle.admin.catalogo.domain.exceptions.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.Objects;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Mockito.*;
 
 /**
@@ -70,7 +65,7 @@ public class GetCategoryByIdUseCaseTest {
         when(this.categoryGatewayMock.findById(eq(expectedId)))
                 .thenReturn(Optional.empty());
 
-        final var actualException = assertThrows(DomainException.class, () -> this.defaultGetCategoryByIdUseCase.execute(expectedId.getValue()));
+        final var actualException = assertThrows(NotFoundException.class, () -> this.defaultGetCategoryByIdUseCase.execute(expectedId.getValue()));
 
         assertEquals(exceptedErrorMessage, actualException.getMessage());
     }

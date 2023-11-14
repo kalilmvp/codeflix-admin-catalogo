@@ -7,7 +7,6 @@ import com.fullcycle.admin.catalogo.domain.category.pagination.CategorySearchQue
 import com.fullcycle.admin.catalogo.domain.category.pagination.Pagination;
 import com.fullcycle.admin.catalogo.infrastructure.category.persistence.CategoryJPAEntity;
 import com.fullcycle.admin.catalogo.infrastructure.category.persistence.CategoryRepository;
-import com.fullcycle.admin.catalogo.infrastructure.utils.SpecificationUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;

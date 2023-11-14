@@ -5,10 +5,7 @@ import com.fullcycle.admin.catalogo.application.category.utils.ExceptionUtils;
 import com.fullcycle.admin.catalogo.domain.category.Category;
 import com.fullcycle.admin.catalogo.domain.category.CategoryGateway;
 import com.fullcycle.admin.catalogo.domain.category.CategoryID;
-import com.fullcycle.admin.catalogo.domain.exceptions.DomainException;
-import com.fullcycle.admin.catalogo.domain.validation.Error;
 import com.fullcycle.admin.catalogo.domain.validation.handlers.Notification;
-import io.vavr.API;
 
 import static io.vavr.API.Left;
 import static io.vavr.API.Try;

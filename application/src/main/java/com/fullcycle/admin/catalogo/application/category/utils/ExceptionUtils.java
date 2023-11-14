@@ -1,7 +1,9 @@
 package com.fullcycle.admin.catalogo.application.category.utils;
 
+import com.fullcycle.admin.catalogo.domain.category.Category;
 import com.fullcycle.admin.catalogo.domain.category.CategoryID;
 import com.fullcycle.admin.catalogo.domain.exceptions.DomainException;
+import com.fullcycle.admin.catalogo.domain.exceptions.NotFoundException;
 import com.fullcycle.admin.catalogo.domain.validation.Error;
 
 import java.util.function.Supplier;

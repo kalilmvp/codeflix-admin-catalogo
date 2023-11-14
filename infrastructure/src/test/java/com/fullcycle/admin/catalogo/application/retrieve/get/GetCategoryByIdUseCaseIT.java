@@ -6,7 +6,7 @@ import com.fullcycle.admin.catalogo.application.category.retrieve.get.GetCategor
 import com.fullcycle.admin.catalogo.domain.category.Category;
 import com.fullcycle.admin.catalogo.domain.category.CategoryGateway;
 import com.fullcycle.admin.catalogo.domain.category.CategoryID;
-import com.fullcycle.admin.catalogo.domain.exceptions.DomainException;
+import com.fullcycle.admin.catalogo.domain.exceptions.NotFoundException;
 import com.fullcycle.admin.catalogo.infrastructure.category.persistence.CategoryJPAEntity;
 import com.fullcycle.admin.catalogo.infrastructure.category.persistence.CategoryRepository;
 import org.junit.jupiter.api.Test;
@@ -14,10 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 
 import java.util.Arrays;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 /**
@@ -63,7 +61,7 @@ public class GetCategoryByIdUseCaseIT {
         final var expectedId = CategoryID.from("123");
         final var exceptedErrorMessage = "Category with ID 123 was not found";
 
-        final var actualException = assertThrows(DomainException.class, () ->
+        final var actualException = assertThrows(NotFoundException.class, () ->
                 this.getCategoryByIdUseCase.execute(expectedId.getValue()));
 
         assertEquals(exceptedErrorMessage, actualException.getMessage());
