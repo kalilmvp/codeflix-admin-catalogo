@@ -6,4 +6,5 @@ package com.fullcycle.admin.catalogo.domain;
  * @email kalilmvp@gmail.com
  */
 public abstract class Identifier extends ValueObject {
+    public abstract String getValue();
 }
