@@ -64,7 +64,7 @@ public class UpdateCategoryUseCaseIT {
         assertNotNull(actualOutput);
         assertNotNull(actualOutput.id());
 
-        final var actualCategory = this.categoryRepository.findById(actualOutput.id().getValue()).get();
+        final var actualCategory = this.categoryRepository.findById(actualOutput.id()).get();
 
         assertEquals(expectedName, actualCategory.getName());
         assertEquals(expectedDescription, actualCategory.getDescription());
@@ -122,7 +122,7 @@ public class UpdateCategoryUseCaseIT {
         assertNotNull(actualOutput);
         assertNotNull(actualOutput.id());
 
-        final var actualCategory = this.categoryRepository.findById(actualOutput.id().getValue()).get();
+        final var actualCategory = this.categoryRepository.findById(actualOutput.id()).get();
 
         assertEquals(expectedName, actualCategory.getName());
         assertEquals(expectedDescription, actualCategory.getDescription());
