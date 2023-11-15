@@ -38,6 +38,7 @@ public class DeleteCategoryUseCaseIT {
     @SpyBean
     private CategoryGateway categoryGatewayMock;
 
+    @Test
     public void givenAValidId_whenCallDeleteCategory_shouldBeOk() {
         final var aCategory = Category.newCategory("Filmes", "A categoria mais assistida", Boolean.TRUE);
 

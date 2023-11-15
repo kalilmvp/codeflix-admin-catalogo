@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fullcycle.admin.catalogo.ControllerTest;
 import com.fullcycle.admin.catalogo.application.category.create.CreateCategoryOutput;
 import com.fullcycle.admin.catalogo.application.category.create.CreateCategoryUseCase;
+import com.fullcycle.admin.catalogo.application.category.delete.DeleteCategoryUseCase;
 import com.fullcycle.admin.catalogo.application.category.retrieve.get.CategoryOutput;
 import com.fullcycle.admin.catalogo.application.category.retrieve.get.GetCategoryByIdUseCase;
 import com.fullcycle.admin.catalogo.application.category.update.UpdateCategoryOutput;
@@ -29,10 +30,11 @@ import java.util.Objects;
 import static io.vavr.API.Left;
 import static io.vavr.API.Right;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -58,6 +60,9 @@ public class CategoryApiTest {
 
     @MockBean
     private UpdateCategoryUseCase updateCategoryUseCase;
+
+    @MockBean
+    private DeleteCategoryUseCase deleteCategoryUseCase;
 
     @Test
     public void givenAValidCommand_whenCallCreateCategory_shouldReturnCategoryId() throws Exception {
@@ -180,7 +185,7 @@ public class CategoryApiTest {
                 .andExpect(jsonPath("$.deleted_at", equalTo(aCategory.getDeletedAt())));
 
         verify(this.getCategoryByIdUseCase, times(1)).execute(eq(expectedId));
-}
+    }
 
     @Test
     public void givenAnInvalidId_whenCallsGetCategory_shouldReturnNotFound() throws Exception {
@@ -300,5 +305,23 @@ public class CategoryApiTest {
                 Objects.equals(expectedName, cmd.name()) &&
                         Objects.equals(expectedDescription, cmd.description()) &&
                         Objects.equals(expectedIsActive, cmd.isActive())));
+    }
+
+    @Test
+    public void givenAValidId_whenCallDeleteCategory_shouldReturnNoContent() throws Exception {
+        // given
+        final var expectedId = "123";
+
+        doNothing().when(this.deleteCategoryUseCase).execute(any());
+
+        // when
+        final var getRequest = delete("/categories/{id}", expectedId);
+
+        final var response = this.mvc.perform(getRequest).andDo(print());
+
+        // then
+        response.andExpect(status().isNoContent());
+
+        verify(this.deleteCategoryUseCase, times(1)).execute(eq(expectedId));
     }
 }
