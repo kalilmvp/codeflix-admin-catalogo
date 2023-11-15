@@ -181,17 +181,15 @@ public class UpdateCategoryUseCaseTest {
         final var expectedIsActive = Boolean.FALSE;
         final var expectedId = "123";
         final var expectedErrorMessage = "Category with ID 123 was not found";
-        final var expectedErrorCount = 1;
 
         final var aCommand = UpdateCategoryCommand.with(expectedId, expectedName, expectedDescription, expectedIsActive);
 
         when(this.categoryGatewayMock.findById(eq(CategoryID.from(expectedId))))
                 .thenReturn(Optional.empty());
 
-        final var actualException = assertThrows(DomainException.class, () -> this.defaultUpdateCategoryUseCase.execute(aCommand));
+        final var actualException = assertThrows(NotFoundException.class, () -> this.defaultUpdateCategoryUseCase.execute(aCommand));
 
-        assertEquals(expectedErrorCount, actualException.getErrors().size());
-        assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
+        assertEquals(expectedErrorMessage, actualException.getMessage());
 
         verify(this.categoryGatewayMock, times(1)).findById(eq(CategoryID.from(expectedId)));
 

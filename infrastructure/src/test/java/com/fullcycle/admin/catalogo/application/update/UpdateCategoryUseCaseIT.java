@@ -8,6 +8,7 @@ import com.fullcycle.admin.catalogo.domain.category.Category;
 import com.fullcycle.admin.catalogo.domain.category.CategoryGateway;
 import com.fullcycle.admin.catalogo.domain.category.CategoryID;
 import com.fullcycle.admin.catalogo.domain.exceptions.DomainException;
+import com.fullcycle.admin.catalogo.domain.exceptions.NotFoundException;
 import com.fullcycle.admin.catalogo.infrastructure.category.persistence.CategoryJPAEntity;
 import com.fullcycle.admin.catalogo.infrastructure.category.persistence.CategoryRepository;
 import org.junit.jupiter.api.Test;
@@ -173,14 +174,12 @@ public class UpdateCategoryUseCaseIT {
         final var expectedIsActive = Boolean.FALSE;
         final var expectedId = "123";
         final var expectedErrorMessage = "Category with ID 123 was not found";
-        final var expectedErrorCount = 1;
 
         final var aCommand = UpdateCategoryCommand.with(expectedId, expectedName, expectedDescription, expectedIsActive);
 
-        final var actualException = assertThrows(DomainException.class, () -> this.updateCategoryUseCase.execute(aCommand));
+        final var actualException = assertThrows(NotFoundException.class, () -> this.updateCategoryUseCase.execute(aCommand));
 
-        assertEquals(expectedErrorCount, actualException.getErrors().size());
-        assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
+        assertEquals(expectedErrorMessage, actualException.getMessage());
     }
 
     private void save(final Category... aCategory) {

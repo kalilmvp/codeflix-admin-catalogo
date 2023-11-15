@@ -1,6 +1,5 @@
 package com.fullcycle.admin.catalogo.application.category.retrieve.get;
 
-import com.fullcycle.admin.catalogo.application.category.utils.ExceptionUtils;
 import com.fullcycle.admin.catalogo.domain.category.Category;
 import com.fullcycle.admin.catalogo.domain.category.CategoryGateway;
 import com.fullcycle.admin.catalogo.domain.category.CategoryID;

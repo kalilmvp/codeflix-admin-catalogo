@@ -223,8 +223,78 @@ public class CategoryApiTest {
         final var response = this.mvc.perform(putRequest).andDo(print());
 
         // then
-        response.andExpect(status().isNoContent())
+        response.andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", equalTo(expectedId)))
                 .andExpect(header().string("Content-Type", MediaType.APPLICATION_JSON_VALUE));
+
+        verify(this.updateCategoryUseCase, times(1)).execute(argThat(cmd ->
+                Objects.equals(expectedName, cmd.name()) &&
+                        Objects.equals(expectedDescription, cmd.description()) &&
+                        Objects.equals(expectedIsActive, cmd.isActive())));
+    }
+
+    @Test
+    public void givenAnInvalidName_whenCallUpdateCategory_shouldReturnDomainException() throws Exception {
+        // given
+        final var expectedId = "123";
+        final var expectedName = "Filmes";
+        final var expectedDescription = "A categoria mais assistida";
+        final var expectedIsActive = Boolean.TRUE;
+
+        final var expectedErrorCount = 1;
+        final var expectedErrorMessage = "'name' should not be null";
+
+        when(this.updateCategoryUseCase.execute(any()))
+                .thenReturn(Left(Notification.create(new Error(expectedErrorMessage))));
+
+        final var aCommand = new UpdateCategoryAPIInput(expectedName, expectedDescription, expectedIsActive);
+
+        // when
+        final var putRequest = put("/categories/{id}", expectedId)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(this.objectMapper.writeValueAsString(aCommand));
+
+        final var response = this.mvc.perform(putRequest).andDo(print());
+
+        // then
+        response.andExpect(status().isUnprocessableEntity())
+                .andExpect(header().string("Content-Type", MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.errors", hasSize(expectedErrorCount)))
+                .andExpect(jsonPath("$.errors[0].message", equalTo(expectedErrorMessage)));
+
+        verify(this.updateCategoryUseCase, times(1)).execute(argThat(cmd ->
+                Objects.equals(expectedName, cmd.name()) &&
+                        Objects.equals(expectedDescription, cmd.description()) &&
+                        Objects.equals(expectedIsActive, cmd.isActive())));
+    }
+
+    @Test
+    public void givenACommandWithInvalidId_whenCallUpdateCategory_shouldReturnNotFoundException() throws Exception {
+        final var expectedName = "Filmes";
+        final var expectedDescription = "A categoria mais assistida";
+        final var expectedIsActive = Boolean.FALSE;
+        final var expectedId = "not-found";
+
+        final var expectedErrorMessage = "Category with ID not-found was not found";
+
+        when(this.updateCategoryUseCase.execute(any()))
+                .thenThrow(NotFoundException.with(Category.class, CategoryID.from(expectedId)));
+
+        final var aCommand = new UpdateCategoryAPIInput(expectedName, expectedDescription, expectedIsActive);
+
+        // when
+        final var putRequest = put("/categories/{id}", expectedId)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(this.objectMapper.writeValueAsString(aCommand));
+
+        final var response = this.mvc.perform(putRequest).andDo(print());
+
+        // then
+        response.andExpect(status().isNotFound())
+                .andExpect(header().string("Content-Type", MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.message", equalTo(expectedErrorMessage)));
 
         verify(this.updateCategoryUseCase, times(1)).execute(argThat(cmd ->
                 Objects.equals(expectedName, cmd.name()) &&
