@@ -1,10 +1,9 @@
 package com.fullcycle.admin.catalogo.infrastructure.api;
 
-import com.fullcycle.admin.catalogo.application.category.update.UpdateCategoryOutput;
 import com.fullcycle.admin.catalogo.domain.category.pagination.Pagination;
-import com.fullcycle.admin.catalogo.infrastructure.category.models.CategoryAPIOutput;
-import com.fullcycle.admin.catalogo.infrastructure.category.models.CreateCategoryAPIInput;
-import com.fullcycle.admin.catalogo.infrastructure.category.models.UpdateCategoryAPIInput;
+import com.fullcycle.admin.catalogo.infrastructure.category.models.CategoryResponse;
+import com.fullcycle.admin.catalogo.infrastructure.category.models.CreateCategoryRequest;
+import com.fullcycle.admin.catalogo.infrastructure.category.models.UpdateCategoryRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -33,7 +32,7 @@ public interface CategoryAPI {
             @ApiResponse(responseCode = "422", description = "A validation error"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error"),
     })
-    ResponseEntity<?> createCategoru(@RequestBody CreateCategoryAPIInput input);
+    ResponseEntity<?> createCategoru(@RequestBody CreateCategoryRequest input);
 
     @GetMapping()
     @Operation(summary = "List all categories paginated")
@@ -58,7 +57,7 @@ public interface CategoryAPI {
             @ApiResponse(responseCode = "422", description = "Category was not found"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error"),
     })
-    CategoryAPIOutput getById(@PathVariable("id") final String id);
+    CategoryResponse getById(@PathVariable("id") final String id);
 
     @PutMapping(value = "{id}",
                 consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -69,7 +68,7 @@ public interface CategoryAPI {
             @ApiResponse(responseCode = "422", description = "Category was not found"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error"),
     })
-    ResponseEntity<?> updateById(@PathVariable("id") final String id, @RequestBody UpdateCategoryAPIInput input);
+    ResponseEntity<?> updateById(@PathVariable("id") final String id, @RequestBody UpdateCategoryRequest input);
 
     @DeleteMapping(value = "{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
