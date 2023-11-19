@@ -1,13 +1,11 @@
-package com.fullcycle.admin.catalogo.infrastructure.models;
+package com.fullcycle.admin.catalogo.infrastructure.category.models;
 
 import com.fullcycle.admin.catalogo.JacksonTest;
-import com.fullcycle.admin.catalogo.infrastructure.category.models.CategoryResponse;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.json.JacksonTester;
 
-import java.io.IOException;
 import java.time.Instant;
 
 /**
@@ -22,7 +20,7 @@ public class CategoryResponseTest {
     private JacksonTester<CategoryResponse> json;
 
     @Test
-    public void testMarshall() throws IOException {
+    public void testMarshall() throws Exception {
         final var expectedId = "123";
         final var expectedName = "Moviees";
         final var expectedDescription = "A categoria mais assistida";
@@ -54,7 +52,7 @@ public class CategoryResponseTest {
     }
 
     @Test
-    public void testUnmarshall() throws IOException {
+    public void testUnmarshall() throws Exception {
         final var expectedId = "123";
         final var expectedName = "Moviees";
         final var expectedDescription = "A categoria mais assistida";

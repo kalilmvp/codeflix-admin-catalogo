@@ -12,7 +12,7 @@ import java.util.Collection;
  * @date 3/19/23 11:00
  * @email kalilmvp@gmail.com
  */
-public class CleanUpExtension implements BeforeEachCallback {
+public class MySQLCleanUpExtension implements BeforeEachCallback {
 
     @Override
     public void beforeEach(ExtensionContext context) throws Exception {
