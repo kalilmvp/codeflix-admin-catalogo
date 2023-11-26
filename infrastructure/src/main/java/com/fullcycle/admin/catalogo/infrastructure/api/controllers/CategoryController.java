@@ -47,7 +47,7 @@ public class CategoryController implements CategoryAPI {
     }
 
     @Override
-    public ResponseEntity<?> createCategoru(final CreateCategoryRequest input) {
+    public ResponseEntity<?> createCategory(final CreateCategoryRequest input) {
         final var aCommand = CreateCategoryCommand.with(
                 input.name(),
                 input.description(),

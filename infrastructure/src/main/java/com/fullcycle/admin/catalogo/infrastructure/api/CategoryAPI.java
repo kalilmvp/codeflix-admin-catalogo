@@ -32,7 +32,7 @@ public interface CategoryAPI {
             @ApiResponse(responseCode = "422", description = "A validation error"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error"),
     })
-    ResponseEntity<?> createCategoru(@RequestBody CreateCategoryRequest input);
+    ResponseEntity<?> createCategory(@RequestBody CreateCategoryRequest input);
 
     @GetMapping()
     @Operation(summary = "List all categories paginated")

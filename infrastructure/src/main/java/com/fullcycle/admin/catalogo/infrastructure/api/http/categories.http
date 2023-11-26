@@ -1,0 +1,37 @@
+### Get all categories
+GET http://localhost:8081/api/categories
+
+### Get unique category
+GET http://localhost:8081/api/categories/ca9ed232-f562-4cdd-821f-a1154bc65cbd
+
+### Update one
+PUT http://localhost:8081/api/categories/e81e17a9-f772-4e9c-b38d-ba223e9cbfce
+Content-Type: application/json
+
+{
+  "name": "Series",
+  "description": "The most watched series",
+  "is_active": true
+}
+
+### Activate/Inactivate one
+PUT http://localhost:8081/api/categories/14853896-6921-47a5-8b26-c8e41fa901da
+Content-Type: application/json
+
+{
+  "name": "Movies",
+  "is_active": true
+}
+
+### Create one
+POST http://localhost:8081/api/categories
+Content-Type: application/json
+
+{
+  "name": "Movies 1",
+  "description": "The most watched category",
+  "is_active": false
+}
+
+### Delete
+DELETE http://localhost:8081/api/categories/ca9ed232-f562-4cdd-821f-a1154bc65cbd
