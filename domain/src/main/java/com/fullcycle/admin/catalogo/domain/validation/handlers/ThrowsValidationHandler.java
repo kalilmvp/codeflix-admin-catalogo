@@ -19,8 +19,8 @@ public class ThrowsValidationHandler implements ValidationHandler {
     }
 
     @Override
-    public ValidationHandler append(final ValidationHandler anhandler) {
-        throw DomainException.with(anhandler.getErrors());
+    public ValidationHandler append(final ValidationHandler aHandler) {
+        throw DomainException.with(aHandler.getErrors());
     }
 
     @Override
