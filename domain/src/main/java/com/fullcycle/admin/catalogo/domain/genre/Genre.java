@@ -1,7 +1,6 @@
 package com.fullcycle.admin.catalogo.domain.genre;
 
 import com.fullcycle.admin.catalogo.domain.AggregateRoot;
-import com.fullcycle.admin.catalogo.domain.category.Category;
 import com.fullcycle.admin.catalogo.domain.category.CategoryID;
 import com.fullcycle.admin.catalogo.domain.exceptions.NotificationException;
 import com.fullcycle.admin.catalogo.domain.utils.InstantUtils;
@@ -100,10 +99,32 @@ public class Genre extends AggregateRoot<GenreID> implements Cloneable {
         }
 
         this.name = aName;
-        this.categories = new ArrayList<>(categories);
+        this.categories = new ArrayList<>(categories != null ? categories : Collections.emptyList());
         this.updatedAt = InstantUtils.now();
 
         this.selfValidated();
+
+        return this;
+    }
+
+    public Genre addCategory(final CategoryID aCategoryId) {
+        if (aCategoryId == null) {
+            return this;
+        }
+
+        this.categories.add(aCategoryId);
+        this.updatedAt = InstantUtils.now();
+
+        return this;
+    }
+
+    public Genre removeCategory(final CategoryID aCategoryId) {
+        if (aCategoryId == null) {
+            return this;
+        }
+
+        this.categories.remove(aCategoryId);
+        this.updatedAt = InstantUtils.now();
 
         return this;
     }
