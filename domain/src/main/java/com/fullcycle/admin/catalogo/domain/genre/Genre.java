@@ -2,7 +2,9 @@ package com.fullcycle.admin.catalogo.domain.genre;
 
 import com.fullcycle.admin.catalogo.domain.AggregateRoot;
 import com.fullcycle.admin.catalogo.domain.category.Category;
+import com.fullcycle.admin.catalogo.domain.category.CategoryID;
 import com.fullcycle.admin.catalogo.domain.exceptions.NotificationException;
+import com.fullcycle.admin.catalogo.domain.utils.InstantUtils;
 import com.fullcycle.admin.catalogo.domain.validation.ValidationHandler;
 import com.fullcycle.admin.catalogo.domain.validation.handlers.Notification;
 
@@ -21,7 +23,7 @@ public class Genre extends AggregateRoot<GenreID> implements Cloneable {
 
     private String name;
     private boolean active;
-    private List<Category> categories;
+    private List<CategoryID> categories;
     private Instant createdAt;
     private Instant updatedAt;
     private Instant deletedAt;
@@ -29,7 +31,7 @@ public class Genre extends AggregateRoot<GenreID> implements Cloneable {
     private Genre(final GenreID anId,
                   final String aName,
                   final boolean isActive,
-                  final List<Category> aCategories,
+                  final List<CategoryID> aCategories,
                   final Instant aCreatedAt,
                   final Instant aUpdatedAt,
                   final Instant aDeletedAt) {
@@ -41,16 +43,11 @@ public class Genre extends AggregateRoot<GenreID> implements Cloneable {
         this.updatedAt = Objects.requireNonNull(aUpdatedAt, "'updatedAt' should not be null");;
         this.deletedAt = aDeletedAt;
 
-        final var notification = Notification.create();
-        validate(notification);
-
-        if (notification.hasErrors()) {
-            throw new NotificationException("Failed to validate aggregate Genre", notification);
-        }
+        this.selfValidated();
     }
 
     public static Genre newGenre(final String aName, final boolean isActive) {
-        final var now = Instant.now();
+        final var now = InstantUtils.now();
         final var deletedAt = isActive ? null : now;
         return new Genre(GenreID.unique(), aName, isActive, new ArrayList<>(), now, now, deletedAt);
     }
@@ -58,7 +55,7 @@ public class Genre extends AggregateRoot<GenreID> implements Cloneable {
     private static Genre with(final GenreID anId,
                               final String aName,
                               final boolean isActive,
-                              final List<Category> aCategories,
+                              final List<CategoryID> aCategories,
                               final Instant aCreatedAt,
                               final Instant aUpdatedAt,
                               final Instant aDeletedAt) {
@@ -66,7 +63,7 @@ public class Genre extends AggregateRoot<GenreID> implements Cloneable {
     }
 
     private static Genre with(final Genre aGenre) {
-        return new Genre(aGenre.getId(), aGenre.getName(), aGenre.isActive(), aGenre.getCategories()
+        return new Genre(aGenre.getId(), aGenre.getName(), aGenre.isActive(), new ArrayList<>(aGenre.getCategories())
                         ,aGenre.getCreatedAt(), aGenre.getUpdatedAt(), aGenre.getDeletedAt());
     }
 
@@ -77,11 +74,11 @@ public class Genre extends AggregateRoot<GenreID> implements Cloneable {
 
     public Genre deactivate() {
         if (this.getDeletedAt() == null) {
-            this.deletedAt = Instant.now();
+            this.deletedAt = InstantUtils.now();
         }
 
         this.active = Boolean.FALSE;
-        this.updatedAt = Instant.now();
+        this.updatedAt = InstantUtils.now();
         return this;
     }
 
@@ -89,13 +86,13 @@ public class Genre extends AggregateRoot<GenreID> implements Cloneable {
     public Genre activate() {
         this.deletedAt = null;
         this.active = Boolean.TRUE;
-        this.updatedAt = Instant.now();
+        this.updatedAt = InstantUtils.now();
 
         return this;
     }
 
 
-    public Genre update(final String aName, final String aDescription, final Boolean aIsActive) {
+    public Genre update(final String aName, final Boolean aIsActive, final List<CategoryID> categories) {
         if (aIsActive) {
             this.activate();
         } else {
@@ -103,9 +100,21 @@ public class Genre extends AggregateRoot<GenreID> implements Cloneable {
         }
 
         this.name = aName;
-        this.updatedAt = Instant.now();
+        this.categories = new ArrayList<>(categories);
+        this.updatedAt = InstantUtils.now();
+
+        this.selfValidated();
 
         return this;
+    }
+
+    private void selfValidated() {
+        final var notification = Notification.create();
+        validate(notification);
+
+        if (notification.hasErrors()) {
+            throw new NotificationException("Failed to validate aggregate Genre", notification);
+        }
     }
 
     public String getName() {
@@ -128,7 +137,7 @@ public class Genre extends AggregateRoot<GenreID> implements Cloneable {
         return deletedAt;
     }
 
-    public List<Category> getCategories() {
+    public List<CategoryID> getCategories() {
         return Collections.unmodifiableList(categories);
     }
 
