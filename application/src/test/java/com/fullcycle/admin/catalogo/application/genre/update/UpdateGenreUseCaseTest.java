@@ -1,15 +1,14 @@
 package com.fullcycle.admin.catalogo.application.genre.update;
 
+import com.fullcycle.admin.catalogo.application.UseCaseTest;
 import com.fullcycle.admin.catalogo.domain.category.CategoryGateway;
 import com.fullcycle.admin.catalogo.domain.category.CategoryID;
 import com.fullcycle.admin.catalogo.domain.exceptions.NotificationException;
 import com.fullcycle.admin.catalogo.domain.genre.Genre;
 import com.fullcycle.admin.catalogo.domain.genre.GenreGateway;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Objects;
@@ -25,8 +24,7 @@ import static org.mockito.Mockito.*;
  * @date 12/2/23 12:10
  * @email kalilmvp@gmail.com
  */
-@ExtendWith(MockitoExtension.class)
-public class UpdateGenreUseCaseTest {
+public class UpdateGenreUseCaseTest extends UseCaseTest {
 
     @InjectMocks
     private DefaultUpdateGenreUseCase defaultUpdateGenreUseCase;
@@ -35,6 +33,11 @@ public class UpdateGenreUseCaseTest {
     private GenreGateway genreGateway;
     @Mock
     private CategoryGateway categoryGateway;
+
+    @Override
+    protected List<Object> getMocks() {
+        return List.of(this.genreGateway, this.categoryGateway);
+    }
 
     @Test
     public void givenValidCommand_whenCallUpdateGenre_shouldReturnGenreId() {
@@ -243,5 +246,4 @@ public class UpdateGenreUseCaseTest {
                 .map(CategoryID::getValue)
                 .toList();
     }
-
 }

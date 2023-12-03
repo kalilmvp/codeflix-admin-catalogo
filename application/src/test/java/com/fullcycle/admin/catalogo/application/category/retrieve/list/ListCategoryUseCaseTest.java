@@ -1,15 +1,13 @@
 package com.fullcycle.admin.catalogo.application.category.retrieve.list;
 
+import com.fullcycle.admin.catalogo.application.UseCaseTest;
 import com.fullcycle.admin.catalogo.domain.category.Category;
 import com.fullcycle.admin.catalogo.domain.category.CategoryGateway;
 import com.fullcycle.admin.catalogo.domain.pagination.SearchQuery;
 import com.fullcycle.admin.catalogo.domain.pagination.Pagination;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
@@ -22,8 +20,7 @@ import static org.mockito.Mockito.*;
  * @date 3/11/23 19:42
  * @email kalilmvp@gmail.com
  */
-@ExtendWith(MockitoExtension.class)
-public class ListCategoryUseCaseTest {
+public class ListCategoryUseCaseTest extends UseCaseTest {
 
     @InjectMocks
     private DefaultListCategoryUseCase defaultListCategoryUseCase;
@@ -31,9 +28,9 @@ public class ListCategoryUseCaseTest {
     @Mock
     private CategoryGateway categoryGatewayMock;
 
-    @BeforeEach
-    void cleanUp() {
-        reset(this.categoryGatewayMock);
+    @Override
+    protected List<Object> getMocks() {
+        return List.of(this.categoryGatewayMock);
     }
 
     @Test
