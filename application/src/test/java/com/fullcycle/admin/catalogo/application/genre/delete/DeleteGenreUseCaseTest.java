@@ -1,11 +1,7 @@
 package com.fullcycle.admin.catalogo.application.genre.delete;
 
 import com.fullcycle.admin.catalogo.application.UseCaseTest;
-import com.fullcycle.admin.catalogo.application.genre.update.DefaultUpdateGenreUseCase;
-import com.fullcycle.admin.catalogo.application.genre.update.UpdateGenreCommand;
-import com.fullcycle.admin.catalogo.domain.category.CategoryGateway;
 import com.fullcycle.admin.catalogo.domain.category.CategoryID;
-import com.fullcycle.admin.catalogo.domain.exceptions.NotificationException;
 import com.fullcycle.admin.catalogo.domain.genre.Genre;
 import com.fullcycle.admin.catalogo.domain.genre.GenreGateway;
 import com.fullcycle.admin.catalogo.domain.genre.GenreID;
@@ -14,11 +10,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
