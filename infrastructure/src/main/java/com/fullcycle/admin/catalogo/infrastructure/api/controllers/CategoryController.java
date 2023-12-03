@@ -9,8 +9,8 @@ import com.fullcycle.admin.catalogo.application.category.retrieve.list.ListCateg
 import com.fullcycle.admin.catalogo.application.category.update.UpdateCategoryCommand;
 import com.fullcycle.admin.catalogo.application.category.update.UpdateCategoryOutput;
 import com.fullcycle.admin.catalogo.application.category.update.UpdateCategoryUseCase;
-import com.fullcycle.admin.catalogo.domain.category.pagination.CategorySearchQuery;
-import com.fullcycle.admin.catalogo.domain.category.pagination.Pagination;
+import com.fullcycle.admin.catalogo.domain.pagination.SearchQuery;
+import com.fullcycle.admin.catalogo.domain.pagination.Pagination;
 import com.fullcycle.admin.catalogo.domain.validation.handlers.Notification;
 import com.fullcycle.admin.catalogo.infrastructure.api.CategoryAPI;
 import com.fullcycle.admin.catalogo.infrastructure.category.models.CategoryResponse;
@@ -62,7 +62,7 @@ public class CategoryController implements CategoryAPI {
 
     @Override
     public Pagination<?> listCategories(final String search, final int page, final int perPage, final String sort, final String direction) {
-        return this.listCategoryUseCase.execute(new CategorySearchQuery(page, perPage, search, sort, direction))
+        return this.listCategoryUseCase.execute(new SearchQuery(page, perPage, search, sort, direction))
                 .map(CategoryApiPresenter::present);
     }
 

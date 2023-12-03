@@ -1,4 +1,4 @@
-package com.fullcycle.admin.catalogo.domain.category.pagination;
+package com.fullcycle.admin.catalogo.domain.pagination;
 
 import java.util.List;
 import java.util.function.Function;

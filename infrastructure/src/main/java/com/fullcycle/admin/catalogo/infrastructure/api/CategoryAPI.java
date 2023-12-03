@@ -1,6 +1,6 @@
 package com.fullcycle.admin.catalogo.infrastructure.api;
 
-import com.fullcycle.admin.catalogo.domain.category.pagination.Pagination;
+import com.fullcycle.admin.catalogo.domain.pagination.Pagination;
 import com.fullcycle.admin.catalogo.infrastructure.category.models.CategoryResponse;
 import com.fullcycle.admin.catalogo.infrastructure.category.models.CreateCategoryRequest;
 import com.fullcycle.admin.catalogo.infrastructure.category.models.UpdateCategoryRequest;

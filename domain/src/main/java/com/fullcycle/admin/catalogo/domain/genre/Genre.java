@@ -61,7 +61,7 @@ public class Genre extends AggregateRoot<GenreID> implements Cloneable {
         return new Genre(anId, aName, isActive, aCategories, aCreatedAt, aUpdatedAt, aDeletedAt);
     }
 
-    private static Genre with(final Genre aGenre) {
+    public static Genre with(final Genre aGenre) {
         return new Genre(aGenre.getId(), aGenre.getName(), aGenre.isActive(), new ArrayList<>(aGenre.getCategories())
                         ,aGenre.getCreatedAt(), aGenre.getUpdatedAt(), aGenre.getDeletedAt());
     }
@@ -115,6 +115,16 @@ public class Genre extends AggregateRoot<GenreID> implements Cloneable {
         this.categories.add(aCategoryId);
         this.updatedAt = InstantUtils.now();
 
+        return this;
+    }
+
+    public Genre addCategories(List<CategoryID> categoriesIds) {
+        if (categoriesIds == null || categoriesIds.isEmpty()) {
+            return this;
+        }
+
+        this.categories.addAll(categoriesIds);
+        this.updatedAt = InstantUtils.now();
         return this;
     }
 
