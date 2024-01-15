@@ -11,11 +11,13 @@ import java.util.List;
  * @date 3/11/23 21:18
  * @email kalilmvp@gmail.com
  */
-public record GenreOutput(String id, String name, boolean isActive
-        , List<String> categories
-        , Instant createdAt
-        , Instant updatedAt
-        , Instant deletedAt) {
+public record GenreOutput(String id,
+                          String name,
+                          boolean isActive,
+                          List<String> categories,
+                          Instant createdAt,
+                          Instant updatedAt,
+                          Instant deletedAt) {
 
     public static GenreOutput from(final Genre aGenre) {
         return new GenreOutput(aGenre.getId().getValue(),
