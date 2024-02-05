@@ -1,30 +1,31 @@
 package com.fullcycle.admin.catalogo.infrastructure.category;
 
-import com.fullcycle.admin.catalogo.domain.category.Category;
-import com.fullcycle.admin.catalogo.domain.category.CategoryGateway;
-import com.fullcycle.admin.catalogo.domain.category.CategoryID;
-import com.fullcycle.admin.catalogo.domain.pagination.SearchQuery;
-import com.fullcycle.admin.catalogo.domain.pagination.Pagination;
-import com.fullcycle.admin.catalogo.infrastructure.category.persistence.CategoryJPAEntity;
-import com.fullcycle.admin.catalogo.infrastructure.category.persistence.CategoryRepository;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
+import static com.fullcycle.admin.catalogo.infrastructure.utils.SpecificationUtils.like;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static com.fullcycle.admin.catalogo.infrastructure.utils.SpecificationUtils.like;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
+
+import com.fullcycle.admin.catalogo.domain.category.Category;
+import com.fullcycle.admin.catalogo.domain.category.CategoryGateway;
+import com.fullcycle.admin.catalogo.domain.category.CategoryID;
+import com.fullcycle.admin.catalogo.domain.pagination.Pagination;
+import com.fullcycle.admin.catalogo.domain.pagination.SearchQuery;
+import com.fullcycle.admin.catalogo.infrastructure.category.persistence.CategoryJPAEntity;
+import com.fullcycle.admin.catalogo.infrastructure.category.persistence.CategoryRepository;
 
 /**
  * @author kalil.peixoto
  * @date 3/15/23 22:16
  * @email kalilmvp@gmail.com
  */
-@Service
+@Component
 public class CategoryMySQLGateway implements CategoryGateway {
 
     private final CategoryRepository repository;
@@ -73,11 +74,7 @@ public class CategoryMySQLGateway implements CategoryGateway {
         // Busca dinamica pelo criterio terms
         final var specifications = Optional.ofNullable(aQuery.terms())
                 .filter(str -> !str.isBlank())
-                .map(str -> {
-                    final Specification<CategoryJPAEntity> nameLike = like("name", str);
-                    final Specification<CategoryJPAEntity> descriptionLike = like("description", str);
-                    return nameLike.or(descriptionLike);
-                }).orElse(null);
+                .map(this::assemBleSpecification).orElse(null);
 
         final var pageResult = this.repository.findAll(Specification.where(specifications), page);
         return new Pagination<>(
@@ -91,5 +88,11 @@ public class CategoryMySQLGateway implements CategoryGateway {
     public List<CategoryID> existsByIds(Iterable<CategoryID> ids) {
         // TODO: implement when getting to the infrastructure
         return Collections.emptyList();
+    }
+
+    private Specification<CategoryJPAEntity> assemBleSpecification(final String str) {
+        final Specification<CategoryJPAEntity> nameLike = like("name", str);
+        final Specification<CategoryJPAEntity> descriptionLike = like("description", str);
+        return nameLike.or(descriptionLike);
     }
 }

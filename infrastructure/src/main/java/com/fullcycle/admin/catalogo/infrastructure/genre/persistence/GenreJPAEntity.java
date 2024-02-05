@@ -7,6 +7,7 @@ import com.fullcycle.admin.catalogo.domain.genre.GenreID;
 import javax.persistence.*;
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static javax.persistence.FetchType.*;
@@ -32,7 +33,7 @@ public class GenreJPAEntity {
     @Column(name = "created_at", nullable = false, columnDefinition = "DATETIME(6)")
     private Instant createdAt;
     @Column(name = "updated_at", nullable = false, columnDefinition = "DATETIME(6)")
-    private Instant updateddAt;
+    private Instant updatedAt;
     @Column(name = "deleted_at", columnDefinition = "DATETIME(6)")
     private Instant deletedAt;
 
@@ -43,7 +44,7 @@ public class GenreJPAEntity {
                            final String aName,
                            final boolean isActive,
                            final Instant createdAt,
-                           final Instant updateddAt,
+                           final Instant updatedAt,
                            final Instant deletedAt) {
 
         this.id = anId;
@@ -51,7 +52,7 @@ public class GenreJPAEntity {
         this.active = isActive;
         this.categories = new HashSet<>();
         this.createdAt = createdAt;
-        this.updateddAt = updateddAt;
+        this.updatedAt = updatedAt;
         this.deletedAt = deletedAt;
     }
 
@@ -74,11 +75,9 @@ public class GenreJPAEntity {
                 GenreID.from(this.getId()),
                 this.getName(),
                 this.isActive(),
-                this.getCategories().stream().map(
-                        it -> CategoryID.from(it.getId().getCategoryId())
-                ).toList(),
+                this.getCategoryIDs(),
                 this.getCreatedAt(),
-                this.getUpdateddAt(),
+                this.getUpdatedAt(),
                 this.getDeletedAt()
         );
     }
@@ -115,6 +114,12 @@ public class GenreJPAEntity {
         this.active = active;
     }
 
+    public List<CategoryID> getCategoryIDs() {
+        return this.getCategories().stream()
+                .map(it -> CategoryID.from(it.getId().getCategoryId()))
+                .toList();
+    }
+
     public Set<GenreCategoryJPAEntity> getCategories() {
         return categories;
     }
@@ -131,12 +136,12 @@ public class GenreJPAEntity {
         this.createdAt = createdAt;
     }
 
-    public Instant getUpdateddAt() {
-        return updateddAt;
+    public Instant getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setUpdateddAt(Instant updateddAt) {
-        this.updateddAt = updateddAt;
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public Instant getDeletedAt() {

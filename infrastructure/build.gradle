@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'org.flywaydb:flyway-mysql:8.5.10'
+        classpath 'org.flywaydb:flyway-mysql:9.11.0'
     }
 }
 
@@ -48,6 +48,7 @@ dependencies {
     implementation('com.fasterxml.jackson.module:jackson-module-afterburner')
 
     testImplementation('org.flywaydb:flyway-core')
+    
     testImplementation('org.springframework.boot:spring-boot-starter-test')
 
     testImplementation('org.testcontainers:testcontainers:1.17.2')
