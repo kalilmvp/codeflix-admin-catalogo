@@ -3,7 +3,6 @@ package com.fullcycle.admin.catalogo.application.category.create;
 import com.fullcycle.admin.catalogo.domain.category.Category;
 import com.fullcycle.admin.catalogo.domain.category.CategoryGateway;
 import com.fullcycle.admin.catalogo.domain.validation.handlers.Notification;
-import com.fullcycle.admin.catalogo.domain.validation.handlers.ThrowsValidationHandler;
 import io.vavr.API;
 import io.vavr.control.Either;
 

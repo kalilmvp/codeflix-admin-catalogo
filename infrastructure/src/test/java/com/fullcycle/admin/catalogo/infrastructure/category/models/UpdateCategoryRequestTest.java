@@ -1,7 +1,6 @@
 package com.fullcycle.admin.catalogo.infrastructure.category.models;
 
 import com.fullcycle.admin.catalogo.JacksonTest;
-import com.fullcycle.admin.catalogo.infrastructure.category.models.UpdateCategoryRequest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

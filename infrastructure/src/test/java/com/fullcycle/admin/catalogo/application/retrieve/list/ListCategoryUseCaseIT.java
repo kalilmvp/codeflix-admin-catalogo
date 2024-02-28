@@ -15,8 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.doThrow;
 
 /**
  * @author kalil.peixoto

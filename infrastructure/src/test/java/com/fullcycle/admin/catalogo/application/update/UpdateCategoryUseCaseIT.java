@@ -1,28 +1,20 @@
 package com.fullcycle.admin.catalogo.application.update;
 
 import com.fullcycle.admin.catalogo.IntegrationTest;
-import com.fullcycle.admin.catalogo.application.category.delete.DeleteCategoryUseCase;
 import com.fullcycle.admin.catalogo.application.category.update.UpdateCategoryCommand;
 import com.fullcycle.admin.catalogo.application.category.update.UpdateCategoryUseCase;
 import com.fullcycle.admin.catalogo.domain.category.Category;
 import com.fullcycle.admin.catalogo.domain.category.CategoryGateway;
-import com.fullcycle.admin.catalogo.domain.category.CategoryID;
-import com.fullcycle.admin.catalogo.domain.exceptions.DomainException;
 import com.fullcycle.admin.catalogo.domain.exceptions.NotFoundException;
 import com.fullcycle.admin.catalogo.infrastructure.category.persistence.CategoryJPAEntity;
 import com.fullcycle.admin.catalogo.infrastructure.category.persistence.CategoryRepository;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 
 import java.util.Arrays;
-import java.util.Objects;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.AdditionalAnswers.returnsFirstArg;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 /**

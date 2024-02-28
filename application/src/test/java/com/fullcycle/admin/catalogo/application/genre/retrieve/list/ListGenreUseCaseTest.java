@@ -1,10 +1,6 @@
 package com.fullcycle.admin.catalogo.application.genre.retrieve.list;
 
 import com.fullcycle.admin.catalogo.application.UseCaseTest;
-import com.fullcycle.admin.catalogo.application.category.retrieve.list.CategoryListOutput;
-import com.fullcycle.admin.catalogo.application.category.retrieve.list.DefaultListCategoryUseCase;
-import com.fullcycle.admin.catalogo.domain.category.Category;
-import com.fullcycle.admin.catalogo.domain.category.CategoryGateway;
 import com.fullcycle.admin.catalogo.domain.genre.Genre;
 import com.fullcycle.admin.catalogo.domain.genre.GenreGateway;
 import com.fullcycle.admin.catalogo.domain.pagination.Pagination;

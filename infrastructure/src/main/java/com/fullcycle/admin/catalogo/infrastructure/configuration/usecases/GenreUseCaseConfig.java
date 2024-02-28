@@ -1,11 +1,7 @@
 package com.fullcycle.admin.catalogo.infrastructure.configuration.usecases;
 
-import java.util.Objects;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import com.fullcycle.admin.catalogo.application.category.retrieve.get.DefaultGetCategoryByIdUseCase;
 import com.fullcycle.admin.catalogo.application.genre.create.CreateGenreUseCase;
 import com.fullcycle.admin.catalogo.application.genre.create.DefaultCreateGenreUseCase;
 import com.fullcycle.admin.catalogo.application.genre.delete.DefaultDeleteGenreUseCase;
