@@ -5,6 +5,7 @@ import static com.fullcycle.admin.catalogo.infrastructure.utils.SpecificationUti
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -85,9 +86,14 @@ public class CategoryMySQLGateway implements CategoryGateway {
     }
 
     @Override
-    public List<CategoryID> existsByIds(Iterable<CategoryID> ids) {
-        // TODO: implement when getting to the infrastructure
-        return Collections.emptyList();
+    public List<CategoryID> existsByIds(Iterable<CategoryID> categoryIds) {
+        final var ids = StreamSupport.stream(categoryIds.spliterator(), false)
+                .map(CategoryID::getValue)
+                .toList();
+        return this.repository.existsByIds(ids)
+                .stream()
+                .map(CategoryID::from)
+                .toList();
     }
 
     private Specification<CategoryJPAEntity> assemBleSpecification(final String str) {

@@ -63,7 +63,7 @@ public class DeleteGenreUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenInValidGenreId_whenCallDeleteGenreAnsGatewayThrowsUnexpectedError_shouldDeleteGenre() {
+    public void givenInValidGenreId_whenCallDeleteGenreAndGatewayThrowsUnexpectedError_shouldDeleteGenre() {
         // given
         final var aGenre = Genre.newGenre("action", true);
         final var expectedId = aGenre.getId();

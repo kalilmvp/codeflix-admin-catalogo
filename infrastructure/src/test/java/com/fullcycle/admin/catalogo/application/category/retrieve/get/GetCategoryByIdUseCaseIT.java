@@ -1,4 +1,4 @@
-package com.fullcycle.admin.catalogo.application.retrieve.get;
+package com.fullcycle.admin.catalogo.application.category.retrieve.get;
 
 import com.fullcycle.admin.catalogo.IntegrationTest;
 import com.fullcycle.admin.catalogo.application.category.retrieve.get.CategoryOutput;

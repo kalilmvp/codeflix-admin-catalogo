@@ -14,7 +14,7 @@ import java.time.Instant;
  * @date 3/15/23 20:53
  * @email kalilmvp@gmail.com
  */
-@Entity
+@Entity(name = "Category")
 @Table(name = "category")
 public class CategoryJPAEntity {
 

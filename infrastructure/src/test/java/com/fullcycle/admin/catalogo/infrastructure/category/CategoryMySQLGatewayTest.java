@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -189,7 +190,7 @@ public class CategoryMySQLGatewayTest {
 
         assertEquals(expectedTotal, this.categoryRepository.count());
 
-        final var aQuery = new SearchQuery(0, 1, "",  "name", "asc");
+        final var aQuery = new SearchQuery(0, 1, "", "name", "asc");
 
         final var actualResult = this.categoryMySQLGateway.findAll(aQuery);
 
@@ -207,7 +208,7 @@ public class CategoryMySQLGatewayTest {
 
         assertEquals(0, this.categoryRepository.count());
 
-        final var aQuery = new SearchQuery(0, 1, "",  "name", "asc");
+        final var aQuery = new SearchQuery(0, 1, "", "name", "asc");
 
         final var actualResult = this.categoryMySQLGateway.findAll(aQuery);
 
@@ -232,7 +233,7 @@ public class CategoryMySQLGatewayTest {
 
         assertEquals(expectedTotal, this.categoryRepository.count());
 
-        var aQuery = new SearchQuery(0, 1, "",  "name", "asc");
+        var aQuery = new SearchQuery(0, 1, "", "name", "asc");
         var actualResult = this.categoryMySQLGateway.findAll(aQuery);
 
         assertEquals(expectedPage, actualResult.currentPage());
@@ -242,7 +243,7 @@ public class CategoryMySQLGatewayTest {
 
         //Page 1
         expectedPage = 1;
-        aQuery = new SearchQuery(1, 1, "",  "name", "asc");
+        aQuery = new SearchQuery(1, 1, "", "name", "asc");
         actualResult = this.categoryMySQLGateway.findAll(aQuery);
 
         assertEquals(expectedPage, actualResult.currentPage());
@@ -252,7 +253,7 @@ public class CategoryMySQLGatewayTest {
 
         //Page 2
         expectedPage = 2;
-        aQuery = new SearchQuery(2, 1, "",  "name", "asc");
+        aQuery = new SearchQuery(2, 1, "", "name", "asc");
         actualResult = this.categoryMySQLGateway.findAll(aQuery);
 
         assertEquals(expectedPage, actualResult.currentPage());
@@ -277,7 +278,7 @@ public class CategoryMySQLGatewayTest {
 
         assertEquals(3, this.categoryRepository.count());
 
-        final var aQuery = new SearchQuery(0, 1, "doc",  "name", "asc");
+        final var aQuery = new SearchQuery(0, 1, "doc", "name", "asc");
 
         final var actualResult = this.categoryMySQLGateway.findAll(aQuery);
 
@@ -303,7 +304,7 @@ public class CategoryMySQLGatewayTest {
 
         assertEquals(3, this.categoryRepository.count());
 
-        final var aQuery = new SearchQuery(0, 1, "MAIS ASSISTIDA",  "name", "asc");
+        final var aQuery = new SearchQuery(0, 1, "MAIS ASSISTIDA", "name", "asc");
 
         final var actualResult = this.categoryMySQLGateway.findAll(aQuery);
 
@@ -311,5 +312,28 @@ public class CategoryMySQLGatewayTest {
         assertEquals(expectedPerPage, actualResult.perPage());
         assertEquals(expectedTotal, actualResult.total());
         assertEquals(filmes.getId(), actualResult.items().get(0).getId());
+    }
+
+    @Test
+    public void givenPrePersistedCategories_whenCallsExistsByIds_shouldReturnIds() {
+        // given
+        final var filmes = Category.newCategory("Filmes", "A categoria mais assistida", Boolean.TRUE);
+        final var series = Category.newCategory("Séries", "Uma categoria assistida", Boolean.TRUE);
+        final var documentarios = Category.newCategory("Documentários", "A categoria menos assistida", Boolean.TRUE);
+
+        assertEquals(0, this.categoryRepository.count());
+
+        this.categoryRepository.saveAll(Arrays.asList(CategoryJPAEntity.from(filmes), CategoryJPAEntity.from(series), CategoryJPAEntity.from(documentarios)));
+
+        assertEquals(3, this.categoryRepository.count());
+
+        final var expectedIds = List.of(filmes.getId(), series.getId());
+        final var ids = List.of(filmes.getId(), series.getId(), CategoryID.from("123"));
+
+        // when
+        final var actualResult = this.categoryMySQLGateway.existsByIds(ids);
+
+        assertTrue(expectedIds.size() == actualResult.size() &&
+                expectedIds.containsAll(actualResult));
     }
 }

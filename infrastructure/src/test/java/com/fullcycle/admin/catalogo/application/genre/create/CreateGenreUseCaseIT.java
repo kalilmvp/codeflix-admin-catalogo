@@ -1,44 +1,71 @@
 package com.fullcycle.admin.catalogo.application.genre.create;
 
-import com.fullcycle.admin.catalogo.application.UseCaseTest;
+import com.fullcycle.admin.catalogo.IntegrationTest;
+import com.fullcycle.admin.catalogo.domain.category.Category;
 import com.fullcycle.admin.catalogo.domain.category.CategoryGateway;
 import com.fullcycle.admin.catalogo.domain.category.CategoryID;
 import com.fullcycle.admin.catalogo.domain.exceptions.NotificationException;
 import com.fullcycle.admin.catalogo.domain.genre.GenreGateway;
+import com.fullcycle.admin.catalogo.infrastructure.genre.persistence.GenreRepository;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 
 import java.util.List;
-import java.util.Objects;
 
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 /**
  * @author kalil.peixoto
- * @date 12/2/23 12:10
+ * @date 3/3/24 11:49
  * @email kalilmvp@gmail.com
  */
-public class CreateGenreUseCaseTest extends UseCaseTest  {
+@IntegrationTest
+public class CreateGenreUseCaseIT {
 
-    @InjectMocks
-    private DefaultCreateGenreUseCase defaultCreateGenreUseCase;
-
-    @Mock
-    private GenreGateway genreGateway;
-    @Mock
+    @Autowired
+    private CreateGenreUseCase createGenreUseCase;
+    @SpyBean
     private CategoryGateway categoryGateway;
-
-    @Override
-    protected List<Object> getMocks() {
-        return List.of(this.genreGateway, this.categoryGateway);
-    }
+    @SpyBean
+    private GenreGateway genreGateway;
+    @Autowired
+    private GenreRepository genreRepository;
 
     @Test
     public void givenValidCommand_whenCallCreateGenre_shouldReturnGenreId() {
+        // given
+        final var movies = this.categoryGateway.create(Category.newCategory("Movies", "", true));
+        final var expectedName = "Action";
+        final var expectedIsActive = true;
+        final var expectedCategories = List.of(movies.getId());
+
+        final var aCommand = CreateGenreCommand.with(expectedName, expectedIsActive, asString(expectedCategories));
+
+        // when
+        final var actualOutput = this.createGenreUseCase.execute(aCommand);
+
+        // then
+        assertNotNull(actualOutput);
+        assertNotNull(actualOutput.id());
+
+        final var actualGenre = this.genreRepository.findById(actualOutput.id()).get();
+        assertEquals(expectedName, actualGenre.getName());
+        assertEquals(expectedIsActive, actualGenre.isActive());
+        assertTrue(expectedCategories.size() == actualGenre.getCategoryIDs().size() &&
+                expectedCategories.containsAll(actualGenre.getCategoryIDs()));
+        assertNotNull(actualGenre.getCreatedAt());
+        assertNotNull(actualGenre.getUpdatedAt());
+        assertNull(actualGenre.getDeletedAt());
+    }
+
+    @Test
+    public void givenValidCommandWithoutCategories_whenCallCreateGenre_shouldReturnGenreId() {
         // given
         final var expectedName = "Action";
         final var expectedIsActive = true;
@@ -46,24 +73,21 @@ public class CreateGenreUseCaseTest extends UseCaseTest  {
 
         final var aCommand = CreateGenreCommand.with(expectedName, expectedIsActive, asString(expectedCategories));
 
-        when(this.genreGateway.create(any()))
-                .thenAnswer(returnsFirstArg());
-
         // when
-        final var actualOutput = this.defaultCreateGenreUseCase.execute(aCommand);
+        final var actualOutput = this.createGenreUseCase.execute(aCommand);
 
         // then
         assertNotNull(actualOutput);
         assertNotNull(actualOutput.id());
 
-        verify(this.genreGateway, times(1)).create(argThat(aGenre ->
-                Objects.equals(expectedName, aGenre.getName()) &&
-                        Objects.equals(expectedIsActive, aGenre.isActive()) &&
-                        Objects.equals(expectedCategories, aGenre.getCategories()) &&
-                        Objects.nonNull(aGenre.getId()) &&
-                        Objects.nonNull(aGenre.getCreatedAt()) &&
-                        Objects.nonNull(aGenre.getUpdatedAt()) &&
-                        Objects.isNull(aGenre.getDeletedAt())));
+        final var actualGenre = this.genreRepository.findById(actualOutput.id()).get();
+        assertEquals(expectedName, actualGenre.getName());
+        assertEquals(expectedIsActive, actualGenre.isActive());
+        assertTrue(expectedCategories.size() == actualGenre.getCategoryIDs().size() &&
+                expectedCategories.containsAll(actualGenre.getCategoryIDs()));
+        assertNotNull(actualGenre.getCreatedAt());
+        assertNotNull(actualGenre.getUpdatedAt());
+        assertNull(actualGenre.getDeletedAt());
     }
 
     @Test
@@ -75,61 +99,21 @@ public class CreateGenreUseCaseTest extends UseCaseTest  {
 
         final var aCommand = CreateGenreCommand.with(expectedName, expectedIsActive, asString(expectedCategories));
 
-        when(this.genreGateway.create(any()))
-                .thenAnswer(returnsFirstArg());
-
         // when
-        final var actualOutput = this.defaultCreateGenreUseCase.execute(aCommand);
+        final var actualOutput = this.createGenreUseCase.execute(aCommand);
 
         // then
         assertNotNull(actualOutput);
         assertNotNull(actualOutput.id());
 
-        verify(this.genreGateway, times(1)).create(argThat(aGenre ->
-                Objects.equals(expectedName, aGenre.getName()) &&
-                        Objects.equals(expectedIsActive, aGenre.isActive()) &&
-                        Objects.equals(expectedCategories, aGenre.getCategories()) &&
-                        Objects.nonNull(aGenre.getId()) &&
-                        Objects.nonNull(aGenre.getCreatedAt()) &&
-                        Objects.nonNull(aGenre.getUpdatedAt()) &&
-                        Objects.nonNull(aGenre.getDeletedAt())));
-    }
-
-    @Test
-    public void givenValidCommandWithCategories_whenCallCreateGenre_shouldReturnGenreId() {
-        // given
-        final var expectedName = "Action";
-        final var expectedIsActive = true;
-        final var expectedCategories = List.of(
-                CategoryID.from("123"),
-                CategoryID.from("345")
-        );
-
-        final var aCommand = CreateGenreCommand.with(expectedName, expectedIsActive, asString(expectedCategories));
-
-        when(this.categoryGateway.existsByIds(any()))
-                .thenReturn(expectedCategories);
-
-        when(this.genreGateway.create(any()))
-                .thenAnswer(returnsFirstArg());
-
-        // when
-        final var actualOutput = this.defaultCreateGenreUseCase.execute(aCommand);
-
-        // then
-        assertNotNull(actualOutput);
-        assertNotNull(actualOutput.id());
-
-        verify(this.categoryGateway, times(1)).existsByIds(expectedCategories);
-
-        verify(this.genreGateway, times(1)).create(argThat(aGenre ->
-                Objects.equals(expectedName, aGenre.getName()) &&
-                        Objects.equals(expectedIsActive, aGenre.isActive()) &&
-                        Objects.equals(expectedCategories, aGenre.getCategories()) &&
-                        Objects.nonNull(aGenre.getId()) &&
-                        Objects.nonNull(aGenre.getCreatedAt()) &&
-                        Objects.nonNull(aGenre.getUpdatedAt()) &&
-                        Objects.isNull(aGenre.getDeletedAt())));
+        final var actualGenre = this.genreRepository.findById(actualOutput.id()).get();
+        assertEquals(expectedName, actualGenre.getName());
+        assertEquals(expectedIsActive, actualGenre.isActive());
+        assertTrue(expectedCategories.size() == actualGenre.getCategoryIDs().size() &&
+                expectedCategories.containsAll(actualGenre.getCategoryIDs()));
+        assertNotNull(actualGenre.getCreatedAt());
+        assertNotNull(actualGenre.getUpdatedAt());
+        assertNotNull(actualGenre.getDeletedAt());
     }
 
     @Test
@@ -145,7 +129,7 @@ public class CreateGenreUseCaseTest extends UseCaseTest  {
         final var aCommand = CreateGenreCommand.with(expectedName, expectedIsActive, asString(expectedCategories));
 
         // when
-        final var actualException = assertThrows(NotificationException.class, () -> defaultCreateGenreUseCase.execute(aCommand));
+        final var actualException = assertThrows(NotificationException.class, () -> this.createGenreUseCase.execute(aCommand));
 
         // then
         assertNotNull(actualException);
@@ -169,7 +153,7 @@ public class CreateGenreUseCaseTest extends UseCaseTest  {
         final var aCommand = CreateGenreCommand.with(expectedName, expectedIsActive, asString(expectedCategories));
 
         // when
-        final var actualException = assertThrows(NotificationException.class, () -> defaultCreateGenreUseCase.execute(aCommand));
+        final var actualException = assertThrows(NotificationException.class, () -> this.createGenreUseCase.execute(aCommand));
 
         // then
         assertNotNull(actualException);
@@ -183,23 +167,23 @@ public class CreateGenreUseCaseTest extends UseCaseTest  {
     @Test
     public void givenAValidCommand_whenCallCreateGenreAndSomeCategoriesDoesNotExist_shouldReturnDomainException() {
         // given
-        final var movies = CategoryID.from("123");
-        final var documentaries = CategoryID.from("456");
-        final var series = CategoryID.from("789");
+        final var series =
+                categoryGateway.create(Category.newCategory("Series", null, true));
+
+        final var movies = CategoryID.from("456");
+        final var documentaries = CategoryID.from("789");
+
         final var expectedName = "Action";
         final var expectedIsActive = true;
-        final var expectedCategories = List.of(movies, documentaries, series);
+        final var expectedCategories = List.of(movies, series.getId(), documentaries);
 
         final var expectedErrorMessage = "Some categories could not be found: 456, 789";
         final var expectedErrorCount = 1;
 
-        when(this.categoryGateway.existsByIds(any()))
-                .thenReturn(List.of(movies));
-
         final var aCommand = CreateGenreCommand.with(expectedName, expectedIsActive, asString(expectedCategories));
 
         // when
-        final var actualException = assertThrows(NotificationException.class, () -> defaultCreateGenreUseCase.execute(aCommand));
+        final var actualException = assertThrows(NotificationException.class, () -> this.createGenreUseCase.execute(aCommand));
 
         // then
         assertNotNull(actualException);
@@ -213,24 +197,24 @@ public class CreateGenreUseCaseTest extends UseCaseTest  {
     @Test
     public void givenAnInvalidName_whenCallCreateGenreAndSomeCategoriesDoesNotExist_shouldReturnDomainException() {
         // given
-        final var movies = CategoryID.from("123");
-        final var documentaries = CategoryID.from("456");
-        final var series = CategoryID.from("789");
+        final var series =
+                categoryGateway.create(Category.newCategory("Series", null, true));
+
+        final var movies = CategoryID.from("456");
+        final var documentaries = CategoryID.from("789");
+
         final var expectedName = " ";
         final var expectedIsActive = true;
-        final var expectedCategories = List.of(movies, documentaries, series);
+        final var expectedCategories = List.of(movies, series.getId(), documentaries);
 
         final var expectedErrorMessageOne = "Some categories could not be found: 456, 789";
         final var expectedErrorMessageTwo = "'name' should not be empty";
         final var expectedErrorCount = 2;
 
-        when(this.categoryGateway.existsByIds(any()))
-                .thenReturn(List.of(movies));
-
         final var aCommand = CreateGenreCommand.with(expectedName, expectedIsActive, asString(expectedCategories));
 
         // when
-        final var actualException = assertThrows(NotificationException.class, () -> defaultCreateGenreUseCase.execute(aCommand));
+        final var actualException = assertThrows(NotificationException.class, () -> this.createGenreUseCase.execute(aCommand));
 
         // then
         assertNotNull(actualException);
