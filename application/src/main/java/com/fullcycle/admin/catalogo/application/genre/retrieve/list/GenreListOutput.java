@@ -2,7 +2,6 @@ package com.fullcycle.admin.catalogo.application.genre.retrieve.list;
 
 import com.fullcycle.admin.catalogo.domain.category.CategoryID;
 import com.fullcycle.admin.catalogo.domain.genre.Genre;
-import com.fullcycle.admin.catalogo.domain.genre.GenreID;
 
 import java.time.Instant;
 import java.util.List;
@@ -12,7 +11,7 @@ import java.util.List;
  * @date 3/12/23 08:28
  * @email kalilmvp@gmail.com
  */
-public record GenreListOutput(GenreID id,
+public record GenreListOutput(String id,
                               String name,
                               List<String> genres,
                               boolean isActive,
@@ -21,7 +20,7 @@ public record GenreListOutput(GenreID id,
 
     public static GenreListOutput from(Genre aGenre) {
         return new GenreListOutput(
-                aGenre.getId(),
+                aGenre.getId().getValue(),
                 aGenre.getName(),
                 aGenre.getCategories().stream().map(CategoryID::getValue).toList(),
                 aGenre.isActive(),
