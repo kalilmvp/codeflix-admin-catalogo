@@ -63,7 +63,7 @@ public class DeleteGenreUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenInValidGenreId_whenCallDeleteGenreAndGatewayThrowsUnexpectedError_shouldDeleteGenre() {
+    public void givenValidGenreId_whenCallDeleteGenreAndGatewayThrowsUnexpectedError_shouldThrowException() {
         // given
         final var aGenre = Genre.newGenre("action", true);
         final var expectedId = aGenre.getId();
@@ -75,11 +75,5 @@ public class DeleteGenreUseCaseTest extends UseCaseTest {
 
         // then
         verify(this.genreGateway, times(1)).deleteById(expectedId);
-    }
-
-    private List<String> asString(final List<CategoryID> categories) {
-        return categories.stream()
-                .map(CategoryID::getValue)
-                .toList();
     }
 }

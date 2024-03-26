@@ -18,7 +18,7 @@ import static org.mockito.Mockito.reset;
 public abstract class UseCaseTest implements BeforeEachCallback {
 
     @Override
-    public void beforeEach(ExtensionContext extensionContext) throws Exception {
+    public void beforeEach(ExtensionContext extensionContext) {
         reset(this.getMocks().toArray());
     }
 
