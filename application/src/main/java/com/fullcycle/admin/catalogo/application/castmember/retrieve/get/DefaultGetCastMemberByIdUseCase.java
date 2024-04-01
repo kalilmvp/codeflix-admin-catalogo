@@ -15,7 +15,7 @@ import java.util.function.Supplier;
  * @date 3/8/23 20:56
  * @email kalilmvp@gmail.com
  */
-public final class DefaultGetCastMemberByIdUseCase extends GetCastMemberByIdUseCase {
+public non-sealed class DefaultGetCastMemberByIdUseCase extends GetCastMemberByIdUseCase {
 
     private final CastMemberGateway castMemberGateway;
 

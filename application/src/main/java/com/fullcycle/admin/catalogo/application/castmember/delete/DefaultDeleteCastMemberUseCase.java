@@ -10,7 +10,7 @@ import java.util.Objects;
  * @date 3/8/23 20:56
  * @email kalilmvp@gmail.com
  */
-public final class DefaultDeleteCastMemberUseCase extends DeleteCastMemberUseCase {
+public non-sealed class DefaultDeleteCastMemberUseCase extends DeleteCastMemberUseCase {
 
     private final CastMemberGateway castMemberGateway;
 

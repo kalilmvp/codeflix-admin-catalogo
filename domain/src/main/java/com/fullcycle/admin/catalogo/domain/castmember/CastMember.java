@@ -33,9 +33,6 @@ public class CastMember extends AggregateRoot<CastMemberID> implements Cloneable
         this.selfValidate();
     }
 
-    private Instant deletedAt;
-
-
     public static CastMember newCastMember(final String name, final CastMemberType type) {
         final Instant now = Instant.now();
         return new CastMember(CastMemberID.unique(), name, type, now, now);

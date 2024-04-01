@@ -27,7 +27,7 @@ import static io.vavr.API.Try;
  * @date 3/8/23 20:56
  * @email kalilmvp@gmail.com
  */
-public final class DefaultUpdateCastMemberUseCase extends UpdateCastMemberUseCase {
+public non-sealed class DefaultUpdateCastMemberUseCase extends UpdateCastMemberUseCase {
 
     private final CastMemberGateway castMemberGateway;
 

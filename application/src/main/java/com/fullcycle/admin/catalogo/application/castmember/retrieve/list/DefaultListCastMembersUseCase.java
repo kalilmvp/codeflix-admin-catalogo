@@ -12,7 +12,7 @@ import java.util.Objects;
  * @date 3/8/23 20:56
  * @email kalilmvp@gmail.com
  */
-public final class DefaultListCastMembersUseCase extends ListCastMembersUseCase {
+public non-sealed class DefaultListCastMembersUseCase extends ListCastMembersUseCase {
 
     private final CastMemberGateway castMemberGateway;
 

@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  * @date 3/8/23 20:56
  * @email kalilmvp@gmail.com
  */
-public final class DefaultCreateCastMemberUseCase extends CreateCastMemberUseCase {
+public non-sealed class DefaultCreateCastMemberUseCase extends CreateCastMemberUseCase {
 
     private final CastMemberGateway castMemberGateway;
 

@@ -1,11 +1,7 @@
 package com.fullcycle.admin.catalogo.infrastructure.presenters;
 
-import com.fullcycle.admin.catalogo.application.category.retrieve.get.CategoryOutput;
-import com.fullcycle.admin.catalogo.application.category.retrieve.list.CategoryListOutput;
 import com.fullcycle.admin.catalogo.application.genre.retrieve.get.GenreOutput;
 import com.fullcycle.admin.catalogo.application.genre.retrieve.list.GenreListOutput;
-import com.fullcycle.admin.catalogo.infrastructure.category.models.CategoryListResponse;
-import com.fullcycle.admin.catalogo.infrastructure.category.models.CategoryResponse;
 import com.fullcycle.admin.catalogo.infrastructure.genre.models.GenreListResponse;
 import com.fullcycle.admin.catalogo.infrastructure.genre.models.GenreResponse;
 
