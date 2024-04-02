@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
  * @email kalilmvp@gmail.com
  */
 @RequestMapping(value = "cast_members")
-@Tag(name = "CastMembers")
+@Tag(name = "Cast Members")
 public interface CastMemberAPI {
 
   @PostMapping(

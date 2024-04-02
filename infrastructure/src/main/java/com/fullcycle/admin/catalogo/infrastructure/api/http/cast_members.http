@@ -1,6 +1,10 @@
 ### Get all cast members
 GET http://localhost:8081/api/cast_members
 
+### Get all cast members filtered
+GET http://localhost:8081/api/cast_members?search=sp
+Content-Type: application/json
+
 ### Create one
 POST http://localhost:8081/api/cast_members
 Content-Type: application/json
