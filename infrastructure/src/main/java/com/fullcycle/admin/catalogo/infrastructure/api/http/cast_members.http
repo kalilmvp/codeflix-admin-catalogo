@@ -1,0 +1,27 @@
+### Get all cast members
+GET http://localhost:8081/api/cast_members
+
+### Create one
+POST http://localhost:8081/api/cast_members
+Content-Type: application/json
+
+{
+  "name": "George Lucas",
+  "type": "DIRECTOR"
+}
+
+### Get one
+GET http://localhost:8081/api/cast_members/e5b868d0-4240-4103-ae86-e3df8f240f71
+Content-Type: application/json
+
+### Update one
+PUT http://localhost:8081/api/cast_members/e5b868d0-4240-4103-ae86-e3df8f240f71
+Content-Type: application/json
+
+{
+  "name": "George Lucas",
+  "type": "DIRECTOR"
+}
+
+### Delete One
+DELETE http://localhost:8081/api/cast_members/e5b868d0-4240-4103-ae86-e3df8f240f71
