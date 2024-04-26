@@ -21,11 +21,11 @@ public class GenreValidator extends Validator {
 
     @Override
     public void validate() {
-        this.chackNameConstraints();
+        this.checkNameConstraints();
     }
 
 
-    private void chackNameConstraints() {
+    private void checkNameConstraints() {
         final var name = this.genre.getName();
         if (name == null) {
             this.validationHandler().append(new Error("'name' should not be null"));

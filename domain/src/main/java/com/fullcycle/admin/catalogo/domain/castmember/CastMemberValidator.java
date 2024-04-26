@@ -22,11 +22,11 @@ public class CastMemberValidator extends Validator {
 
     @Override
     public void validate() {
-        this.chackNameConstraints();
-        this.chackTypeConstraints();
+        this.checkNameConstraints();
+        this.checkTypeConstraints();
     }
 
-    private void chackNameConstraints() {
+    private void checkNameConstraints() {
         final var name = this.castMember.getName();
         if (name == null) {
             this.validationHandler().append(new Error("'name' should not be null"));
@@ -44,7 +44,7 @@ public class CastMemberValidator extends Validator {
         }
     }
 
-    private void chackTypeConstraints() {
+    private void checkTypeConstraints() {
         final var type = this.castMember.getType();
         if (type == null) {
             this.validationHandler().append(new Error("'type' should not be null"));
