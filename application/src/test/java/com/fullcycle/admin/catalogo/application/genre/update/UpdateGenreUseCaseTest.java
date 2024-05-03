@@ -240,10 +240,4 @@ public class UpdateGenreUseCaseTest extends UseCaseTest {
                         aGenre.getUpdatedAt().isBefore(anUpdatedGenre.getUpdatedAt()) &&
                         Objects.nonNull(anUpdatedGenre.getDeletedAt())));
     }
-
-    private List<String> asString(final List<CategoryID> categories) {
-        return categories.stream()
-                .map(CategoryID::getValue)
-                .toList();
-    }
 }

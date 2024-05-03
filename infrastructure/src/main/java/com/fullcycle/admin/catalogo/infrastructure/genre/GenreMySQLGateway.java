@@ -1,5 +1,6 @@
 package com.fullcycle.admin.catalogo.infrastructure.genre;
 
+import com.fullcycle.admin.catalogo.domain.castmember.CastMemberID;
 import com.fullcycle.admin.catalogo.domain.genre.Genre;
 import com.fullcycle.admin.catalogo.domain.genre.GenreGateway;
 import com.fullcycle.admin.catalogo.domain.genre.GenreID;
@@ -16,6 +17,7 @@ import org.springframework.data.jpa.domain.Specification;
 import static org.springframework.data.jpa.domain.Specification.where;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -84,5 +86,10 @@ public class GenreMySQLGateway implements GenreGateway {
 
     private Specification<GenreJPAEntity> assemBleSpecification(final String terms) {
         return SpecificationUtils.like("name", terms);
+    }
+
+    @Override
+    public List<GenreID> existsByIds(final Iterable<GenreID> ids) {
+        throw new UnsupportedOperationException();
     }
 }

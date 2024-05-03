@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.data.jpa.domain.Specification.where;
@@ -79,6 +80,11 @@ public class CastMembersMySQLGateway implements CastMemberGateway {
                                 result.getTotalElements(),
                                 result.map(CastMembersJPAEntity::toAggregate)
                         .toList());
+    }
+
+    @Override
+    public List<CastMemberID> existsByIds(final Iterable<CastMemberID> ids) {
+        throw new UnsupportedOperationException();
     }
 
     private Specification<CastMembersJPAEntity> assemBleSpecification(final String terms) {

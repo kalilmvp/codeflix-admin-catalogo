@@ -77,10 +77,4 @@ public class GetGenreByIdUseCaseTest extends UseCaseTest {
 
         assertEquals(exceptedErrorMessage, actualException.getMessage());
     }
-
-    private List<String> asString(final List<CategoryID> categories) {
-        return categories.stream()
-                .map(CategoryID::getValue)
-                .toList();
-    }
 }

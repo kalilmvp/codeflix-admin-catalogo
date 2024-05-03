@@ -2,12 +2,8 @@ package com.fullcycle.admin.catalogo.application.castmember.retrieve.list;
 
 import com.fullcycle.admin.catalogo.application.Fixture;
 import com.fullcycle.admin.catalogo.application.UseCaseTest;
-import com.fullcycle.admin.catalogo.application.genre.retrieve.list.DefaultListGenreUseCase;
-import com.fullcycle.admin.catalogo.application.genre.retrieve.list.GenreListOutput;
 import com.fullcycle.admin.catalogo.domain.castmember.CastMember;
 import com.fullcycle.admin.catalogo.domain.castmember.CastMemberGateway;
-import com.fullcycle.admin.catalogo.domain.genre.Genre;
-import com.fullcycle.admin.catalogo.domain.genre.GenreGateway;
 import com.fullcycle.admin.catalogo.domain.pagination.Pagination;
 import com.fullcycle.admin.catalogo.domain.pagination.SearchQuery;
 import org.junit.jupiter.api.Test;
@@ -41,8 +37,8 @@ public class ListCastMembersUseCaseTest extends UseCaseTest {
     @Test
     public void givenAValidQuery_whenCallListCastMembers_shouldReturnCastMembers() {
         final var castMembers = List.of(
-                CastMember.newCastMember(Fixture.name(), Fixture.CastMember.type()),
-                CastMember.newCastMember(Fixture.name(), Fixture.CastMember.type())
+                CastMember.newCastMember(Fixture.name(), Fixture.CastMembers.type()),
+                CastMember.newCastMember(Fixture.name(), Fixture.CastMembers.type())
         );
 
         final var expectedPage = 0;

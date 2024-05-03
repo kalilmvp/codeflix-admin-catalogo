@@ -7,7 +7,6 @@ import com.fullcycle.admin.catalogo.domain.genre.GenreID;
 import com.fullcycle.admin.catalogo.domain.utils.InstantUtils;
 import com.fullcycle.admin.catalogo.domain.validation.ValidationHandler;
 
-import java.text.Bidi;
 import java.time.Instant;
 import java.time.Year;
 import java.util.*;
@@ -205,7 +204,7 @@ public class Video extends AggregateRoot<VideoID> {
 
     @Override
     public void validate(final ValidationHandler handler) {
-
+        new VideoValidator(this, handler).validate();
     }
 
     public String getTitle() {
@@ -244,10 +243,6 @@ public class Video extends AggregateRoot<VideoID> {
         return updatedAt;
     }
 
-    public Optional<ImageMedia> getBanner() {
-        return Optional.ofNullable(banner);
-    }
-
     public Set<CategoryID> getCategories() {
         return categories != null ? Collections.unmodifiableSet(categories) : Collections.emptySet();
     }
@@ -260,19 +255,23 @@ public class Video extends AggregateRoot<VideoID> {
         return castMembers != null ? Collections.unmodifiableSet(castMembers) : Collections.emptySet();
     }
 
-    public Optional<ImageMedia> getThumbnail() {
-        return Optional.ofNullable(thumbnail);
-    }
-
-    public Optional<ImageMedia> getThumbnailHalf() {
-        return Optional.ofNullable(thumbnailHalf);
+    public Optional<AudioVideoMedia> getVideo() {
+        return Optional.ofNullable(video);
     }
 
     public Optional<AudioVideoMedia> getTrailer() {
         return Optional.ofNullable(trailer);
     }
 
-    public Optional<AudioVideoMedia> getVideo() {
-        return Optional.ofNullable(video);
+    public Optional<ImageMedia> getBanner() {
+        return Optional.ofNullable(banner);
+    }
+
+    public Optional<ImageMedia> getThumbnail() {
+        return Optional.ofNullable(thumbnail);
+    }
+
+    public Optional<ImageMedia> getThumbnailHalf() {
+        return Optional.ofNullable(thumbnailHalf);
     }
 }

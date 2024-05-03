@@ -46,7 +46,7 @@ public class UpdateCastMemberUseCaseTest extends UseCaseTest {
 
         final var expectedId = aCastMember.getId();
         final var expectedName = Fixture.name();
-        final var expectedType = Fixture.CastMember.type();
+        final var expectedType = Fixture.CastMembers.type();
 
         final var aCommand = UpdateCastMemberCommand.with(expectedId.getValue()
                 , expectedName
@@ -82,7 +82,7 @@ public class UpdateCastMemberUseCaseTest extends UseCaseTest {
 
         final var expectedId = aCastMember.getId();
         final String expectedName = null;
-        final var expectedType = Fixture.CastMember.type();
+        final var expectedType = Fixture.CastMembers.type();
 
         final var expectedErrorMessage = "'name' should not be null";
         final var expectedErrorCount = 1;
@@ -113,7 +113,7 @@ public class UpdateCastMemberUseCaseTest extends UseCaseTest {
 
         final var expectedId = aCastMember.getId();
         final String expectedName = " ";
-        final var expectedType = Fixture.CastMember.type();
+        final var expectedType = Fixture.CastMembers.type();
 
         final var expectedErrorMessage = "'name' should not be empty";
         final var expectedErrorCount = 1;
@@ -173,7 +173,7 @@ public class UpdateCastMemberUseCaseTest extends UseCaseTest {
         // given
         final var expectedId = CastMemberID.from("123");
         final var expectedName = Fixture.name();
-        final var expectedType = Fixture.CastMember.type();
+        final var expectedType = Fixture.CastMembers.type();
 
         final var expectedErrorMessage = "CastMember with ID 123 was not found";
 

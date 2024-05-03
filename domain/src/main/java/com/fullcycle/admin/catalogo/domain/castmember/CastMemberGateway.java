@@ -18,4 +18,5 @@ public interface CastMemberGateway {
     Optional<CastMember> findById(CastMemberID anId);
     CastMember update(CastMember aCastMember);
     Pagination<CastMember> findAll(SearchQuery aQuery);
+    List<CastMemberID> existsByIds(Iterable<CastMemberID> ids);
 }
