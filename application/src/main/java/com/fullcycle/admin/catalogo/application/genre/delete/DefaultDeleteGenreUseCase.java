@@ -15,7 +15,7 @@ public class DefaultDeleteGenreUseCase extends DeleteGenreUseCase {
 
     private final GenreGateway genreGateway;
 
-    public DefaultDeleteGenreUseCase(GenreGateway genreGateway, CategoryGateway categoryGateway) {
+    public DefaultDeleteGenreUseCase(GenreGateway genreGateway) {
         this.genreGateway = Objects.requireNonNull(genreGateway);
     }
 
