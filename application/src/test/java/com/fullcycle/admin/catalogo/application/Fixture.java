@@ -46,6 +46,19 @@ public final class Fixture {
         return FAKER.bool().bool();
     }
 
+    public static Video video() {
+        return Video.newVideo(title(),
+                Videos.description(),
+                Year.of(year()),
+                duration(),
+                Videos.rating(),
+                bool(),
+                bool(),
+                Set.of(Categories.aulas().getId()),
+                Set.of(Genres.tech().getId()),
+                Set.of(CastMembers.wesley().getId(), CastMembers.kalil().getId()));
+    }
+
     public static class Categories {
         private static final Category AULAS = Category.newCategory("Aulas", "Sem descrição", true);
 
@@ -80,19 +93,20 @@ public final class Fixture {
     }
 
     public static class Videos {
+        private static final Video SYSTEM_DESIGN = Video.newVideo(
+                "System Design no Mercado Livre na Prática",
+                "System Design no Mercado Livre na Prática Description",
+                Year.of(2022),
+                duration(),
+                rating(),
+                bool(),
+                bool(),
+                Set.of(Categories.aulas().getId()),
+                Set.of(Genres.tech().getId()),
+                Set.of(CastMembers.wesley().getId(), CastMembers.kalil().getId()));
+
         public static Video systemDesign() {
-            return Video.newVideo(
-                    title(),
-                    description(),
-                    Year.of(year()),
-                    duration(),
-                    rating(),
-                    bool(),
-                    bool(),
-                    Set.of(Categories.aulas().getId()),
-                    Set.of(Genres.tech().getId()),
-                    Set.of(CastMembers.wesley().getId(), CastMembers.kalil().getId())
-            );
+            return Video.with(SYSTEM_DESIGN);
         }
 
         public static Rating rating() {
@@ -102,19 +116,19 @@ public final class Fixture {
         public static String description() {
             return FAKER.options().option(
                     """
-                        A skilled thief, who steals secrets from deep within the subconscious during the dream state, 
-                        is given the task to plant an idea into the mind of a CEO. However, his tragic past may doom the project and 
-                        his team to disaster.
-                    """,
+                                A skilled thief, who steals secrets from deep within the subconscious during the dream state, 
+                                is given the task to plant an idea into the mind of a CEO. However, his tragic past may doom the project and 
+                                his team to disaster.
+                            """,
                     """
-                        The film recounts the adventures of Gustave H, a legendary concierge at a famous European hotel between the wars, and Zero Moustafa, 
-                        the lobby boy who becomes his most trusted friend. The story involves the theft of a priceless painting and the battle for an enormous
-                         family fortune.
-                    """,
+                                The film recounts the adventures of Gustave H, a legendary concierge at a famous European hotel between the wars, and Zero Moustafa, 
+                                the lobby boy who becomes his most trusted friend. The story involves the theft of a priceless painting and the battle for an enormous
+                                 family fortune.
+                            """,
                     """
-                        An unemployed South Korean family becomes entangled in a strange and unsettling reality when they start
-                         to provide services to a wealthy family, leading to a series of unexpected incidents that unravel their lives.
-                    """
+                                An unemployed South Korean family becomes entangled in a strange and unsettling reality when they start
+                                 to provide services to a wealthy family, leading to a series of unexpected incidents that unravel their lives.
+                            """
             );
         }
 
