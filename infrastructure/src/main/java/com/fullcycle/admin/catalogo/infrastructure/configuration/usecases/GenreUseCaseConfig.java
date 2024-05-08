@@ -38,7 +38,7 @@ public class GenreUseCaseConfig {
 
   @Bean
   public DeleteGenreUseCase deleteGenreUseCase() {
-    return new DefaultDeleteGenreUseCase(this.genreGateway, this.categoryGateway);
+    return new DefaultDeleteGenreUseCase(this.genreGateway);
   }
 
   @Bean
