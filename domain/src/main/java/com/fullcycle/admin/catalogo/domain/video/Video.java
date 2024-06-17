@@ -202,6 +202,46 @@ public class Video extends AggregateRoot<VideoID> {
         );
     }
 
+    public static Video with(final VideoID anId,
+                             final String aTitle,
+                             final String aDescription,
+                             final Year aLaunchYear,
+                             final double aDuration,
+                             final Rating aRating,
+                             final boolean wasOpened,
+                             final boolean wasPublished,
+                             final Instant aCreationDate,
+                             final Instant aUpdateDate,
+                             final ImageMedia aBanner,
+                             final ImageMedia aThumb,
+                             final ImageMedia aThumbHalf,
+                             final AudioVideoMedia aTrailer,
+                             final AudioVideoMedia aVideo,
+                             final Set<CategoryID> categories,
+                             final Set<GenreID> genres,
+                             final Set<CastMemberID> castMembers) {
+        return new Video(
+                anId,
+                aTitle,
+                aDescription,
+                aLaunchYear,
+                aDuration,
+                aRating,
+                wasOpened,
+                wasPublished,
+                aCreationDate,
+                aUpdateDate,
+                aBanner,
+                aThumb,
+                aThumbHalf,
+                aTrailer,
+                aVideo,
+                categories,
+                genres,
+                castMembers
+        );
+    }
+
     @Override
     public void validate(final ValidationHandler handler) {
         new VideoValidator(this, handler).validate();

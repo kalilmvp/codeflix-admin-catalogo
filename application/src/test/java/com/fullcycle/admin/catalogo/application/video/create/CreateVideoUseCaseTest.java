@@ -10,6 +10,7 @@ import com.fullcycle.admin.catalogo.domain.exceptions.InternalErrorException;
 import com.fullcycle.admin.catalogo.domain.exceptions.NotificationException;
 import com.fullcycle.admin.catalogo.domain.genre.GenreGateway;
 import com.fullcycle.admin.catalogo.domain.genre.GenreID;
+import com.fullcycle.admin.catalogo.domain.utils.IdUtils;
 import com.fullcycle.admin.catalogo.domain.video.*;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -1013,14 +1014,14 @@ public class CreateVideoUseCaseTest extends UseCaseTest {
     private void mockImageMedia() {
         when(this.mediaResourceGateway.storeImage(any(), any())).thenAnswer(t -> {
             final var resource = t.getArgument(1, Resource.class);
-            return ImageMedia.with(UUID.randomUUID().toString(), resource.name(), "/img");
+            return ImageMedia.with(IdUtils.uuid(), resource.name(), "/img");
         });
     }
 
     private void mockAudioVideoMedia() {
         when(this.mediaResourceGateway.storeAudioVideo(any(), any())).thenAnswer(t -> {
             final var resource = t.getArgument(1, Resource.class);
-            return AudioVideoMedia.with(UUID.randomUUID().toString(), resource.name(), "/img", "", MediaStatus.PENDING);
+            return AudioVideoMedia.with(IdUtils.uuid(), resource.name(), "/img", "", MediaStatus.PENDING);
         });
     }
 }
