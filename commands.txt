@@ -1,3 +1,4 @@
+./gradlew flywayClean
 ./gradlew flywayInfo
 ./gradlew flywayMigrate
 ```

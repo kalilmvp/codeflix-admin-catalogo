@@ -19,7 +19,7 @@ public class ImageMediaJPAEntity {
     private String id;
     @Column(name = "name", nullable = false)
     private String name;
-    @Column(name = "filePath", nullable = false)
+    @Column(name = "file_path", nullable = false)
     private String filePath;
 
     public ImageMediaJPAEntity() {

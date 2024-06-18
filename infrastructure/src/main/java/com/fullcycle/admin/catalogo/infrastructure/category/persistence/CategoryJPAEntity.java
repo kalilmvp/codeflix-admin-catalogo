@@ -15,10 +15,11 @@ import java.time.Instant;
  * @email kalilmvp@gmail.com
  */
 @Entity(name = "Category")
-@Table(name = "category")
+@Table(name = "categories")
 public class CategoryJPAEntity {
 
     @Id
+    @Column(name = "id", nullable = false)
     private String id;
     @Column(name = "name", length = 255, nullable = false)
     private String name;
