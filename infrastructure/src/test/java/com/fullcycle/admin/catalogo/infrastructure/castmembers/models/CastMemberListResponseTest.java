@@ -1,7 +1,7 @@
 package com.fullcycle.admin.catalogo.infrastructure.castmembers.models;
 
-import com.fullcycle.admin.catalogo.Fixture;
 import com.fullcycle.admin.catalogo.JacksonTest;
+import com.fullcycle.admin.catalogo.domain.Fixture;
 import com.fullcycle.admin.catalogo.domain.castmember.CastMemberID;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ public class CastMemberListResponseTest {
     public void testMarshall() throws Exception {
         final var expectedId = CastMemberID.unique().getValue();
         final var expectedName = Fixture.name();
-        final var expectedType = Fixture.CastMember.type().name();
+        final var expectedType = Fixture.CastMembers.type().name();
         final var expectedCreatedAt = Instant.now().toString();
 
         final var castMemberListResponse = new CastMemberListResponse(

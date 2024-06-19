@@ -1,7 +1,7 @@
 package com.fullcycle.admin.catalogo.application.castmember.delete;
 
-import com.fullcycle.admin.catalogo.Fixture;
 import com.fullcycle.admin.catalogo.IntegrationTest;
+import com.fullcycle.admin.catalogo.domain.Fixture;
 import com.fullcycle.admin.catalogo.domain.castmember.CastMember;
 import com.fullcycle.admin.catalogo.domain.castmember.CastMemberGateway;
 import com.fullcycle.admin.catalogo.domain.castmember.CastMemberID;
@@ -35,10 +35,10 @@ public class DeleteCastMemberUseCaseIT {
     @Test
     public void givenValidCastMemberId_whenCallDeleteCastMember_shouldDeleteCastMember() {
         // given
-        final var aCastMember = CastMember.newCastMember(Fixture.name(), Fixture.CastMember.type());
+        final var aCastMember = CastMember.newCastMember(Fixture.name(), Fixture.CastMembers.type());
         final var expectedId = aCastMember.getId();
 
-        final var aCastMemberTwo = CastMember.newCastMember(Fixture.name(), Fixture.CastMember.type());
+        final var aCastMemberTwo = CastMember.newCastMember(Fixture.name(), Fixture.CastMembers.type());
 
         this.castMemberRepository.saveAndFlush(CastMembersJPAEntity.from(aCastMember));
         this.castMemberRepository.saveAndFlush(CastMembersJPAEntity.from(aCastMemberTwo));
@@ -59,7 +59,7 @@ public class DeleteCastMemberUseCaseIT {
     @Test
     public void givenInValidCastMemberId_whenCallDeleteCastMember_shouldBeOk() {
         // given
-        this.castMemberRepository.saveAndFlush(CastMembersJPAEntity.from(CastMember.newCastMember(Fixture.name(), Fixture.CastMember.type())));
+        this.castMemberRepository.saveAndFlush(CastMembersJPAEntity.from(CastMember.newCastMember(Fixture.name(), Fixture.CastMembers.type())));
 
         assertEquals(1, this.castMemberRepository.count());
 
@@ -77,7 +77,7 @@ public class DeleteCastMemberUseCaseIT {
     @Test
     public void givenValidCastMemberId_whenCallDeleteCastMemberAndGatewayThrowsUnexpectedError_shoulReceiveException() {
         // given
-        final var aCastMember = CastMember.newCastMember(Fixture.name(), Fixture.CastMember.type());
+        final var aCastMember = CastMember.newCastMember(Fixture.name(), Fixture.CastMembers.type());
         this.castMemberRepository.saveAndFlush(CastMembersJPAEntity.from(aCastMember));
 
         assertEquals(1, this.castMemberRepository.count());

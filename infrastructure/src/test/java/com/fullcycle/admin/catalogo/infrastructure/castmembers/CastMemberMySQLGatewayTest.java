@@ -1,6 +1,7 @@
 package com.fullcycle.admin.catalogo.infrastructure.castmembers;
 
 import com.fullcycle.admin.catalogo.MySQLGatewayTest;
+import com.fullcycle.admin.catalogo.domain.Fixture;
 import com.fullcycle.admin.catalogo.domain.castmember.CastMember;
 import com.fullcycle.admin.catalogo.domain.castmember.CastMemberID;
 import com.fullcycle.admin.catalogo.domain.castmember.CastMemberType;
@@ -14,8 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-import static com.fullcycle.admin.catalogo.Fixture.CastMember.type;
-import static com.fullcycle.admin.catalogo.Fixture.name;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -41,8 +40,8 @@ public class CastMemberMySQLGatewayTest {
     @Test
     public void givenAValidCastMember_whenCallsCreateCastMember_shouldPersistCastMember() {
         // given
-        final var expectedName = name();
-        final var expectedType = type();
+        final var expectedName = Fixture.name();
+        final var expectedType = Fixture.CastMembers.type();
         final var aCastMember = CastMember.newCastMember(expectedName, expectedType);
 
         final var expectedId = aCastMember.getId();
@@ -72,7 +71,7 @@ public class CastMemberMySQLGatewayTest {
     @Test
     public void givenAValidCastMember_whenCallsUpdateeCastMember_shouldUpdateIt() {
         // given
-        final var expectedName = name();
+        final var expectedName = Fixture.name();
         final var expectedType = CastMemberType.ACTOR;
         final var aCastMember = CastMember.newCastMember("vind", CastMemberType.DIRECTOR);
 
@@ -109,7 +108,7 @@ public class CastMemberMySQLGatewayTest {
     @Test
     public void givenAPrePersistedCastMember_whenCallDeleteById_shouldDeleteCastMember() {
         // given
-        CastMember aCastMember = CastMember.newCastMember(name(), type());
+        CastMember aCastMember = CastMember.newCastMember(Fixture.name(), Fixture.CastMembers.type());
 
         assertEquals(0, this.castMemberRepository.count());
 
@@ -139,8 +138,8 @@ public class CastMemberMySQLGatewayTest {
     @Test
     public void givenAPrePersistedCastMember_whenCallFindById_shouldReturnCastMember() {
         // given
-        final var expectedName = name();
-        final var expectedType = type();
+        final var expectedName = Fixture.name();
+        final var expectedType = Fixture.CastMembers.type();
 
         final var aCastMember = CastMember.newCastMember(expectedName, expectedType);
 

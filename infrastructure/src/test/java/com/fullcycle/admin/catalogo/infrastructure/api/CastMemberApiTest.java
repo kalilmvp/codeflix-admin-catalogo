@@ -2,7 +2,6 @@ package com.fullcycle.admin.catalogo.infrastructure.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fullcycle.admin.catalogo.ControllerTest;
-import com.fullcycle.admin.catalogo.Fixture;
 import com.fullcycle.admin.catalogo.application.castmember.create.CreateCastMemberOutput;
 import com.fullcycle.admin.catalogo.application.castmember.create.DefaultCreateCastMemberUseCase;
 import com.fullcycle.admin.catalogo.application.castmember.delete.DefaultDeleteCastMemberUseCase;
@@ -12,6 +11,7 @@ import com.fullcycle.admin.catalogo.application.castmember.retrieve.list.CastMem
 import com.fullcycle.admin.catalogo.application.castmember.retrieve.list.DefaultListCastMembersUseCase;
 import com.fullcycle.admin.catalogo.application.castmember.update.DefaultUpdateCastMemberUseCase;
 import com.fullcycle.admin.catalogo.application.castmember.update.UpdateCastMemberOutput;
+import com.fullcycle.admin.catalogo.domain.Fixture;
 import com.fullcycle.admin.catalogo.domain.castmember.CastMember;
 import com.fullcycle.admin.catalogo.domain.castmember.CastMemberID;
 import com.fullcycle.admin.catalogo.domain.castmember.CastMemberType;
@@ -66,7 +66,7 @@ public class CastMemberApiTest {
     public void givenAValidCommand_whenCallsCreateCastMember_shouldReturnCastMemberId() throws Exception {
         // given
         final var expectedName = Fixture.name();
-        final var expectedType = Fixture.CastMember.type();
+        final var expectedType = Fixture.CastMembers.type();
         final var expectedId = CastMemberID.from("123");
 
         final var aCommand = new CreateCastMemberRequest(expectedName, expectedType);
@@ -97,7 +97,7 @@ public class CastMemberApiTest {
     public void givenAnInvalidName_whenCallsCreateCastMember_shouldReturnNotification() throws Exception {
         // given
         final String expectedName = null;
-        final var expectedType = Fixture.CastMember.type();
+        final var expectedType = Fixture.CastMembers.type();
         final var expectedErrorMessage = "'name' should not be null";
 
         final var aCommand = new CreateCastMemberRequest(expectedName, expectedType);
@@ -129,7 +129,7 @@ public class CastMemberApiTest {
     public void givenAValidId_whenCallsGetCastMemberById_shouldReturnCastMember() throws Exception {
         // given
         final var expectedName = Fixture.name();
-        final var expectedType = Fixture.CastMember.type();
+        final var expectedType = Fixture.CastMembers.type();
 
         final var aCastMember = CastMember.newCastMember(expectedName, expectedType);
 
@@ -185,7 +185,7 @@ public class CastMemberApiTest {
     public void givenAValidCommand_whenCallsUpdateCastMember_shouldReturnCastMemberId() throws Exception {
         // given
         final var expectedName = Fixture.name();
-        final var expectedType = Fixture.CastMember.type();
+        final var expectedType = Fixture.CastMembers.type();
 
         final var aCastMember = CastMember.newCastMember(expectedName, expectedType);
         final var expectedId = aCastMember.getId();
@@ -220,7 +220,7 @@ public class CastMemberApiTest {
         final var expectedId = aCastMember.getId();
 
         final String expectedName = null;
-        final var expectedType = Fixture.CastMember.type();
+        final var expectedType = Fixture.CastMembers.type();
         final var expectedErrorMessage = "'name' should not be null";
 
         final var aCommand = new UpdateCastMemberRequest(expectedName, expectedType);
@@ -253,7 +253,7 @@ public class CastMemberApiTest {
     public void givenAnInvalidId_whenCallsUpdateCastMember_shouldReturnNotFound() throws Exception {
         // given
         final var expectedName = Fixture.name();
-        final var expectedType = Fixture.CastMember.type();
+        final var expectedType = Fixture.CastMembers.type();
         final var expectedErrorMessage = "CastMember with ID 123 was not found";
 
         final var expectedId = CastMemberID.from("123");
@@ -302,7 +302,7 @@ public class CastMemberApiTest {
     @Test
     public void givenValidParams_whenCallListCastMember_shouldReturnCastMembers() throws Exception {
         // given
-        final var aCastMember = CastMember.newCastMember(Fixture.name(), Fixture.CastMember.type());
+        final var aCastMember = CastMember.newCastMember(Fixture.name(), Fixture.CastMembers.type());
 
         final var expectedPage = 0;
         final var expectedPerPage = 10;
@@ -349,7 +349,7 @@ public class CastMemberApiTest {
     @Test
     public void givenEmptyParams_whenCallListCastMember_shouldReturnDefaultAndReturnIt() throws Exception {
         // given
-        final var aCastMember = CastMember.newCastMember(Fixture.name(), Fixture.CastMember.type());
+        final var aCastMember = CastMember.newCastMember(Fixture.name(), Fixture.CastMembers.type());
 
         final var expectedPage = 0;
         final var expectedPerPage = 10;

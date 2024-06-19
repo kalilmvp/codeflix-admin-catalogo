@@ -6,6 +6,7 @@ import com.fullcycle.admin.catalogo.domain.genre.GenreID;
 import com.fullcycle.admin.catalogo.domain.video.VideoPreview;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -44,6 +45,6 @@ public interface VideoRepository extends JpaRepository<VideoJPAEntity, String> {
                                @Param("categories") Set<String> categories,
                                @Param("genres") Set<String> genres,
                                @Param("castMembers") Set<String> castMembers,
-                               PageRequest page);
+                               Pageable page);
 
 }

@@ -1,6 +1,7 @@
 package com.fullcycle.admin.catalogo.application.video.retrieve.list;
 
 import com.fullcycle.admin.catalogo.domain.video.Video;
+import com.fullcycle.admin.catalogo.domain.video.VideoPreview;
 
 import java.time.Instant;
 
@@ -11,6 +12,7 @@ import java.time.Instant;
  */
 public record VideosListOutput(String id,
                                String title,
+                               String description,
                                Instant createdAt,
                                Instant updatedAt) {
 
@@ -18,7 +20,17 @@ public record VideosListOutput(String id,
         return new VideosListOutput(
                 aVideo.getId().getValue(),
                 aVideo.getTitle(),
+                aVideo.getDescription(),
                 aVideo.getCreatedAt(),
                 aVideo.getUpdatedAt());
+    }
+
+    public static VideosListOutput from(VideoPreview aVideo) {
+        return new VideosListOutput(
+                aVideo.id(),
+                aVideo.title(),
+                aVideo.description(),
+                aVideo.createdAt(),
+                aVideo.updatedAt());
     }
 }

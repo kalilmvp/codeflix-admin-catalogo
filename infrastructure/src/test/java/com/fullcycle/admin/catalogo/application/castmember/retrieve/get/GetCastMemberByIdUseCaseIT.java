@@ -1,7 +1,7 @@
 package com.fullcycle.admin.catalogo.application.castmember.retrieve.get;
 
-import com.fullcycle.admin.catalogo.Fixture;
 import com.fullcycle.admin.catalogo.IntegrationTest;
+import com.fullcycle.admin.catalogo.domain.Fixture;
 import com.fullcycle.admin.catalogo.domain.castmember.CastMember;
 import com.fullcycle.admin.catalogo.domain.castmember.CastMemberGateway;
 import com.fullcycle.admin.catalogo.domain.castmember.CastMemberID;
@@ -36,7 +36,7 @@ public class GetCastMemberByIdUseCaseIT {
     @Test
     public void givenAValidId_whenCallGetCastMemberById_shouldReturnCastMember() {
         final var expectedName = Fixture.name();
-        final var expectedType = Fixture.CastMember.type();
+        final var expectedType = Fixture.CastMembers.type();
 
         final var aCastMember = CastMember.newCastMember(expectedName, expectedType);
 
@@ -62,7 +62,7 @@ public class GetCastMemberByIdUseCaseIT {
         final var expectedId = CastMemberID.from("123");
         final var exceptedErrorMessage = "CastMember with ID 123 was not found";
 
-        this.castMemberRepository.saveAndFlush(CastMembersJPAEntity.from(CastMember.newCastMember(Fixture.name(), Fixture.CastMember.type())));
+        this.castMemberRepository.saveAndFlush(CastMembersJPAEntity.from(CastMember.newCastMember(Fixture.name(), Fixture.CastMembers.type())));
 
         assertEquals(1, this.castMemberRepository.count());
 

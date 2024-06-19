@@ -1,7 +1,7 @@
 package com.fullcycle.admin.catalogo.e2e.castmember;
 
 import com.fullcycle.admin.catalogo.E2ETest;
-import com.fullcycle.admin.catalogo.Fixture;
+import com.fullcycle.admin.catalogo.domain.Fixture;
 import com.fullcycle.admin.catalogo.domain.castmember.CastMemberID;
 import com.fullcycle.admin.catalogo.domain.castmember.CastMemberType;
 import com.fullcycle.admin.catalogo.e2e.MockDsl;
@@ -58,7 +58,7 @@ public class CastMemberE2ETest implements MockDsl {
         assertEquals(0, this.castMemberRepository.count());
 
         final var expectedName = Fixture.name();
-        final var expectedType = Fixture.CastMember.type();
+        final var expectedType = Fixture.CastMembers.type();
 
         final var actualId = this.givenACastMember(expectedName, expectedType);
 
@@ -77,7 +77,7 @@ public class CastMemberE2ETest implements MockDsl {
         assertEquals(0, this.castMemberRepository.count());
 
         final String expectedName = null;
-        final var expectedType = Fixture.CastMember.type();
+        final var expectedType = Fixture.CastMembers.type();
         final var expectedErrorMessage = "'name' should not be null";
 
         this.givenACastMemberResult(expectedName, expectedType)
@@ -170,10 +170,10 @@ public class CastMemberE2ETest implements MockDsl {
         assertEquals(0, this.castMemberRepository.count());
 
         final var expectedName = Fixture.name();
-        final var expectedType = Fixture.CastMember.type();
+        final var expectedType = Fixture.CastMembers.type();
 
-        this.givenACastMember(Fixture.name(), Fixture.CastMember.type());
-        this.givenACastMember(Fixture.name(), Fixture.CastMember.type());
+        this.givenACastMember(Fixture.name(), Fixture.CastMembers.type());
+        this.givenACastMember(Fixture.name(), Fixture.CastMembers.type());
         final var actualID = this.givenACastMember(expectedName, expectedType);
 
         final var actualCastMember = this.retrieveACastMember(actualID);
@@ -193,8 +193,8 @@ public class CastMemberE2ETest implements MockDsl {
 
         final var expectedErrorMessage = "CastMember with ID 123 was not found";
 
-        this.givenACastMember(Fixture.name(), Fixture.CastMember.type());
-        this.givenACastMember(Fixture.name(), Fixture.CastMember.type());
+        this.givenACastMember(Fixture.name(), Fixture.CastMembers.type());
+        this.givenACastMember(Fixture.name(), Fixture.CastMembers.type());
 
         this.retrieveACastMemberResult(CastMemberID.from("123"))
                 .andExpect(status().isNotFound())
@@ -211,7 +211,7 @@ public class CastMemberE2ETest implements MockDsl {
         final var expectedName = "Vin Diesel";
         final var expectedType = CastMemberType.ACTOR;
 
-        this.givenACastMember(Fixture.name(), Fixture.CastMember.type());
+        this.givenACastMember(Fixture.name(), Fixture.CastMembers.type());
         final var actualID = this.givenACastMember("vin d", CastMemberType.DIRECTOR);
 
         this.updateACastMember(actualID, expectedName, expectedType)
@@ -236,7 +236,7 @@ public class CastMemberE2ETest implements MockDsl {
         final var expectedType = CastMemberType.ACTOR;
         final var expectedErrorMessage = "'name' should not be null";
 
-        this.givenACastMember(Fixture.name(), Fixture.CastMember.type());
+        this.givenACastMember(Fixture.name(), Fixture.CastMembers.type());
         final var actualID = this.givenACastMember("vin d", CastMemberType.DIRECTOR);
 
         this.updateACastMember(actualID, expectedName, expectedType)
@@ -251,8 +251,8 @@ public class CastMemberE2ETest implements MockDsl {
 
         assertEquals(0, this.castMemberRepository.count());
 
-        this.givenACastMember(Fixture.name(), Fixture.CastMember.type());
-        final var actualID = this.givenACastMember(Fixture.name(), Fixture.CastMember.type());
+        this.givenACastMember(Fixture.name(), Fixture.CastMembers.type());
+        final var actualID = this.givenACastMember(Fixture.name(), Fixture.CastMembers.type());
 
         assertEquals(2, this.castMemberRepository.count());
 
@@ -270,8 +270,8 @@ public class CastMemberE2ETest implements MockDsl {
 
         assertEquals(0, this.castMemberRepository.count());
 
-        this.givenACastMember(Fixture.name(), Fixture.CastMember.type());
-        this.givenACastMember(Fixture.name(), Fixture.CastMember.type());
+        this.givenACastMember(Fixture.name(), Fixture.CastMembers.type());
+        this.givenACastMember(Fixture.name(), Fixture.CastMembers.type());
 
         assertEquals(2, this.castMemberRepository.count());
 
