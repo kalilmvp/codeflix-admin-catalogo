@@ -51,11 +51,11 @@ public class Video extends AggregateRoot<VideoID> {
                   final boolean wasPublished,
                   final Instant aCreationDate,
                   final Instant aUpdateDate,
+                  final AudioVideoMedia aVideo,
+                  final AudioVideoMedia aTrailer,
                   final ImageMedia aBanner,
                   final ImageMedia aThumb,
                   final ImageMedia aThumbHalf,
-                  final AudioVideoMedia aTrailer,
-                  final AudioVideoMedia aVideo,
                   final Set<CategoryID> categories,
                   final Set<GenreID> genres,
                   final Set<CastMemberID> castMembers) {
@@ -69,11 +69,11 @@ public class Video extends AggregateRoot<VideoID> {
         this.published = wasPublished;
         this.createdAt = Objects.requireNonNull(aCreationDate, "'createdAt' should not be null");
         this.updatedAt = Objects.requireNonNull(aUpdateDate, "'updatedAt' should not be null");;
+        this.video = aVideo;
+        this.trailer = aTrailer;
         this.banner = aBanner;
         this.thumbnail = aThumb;
         this.thumbnailHalf = aThumbHalf;
-        this.trailer = aTrailer;
-        this.video = aVideo;
         this.categories = categories;
         this.genres = genres;
         this.castMembers = castMembers;
@@ -191,11 +191,11 @@ public class Video extends AggregateRoot<VideoID> {
                 aVideo.getPublished(),
                 aVideo.getCreatedAt(),
                 aVideo.getUpdatedAt(),
+                aVideo.getVideo().orElse(null),
+                aVideo.getTrailer().orElse(null),
                 aVideo.getBanner().orElse(null),
                 aVideo.getThumbnail().orElse(null),
                 aVideo.getThumbnailHalf().orElse(null),
-                aVideo.getTrailer().orElse(null),
-                aVideo.getVideo().orElse(null),
                 aVideo.getCategories(),
                 aVideo.getGenres(),
                 aVideo.getCastMembers()
@@ -212,11 +212,11 @@ public class Video extends AggregateRoot<VideoID> {
                              final boolean wasPublished,
                              final Instant aCreationDate,
                              final Instant aUpdateDate,
+                             final AudioVideoMedia aVideo,
+                             final AudioVideoMedia aTrailer,
                              final ImageMedia aBanner,
                              final ImageMedia aThumb,
                              final ImageMedia aThumbHalf,
-                             final AudioVideoMedia aTrailer,
-                             final AudioVideoMedia aVideo,
                              final Set<CategoryID> categories,
                              final Set<GenreID> genres,
                              final Set<CastMemberID> castMembers) {
@@ -231,11 +231,11 @@ public class Video extends AggregateRoot<VideoID> {
                 wasPublished,
                 aCreationDate,
                 aUpdateDate,
+                aVideo,
+                aTrailer,
                 aBanner,
                 aThumb,
                 aThumbHalf,
-                aTrailer,
-                aVideo,
                 categories,
                 genres,
                 castMembers

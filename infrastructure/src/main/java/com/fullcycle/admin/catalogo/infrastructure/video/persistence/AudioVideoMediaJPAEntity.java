@@ -18,6 +18,8 @@ public class AudioVideoMediaJPAEntity {
 
     @Id
     private String id;
+    @Column(name = "checksum", nullable = false)
+    private String checksum;
     @Column(name = "name", nullable = false)
     private String name;
     @Column(name = "file_path", nullable = false)
@@ -32,11 +34,13 @@ public class AudioVideoMediaJPAEntity {
     }
 
     private AudioVideoMediaJPAEntity(final String id,
-                                    final String name,
-                                    final String filePath,
-                                    final String encodedPath,
-                                    final MediaStatus status) {
+                                     final String checksum,
+                                     final String name,
+                                     final String filePath,
+                                     final String encodedPath,
+                                     final MediaStatus status) {
         this.id = id;
+        this.checksum = checksum;
         this.name = name;
         this.filePath = filePath;
         this.encodedPath = encodedPath;
@@ -45,6 +49,7 @@ public class AudioVideoMediaJPAEntity {
 
     public static AudioVideoMediaJPAEntity from(final AudioVideoMedia aAudioVideoMedia) {
         return new AudioVideoMediaJPAEntity(
+                aAudioVideoMedia.id(),
                 aAudioVideoMedia.checksum(),
                 aAudioVideoMedia.name(),
                 aAudioVideoMedia.rawLocation(),
@@ -55,6 +60,7 @@ public class AudioVideoMediaJPAEntity {
     public AudioVideoMedia toDomain() {
         return AudioVideoMedia.with(
                 this.getId(),
+                this.getChecksum(),
                 this.getName(),
                 this.getFilePath(),
                 this.getEncodedPath(),
@@ -68,6 +74,14 @@ public class AudioVideoMediaJPAEntity {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getChecksum() {
+        return checksum;
+    }
+
+    public void setChecksum(String checksum) {
+        this.checksum = checksum;
     }
 
     public String getName() {

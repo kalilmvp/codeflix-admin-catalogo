@@ -1,5 +1,6 @@
 package com.fullcycle.admin.catalogo.domain.video;
 
+import com.fullcycle.admin.catalogo.domain.utils.IdUtils;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -10,6 +11,7 @@ class AudioVideoMediaTest {
     @Test
     public void givenValidParams_whenCallNewAudioVideo_shouldReturnInstance() {
         // given
+        final var expectedId = IdUtils.uuid();
         final var expectedCheckSum = "123";
         final var expectedName = "Banner.jpg";
         final var expectedRawLocation = "/images/123";
@@ -17,7 +19,7 @@ class AudioVideoMediaTest {
         final var expectedStatus = MediaStatus.PENDING;
 
         // when
-        final var actualAudioVideo = AudioVideoMedia.with(expectedCheckSum, expectedName, expectedRawLocation, expectedEncodedLocation, expectedStatus);
+        final var actualAudioVideo = AudioVideoMedia.with(expectedId, expectedCheckSum, expectedName, expectedRawLocation, expectedEncodedLocation, expectedStatus);
 
         // then
         assertNotNull(actualAudioVideo);
@@ -44,10 +46,10 @@ class AudioVideoMediaTest {
 
     @Test
     public void givenInvalidParams_whenCallsWith_shouldReturnError() {
-        assertThrows(NullPointerException.class, () -> AudioVideoMedia.with(null, "Random", "/images", "/images", MediaStatus.PENDING));
-        assertThrows(NullPointerException.class, () -> AudioVideoMedia.with("abc", null, "/images", "/images", MediaStatus.PENDING));
-        assertThrows(NullPointerException.class, () -> AudioVideoMedia.with("abc", "Random", null, "/images", MediaStatus.PENDING));
-        assertThrows(NullPointerException.class, () -> AudioVideoMedia.with("abc", "Random", "/images", null, MediaStatus.PENDING));
-        assertThrows(NullPointerException.class, () -> AudioVideoMedia.with("abc", "Random", "/images", "/images", null));
+        assertThrows(NullPointerException.class, () -> AudioVideoMedia.with(null, "123", "Random", "/images", "/images", MediaStatus.PENDING));
+        assertThrows(NullPointerException.class, () -> AudioVideoMedia.with("id", "123", null, "/images", "/images", MediaStatus.PENDING));
+        assertThrows(NullPointerException.class, () -> AudioVideoMedia.with("id", "123", "Random", null, "/images", MediaStatus.PENDING));
+        assertThrows(NullPointerException.class, () -> AudioVideoMedia.with("id", "123", "Random", "/images", null, MediaStatus.PENDING));
+        assertThrows(NullPointerException.class, () -> AudioVideoMedia.with("id", "123", "Random", "/images", "/images", null));
     }
 }

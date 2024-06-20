@@ -10,11 +10,10 @@ import com.fullcycle.admin.catalogo.infrastructure.video.persistence.VideoJPAEnt
 import com.fullcycle.admin.catalogo.infrastructure.video.persistence.VideoRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import static com.fullcycle.admin.catalogo.domain.utils.CollectionUtils.mapTo;
 import static com.fullcycle.admin.catalogo.domain.utils.CollectionUtils.nullIfEmpty;
@@ -24,6 +23,7 @@ import static com.fullcycle.admin.catalogo.domain.utils.CollectionUtils.nullIfEm
  * @date 6/18/24 20:22
  * @email kalilmvp@gmail.com
  */
+@Component
 public class DefaultVideoGateway implements VideoGateway {
     private final VideoRepository videoRepository;
 
