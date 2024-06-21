@@ -1,6 +1,7 @@
 package com.fullcycle.admin.catalogo.infrastructure.genre;
 
 import com.fullcycle.admin.catalogo.domain.castmember.CastMemberID;
+import com.fullcycle.admin.catalogo.domain.category.CategoryID;
 import com.fullcycle.admin.catalogo.domain.genre.Genre;
 import com.fullcycle.admin.catalogo.domain.genre.GenreGateway;
 import com.fullcycle.admin.catalogo.domain.genre.GenreID;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 /**
  * @author kalil.peixoto
@@ -84,12 +86,18 @@ public class GenreMySQLGateway implements GenreGateway {
                         .toList());
     }
 
-    private Specification<GenreJPAEntity> assemBleSpecification(final String terms) {
-        return SpecificationUtils.like("name", terms);
+    @Override
+    public List<GenreID> existsByIds(final Iterable<GenreID> genreIds) {
+        final var ids = StreamSupport.stream(genreIds.spliterator(), false)
+                .map(GenreID::getValue)
+                .toList();
+        return this.genreRepository.existsByIds(ids)
+                .stream()
+                .map(GenreID::from)
+                .toList();
     }
 
-    @Override
-    public List<GenreID> existsByIds(final Iterable<GenreID> ids) {
-        throw new UnsupportedOperationException();
+    private Specification<GenreJPAEntity> assemBleSpecification(final String terms) {
+        return SpecificationUtils.like("name", terms);
     }
 }

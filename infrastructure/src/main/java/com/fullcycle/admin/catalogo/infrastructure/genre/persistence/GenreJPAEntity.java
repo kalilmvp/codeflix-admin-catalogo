@@ -17,7 +17,7 @@ import static javax.persistence.FetchType.*;
  * @date 1/14/24 21:32
  * @email kalilmvp@gmail.com
  */
-@Entity
+@Entity(name = "Genre")
 @Table(name = "genres")
 public class GenreJPAEntity {
 

@@ -1,12 +1,14 @@
 package com.fullcycle.admin.catalogo.infrastructure.genre;
 
 import com.fullcycle.admin.catalogo.MySQLGatewayTest;
+import com.fullcycle.admin.catalogo.domain.Fixture;
 import com.fullcycle.admin.catalogo.domain.category.Category;
 import com.fullcycle.admin.catalogo.domain.category.CategoryID;
 import com.fullcycle.admin.catalogo.domain.genre.Genre;
 import com.fullcycle.admin.catalogo.domain.genre.GenreID;
 import com.fullcycle.admin.catalogo.domain.pagination.SearchQuery;
 import com.fullcycle.admin.catalogo.infrastructure.category.CategoryMySQLGateway;
+import com.fullcycle.admin.catalogo.infrastructure.category.persistence.CategoryJPAEntity;
 import com.fullcycle.admin.catalogo.infrastructure.genre.persistence.GenreJPAEntity;
 import com.fullcycle.admin.catalogo.infrastructure.genre.persistence.GenreRepository;
 import org.junit.jupiter.api.Test;
@@ -14,6 +16,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -484,6 +487,28 @@ public class GenreMySQLGatewayTest {
             assertEquals(expectedName, actualName);
             index++;
         }
+    }
+
+    @Test
+    public void givenPrePersistedGenres_whenCallsExistsByIds_shouldReturnIds() {
+        // given
+        final var tech = Fixture.Genres.tech();
+        final var western = Fixture.Genres.western();
+
+        assertEquals(0, this.genreRepository.count());
+
+        this.genreRepository.saveAll(Arrays.asList(GenreJPAEntity.from(tech), GenreJPAEntity.from(western)));
+
+        assertEquals(2, this.genreRepository.count());
+
+        final var expectedIds = List.of(tech.getId(), western.getId());
+        final var ids = List.of(tech.getId(), western.getId(), GenreID.from("123"));
+
+        // when
+        final var actualResult = this.genreMySQLGateway.existsByIds(ids);
+
+        assertTrue(expectedIds.size() == actualResult.size() &&
+                expectedIds.containsAll(actualResult));
     }
 
     private void mockGenres() {

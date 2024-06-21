@@ -69,9 +69,14 @@ public final class Fixture {
 
     public static class Genres {
         private static final Genre TECH = Genre.newGenre("Technology", true);
+        private static final Genre WESTERN = Genre.newGenre("Western", true);
 
         public static Genre tech() {
             return Genre.with(TECH);
+        }
+
+        public static Genre western() {
+            return Genre.with(WESTERN);
         }
     }
 

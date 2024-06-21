@@ -18,5 +18,5 @@ public interface GenreGateway {
     Optional<Genre> findById(GenreID anId);
     Genre update(Genre aGenre);
     Pagination<Genre> findAll(SearchQuery aQuery);
-    List<GenreID> existsByIds(Iterable<GenreID> ids);
+    List<GenreID> existsByIds(Iterable<GenreID> genreIds);
 }

@@ -13,6 +13,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -307,6 +308,28 @@ public class CastMemberMySQLGatewayTest {
             assertEquals(expectedName, actualName);
             index++;
         }
+    }
+
+    @Test
+    public void givenPrePersistedCastMembers_whenCallsExistsByIds_shouldReturnIds() {
+        // given
+        final var kalil = Fixture.CastMembers.kalil();
+        final var wesley = Fixture.CastMembers.wesley();
+
+        assertEquals(0, this.castMemberRepository.count());
+
+        this.castMemberRepository.saveAll(Arrays.asList(CastMembersJPAEntity.from(kalil), CastMembersJPAEntity.from(wesley)));
+
+        assertEquals(2, this.castMemberRepository.count());
+
+        final var expectedIds = List.of(kalil.getId(), wesley.getId());
+        final var ids = List.of(kalil.getId(), wesley.getId(), CastMemberID.from("123"));
+
+        // when
+        final var actualResult = this.castMemberMySQLGateway.existsByIds(ids);
+
+        assertTrue(expectedIds.size() == actualResult.size() &&
+                expectedIds.containsAll(actualResult));
     }
 
     private void mockCastMembers() {
