@@ -61,9 +61,14 @@ public final class Fixture {
 
     public static class Categories {
         private static final Category AULAS = Category.newCategory("Aulas", "Sem descrição", true);
+        private static final Category TUTORIAIS = Category.newCategory("Tutoriais", "Sem descrição", true);
 
         public static Category aulas() {
             return Category.with(AULAS);
+        }
+
+        public static Category tutoriais() {
+            return Category.with(TUTORIAIS);
         }
     }
 

@@ -17,6 +17,8 @@ import java.util.Optional;
 
 import static com.fullcycle.admin.catalogo.domain.utils.CollectionUtils.mapTo;
 import static com.fullcycle.admin.catalogo.domain.utils.CollectionUtils.nullIfEmpty;
+import static com.fullcycle.admin.catalogo.infrastructure.utils.SqlUtils.like;
+import static com.fullcycle.admin.catalogo.infrastructure.utils.SqlUtils.upper;
 
 /**
  * @author kalil.peixoto
@@ -70,7 +72,7 @@ public class DefaultVideoGateway implements VideoGateway {
         );
 
         final var actualPage = this.videoRepository.findAll(
-                SqlUtils.like(aQuery.terms()),
+                like(upper(aQuery.terms())),
                 nullIfEmpty(mapTo(aQuery.categories(), Identifier::getValue)),
                 nullIfEmpty(mapTo(aQuery.genres(), Identifier::getValue)),
                 nullIfEmpty(mapTo(aQuery.castMembers(), Identifier::getValue)),

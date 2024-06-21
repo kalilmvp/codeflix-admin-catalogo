@@ -20,27 +20,27 @@ import java.util.Set;
  */
 public interface VideoRepository extends JpaRepository<VideoJPAEntity, String> {
 
-    @Query("""
-            select new com.fullcycle.admin.catalogo.domain.video.VideoPreview(
-                v.id as id,
-                v.title as title,
-                v.description as description,
-                v.createdAt as createdAt,
-                v.updatedAt as updatedAt
-            )
-            from Video v
-                join v.categories c 
-                join v.genres g
-                join v.castMembers cm
-            where
-                (:terms is null or UPPER(v.title) like :terms )
-            and
-                (:categories is null or c.id.categoryId in :categories )
-            and
-                (:genres is null or g.id.genreId in :genres )
-            and
-                (:castMembers is null or cm.id.castMemberId in :castMembers )
-           """)
+    @Query(value = """
+             select distinct new com.fullcycle.admin.catalogo.domain.video.VideoPreview(
+                 v.id as id,
+                 v.title as title,
+                 v.description as description,
+                 v.createdAt as createdAt,
+                 v.updatedAt as updatedAt
+             )
+             from Video v
+                  left join v.castMembers members
+                  left join v.categories categories
+                  left join v.genres genres
+              where
+                  ( :terms is null or UPPER(v.title) like :terms )
+              and
+                  ( (:castMembers) is null or members.id.castMemberId in (:castMembers) )
+              and
+                  ( (:categories) is null or categories.id.categoryId in (:categories) )
+              and
+                  ( (:genres) is null or genres.id.genreId in (:genres) )
+            """)
     Page<VideoPreview> findAll(@Param("terms") String terms,
                                @Param("categories") Set<String> categories,
                                @Param("genres") Set<String> genres,

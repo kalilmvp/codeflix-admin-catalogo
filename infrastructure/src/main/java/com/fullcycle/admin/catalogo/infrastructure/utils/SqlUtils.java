@@ -13,4 +13,9 @@ public final class SqlUtils {
         if (term == null) return null;
         return "%" + term + "%";
     }
+
+    public static String upper(final String term) {
+        if (term == null) return null;
+        return term.toUpperCase();
+    }
 }
