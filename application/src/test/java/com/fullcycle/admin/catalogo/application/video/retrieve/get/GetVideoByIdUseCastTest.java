@@ -3,6 +3,7 @@ package com.fullcycle.admin.catalogo.application.video.retrieve.get;
 import com.fullcycle.admin.catalogo.application.UseCaseTest;
 import com.fullcycle.admin.catalogo.domain.Fixture;
 import com.fullcycle.admin.catalogo.domain.exceptions.NotFoundException;
+import com.fullcycle.admin.catalogo.domain.resource.Resource;
 import com.fullcycle.admin.catalogo.domain.utils.IdUtils;
 import com.fullcycle.admin.catalogo.domain.video.*;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,8 @@ import org.mockito.Mock;
 import java.time.Year;
 import java.util.*;
 
+import static com.fullcycle.admin.catalogo.domain.Fixture.Videos.audioVideo;
+import static com.fullcycle.admin.catalogo.domain.Fixture.Videos.image;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -51,11 +54,11 @@ public class GetVideoByIdUseCastTest extends UseCaseTest {
                 Fixture.CastMembers.wesley().getId()
         );
 
-        final var expectedVideo = audioVideoMedia(Resource.Type.VIDEO);
-        final var expectedTrailer = audioVideoMedia(Resource.Type.TRAILER);
-        final var expectedBanner = image(Resource.Type.BANNER);
-        final var expectedThumbnail = image(Resource.Type.THUMBNAIL);
-        final var expectedThumbnailHalf = image(Resource.Type.THUMBNAIL_HALF);
+        final var expectedVideo = audioVideo(VideoMediaType.VIDEO);
+        final var expectedTrailer = audioVideo(VideoMediaType.TRAILER);
+        final var expectedBanner = image(VideoMediaType.BANNER);
+        final var expectedThumbnail = image(VideoMediaType.THUMBNAIL);
+        final var expectedThumbnailHalf = image(VideoMediaType.THUMBNAIL_HALF);
 
         final var aVideo = Video.newVideo(
                 expectedTitle,
@@ -119,25 +122,5 @@ public class GetVideoByIdUseCastTest extends UseCaseTest {
 
         // then
         assertEquals(expectedErrorMessage, actualError.getMessage());
-    }
-
-    private AudioVideoMedia audioVideoMedia(final Resource.Type type) {
-        return AudioVideoMedia.with(
-                IdUtils.uuid(),
-                "checksum",
-                type.name().toLowerCase(),
-                "/videos/".concat("checksum"),
-                "",
-                MediaStatus.PENDING
-        );
-    }
-
-    private ImageMedia image(final Resource.Type type) {
-        final var checksum = IdUtils.uuid();
-        return ImageMedia.with(
-                checksum,
-                type.name().toLowerCase(),
-                "/images/".concat(checksum)
-        );
     }
 }

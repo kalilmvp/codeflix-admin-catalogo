@@ -4,9 +4,9 @@ import com.fullcycle.admin.catalogo.domain.castmember.CastMember;
 import com.fullcycle.admin.catalogo.domain.castmember.CastMemberType;
 import com.fullcycle.admin.catalogo.domain.category.Category;
 import com.fullcycle.admin.catalogo.domain.genre.Genre;
-import com.fullcycle.admin.catalogo.domain.video.Rating;
-import com.fullcycle.admin.catalogo.domain.video.Resource;
-import com.fullcycle.admin.catalogo.domain.video.Video;
+import com.fullcycle.admin.catalogo.domain.utils.IdUtils;
+import com.fullcycle.admin.catalogo.domain.video.*;
+import com.fullcycle.admin.catalogo.domain.resource.Resource;
 import com.github.javafaker.Faker;
 
 import java.time.Year;
@@ -44,6 +44,10 @@ public final class Fixture {
 
     public static boolean bool() {
         return FAKER.bool().bool();
+    }
+
+    public static String checksum() {
+        return "03fe62de";
     }
 
     public static Video video() {
@@ -142,17 +146,33 @@ public final class Fixture {
             );
         }
 
-        public static Resource resource(final Resource.Type type) {
+        public static Resource resource(final VideoMediaType type) {
             final String contentType = Match(type).of(
-                    Case($(List(Resource.Type.VIDEO, Resource.Type.TRAILER)::contains), "video/mp4"),
+                    Case($(List(VideoMediaType.VIDEO, VideoMediaType.TRAILER)::contains), "video/mp4"),
                     Case($(), "image/jpg")
             );
 
             final byte[] content = "Contents".getBytes();
 
-            return Resource.with(content, contentType, type.name().toLowerCase(), type);
+            return Resource.with(IdUtils.uuid(), content, contentType, type.name().toLowerCase());
+        }
+
+        public static AudioVideoMedia audioVideo(final VideoMediaType type) {
+            final var checksum = checksum();
+            return AudioVideoMedia.with(
+                    checksum,
+                    type.name().toLowerCase(),
+                    "/videos/" + checksum
+            );
+        }
+
+        public static ImageMedia image(final VideoMediaType type) {
+            final var checksum = checksum();
+            return ImageMedia.with(
+                    checksum,
+                    type.name().toLowerCase(),
+                    "/images/" + checksum
+            );
         }
     }
-
-
 }
