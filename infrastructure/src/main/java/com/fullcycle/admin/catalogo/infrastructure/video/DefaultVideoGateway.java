@@ -1,11 +1,8 @@
 package com.fullcycle.admin.catalogo.infrastructure.video;
 
 import com.fullcycle.admin.catalogo.domain.Identifier;
-import com.fullcycle.admin.catalogo.domain.castmember.CastMemberID;
 import com.fullcycle.admin.catalogo.domain.pagination.Pagination;
-import com.fullcycle.admin.catalogo.domain.utils.CollectionUtils;
 import com.fullcycle.admin.catalogo.domain.video.*;
-import com.fullcycle.admin.catalogo.infrastructure.utils.SqlUtils;
 import com.fullcycle.admin.catalogo.infrastructure.video.persistence.VideoJPAEntity;
 import com.fullcycle.admin.catalogo.infrastructure.video.persistence.VideoRepository;
 import org.springframework.data.domain.PageRequest;

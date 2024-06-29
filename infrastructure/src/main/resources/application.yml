@@ -3,7 +3,7 @@ google:
     credentials: ${GOOGLE_CLOUD_CREDENTIALS}
     project-id: ${GOOGLE_CLOUD_PROJECT_ID}
     storage:
-      catalogo-video:
+      catalogo-videos:
         bucket: kmvp_fc3_catalogo_videos
         connect-timeout: 1000
         read-timeout: 2000
@@ -57,4 +57,7 @@ spring:
   flyway:
     clean-disabled: false
 
-
+storage:
+  catalogo-videos:
+    filename-pattern: type-{type}
+    location-pattern: videoId-{videoId}
