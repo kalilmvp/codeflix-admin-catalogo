@@ -1,5 +1,8 @@
 package com.fullcycle.admin.catalogo.domain.video;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 /**
  * @author kalil.peixoto
  * @date 6/25/24 17:05
@@ -10,5 +13,11 @@ public enum VideoMediaType {
     TRAILER,
     BANNER,
     THUMBNAIL,
-    THUMBNAIL_HALF
+    THUMBNAIL_HALF;
+
+    public static Optional<VideoMediaType> of(final String value) {
+        return Arrays.stream(values())
+                .filter(it -> it.name().equalsIgnoreCase(value))
+                .findFirst();
+    }
 }

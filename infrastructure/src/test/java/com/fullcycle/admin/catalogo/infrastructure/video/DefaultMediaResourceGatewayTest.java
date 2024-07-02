@@ -110,6 +110,45 @@ public class DefaultMediaResourceGatewayTest {
                 expectedValues.containsAll(actualKeys));
     }
 
+    @Test
+    public void givenValidVideoId_whenCallsGetResource_shouldReturnIt() {
+        // given
+        final var videoOne = VideoID.unique();
+        final var expectedType = VideoMediaType.VIDEO;
+        final var expectedResource = resource(mediaType());
+
+        this.storageService().store("videoId-%s/type-%s".formatted(videoOne.getValue(), expectedType.name()), expectedResource);
+        this.storageService().store("videoId-%s/type-%s".formatted(videoOne.getValue(), VideoMediaType.TRAILER.name()), resource(mediaType()));
+        this.storageService().store("videoId-%s/type-%s".formatted(videoOne.getValue(), VideoMediaType.BANNER.name()), resource(mediaType()));
+
+        assertEquals(3, this.storageService().storage().size());
+
+        // when
+        final var actualResult = this.mediaResourceGateway.getResource(videoOne, expectedType).get();
+
+        // then
+        assertEquals(expectedResource, actualResult);
+    }
+
+    @Test
+    public void givenInvalidType_whenCallsGetResource_shouldReturnEmpty() {
+        // given
+        final var videoOne = VideoID.unique();
+        final var expectedType = VideoMediaType.THUMBNAIL_HALF;
+
+        this.storageService().store("videoId-%s/type-%s".formatted(videoOne.getValue(), VideoMediaType.VIDEO.name()), resource(mediaType()));
+        this.storageService().store("videoId-%s/type-%s".formatted(videoOne.getValue(), VideoMediaType.TRAILER.name()), resource(mediaType()));
+        this.storageService().store("videoId-%s/type-%s".formatted(videoOne.getValue(), VideoMediaType.BANNER.name()), resource(mediaType()));
+
+        assertEquals(3, this.storageService().storage().size());
+
+        // when
+        final var actualResult = this.mediaResourceGateway.getResource(videoOne, expectedType);
+
+        // then
+        assertTrue(actualResult.isEmpty());
+    }
+
     private InMemoryStorageService storageService() {
         return (InMemoryStorageService) this.storageService;
     }
