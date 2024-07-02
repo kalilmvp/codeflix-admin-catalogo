@@ -2,6 +2,7 @@ package com.fullcycle.admin.catalogo.application.video.delete;
 
 import com.fullcycle.admin.catalogo.application.UseCaseTest;
 import com.fullcycle.admin.catalogo.domain.exceptions.InternalErrorException;
+import com.fullcycle.admin.catalogo.domain.video.MediaResourceGateway;
 import com.fullcycle.admin.catalogo.domain.video.VideoGateway;
 import com.fullcycle.admin.catalogo.domain.video.VideoID;
 import org.junit.jupiter.api.Test;
@@ -28,10 +29,12 @@ public class DeleteVideoUseCastTest extends UseCaseTest {
 
     @Mock
     private VideoGateway videoGateway;
+    @Mock
+    private MediaResourceGateway mediaResourceGateway;
 
     @Override
     protected List<Object> getMocks() {
-        return List.of(this.videoGateway);
+        return List.of(this.videoGateway, this.mediaResourceGateway);
     }
 
     @Test
@@ -41,12 +44,14 @@ public class DeleteVideoUseCastTest extends UseCaseTest {
 
         doNothing()
                 .when(this.videoGateway).deleteById(any());
+        doNothing()
+                .when(this.mediaResourceGateway).clearResources(any());
         // when
         assertDoesNotThrow(() -> this.useCase.execute(expectedId.getValue()));
 
         // then
         verify(this.videoGateway, times(1)).deleteById(eq(expectedId));
-
+        verify(this.mediaResourceGateway, times(1)).clearResources(eq(expectedId));
     }
 
     @Test

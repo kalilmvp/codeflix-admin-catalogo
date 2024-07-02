@@ -427,7 +427,7 @@ public class UpdateVideoUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenAValidCommandWithoutResources_whenCallsUpdateVideo_shouldReturnVideoid() {
+    public void givenAValidCommandWithoutResources_whenCallsUpdateVideo_shouldReturnVideoId() {
         // given
         final var aVideo = Fixture.Videos.systemDesign();
 

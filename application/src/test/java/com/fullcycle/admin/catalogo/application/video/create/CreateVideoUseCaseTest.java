@@ -11,7 +11,6 @@ import com.fullcycle.admin.catalogo.domain.exceptions.NotificationException;
 import com.fullcycle.admin.catalogo.domain.genre.GenreGateway;
 import com.fullcycle.admin.catalogo.domain.genre.GenreID;
 import com.fullcycle.admin.catalogo.domain.resource.Resource;
-import com.fullcycle.admin.catalogo.domain.utils.IdUtils;
 import com.fullcycle.admin.catalogo.domain.video.*;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -57,7 +56,7 @@ public class CreateVideoUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenAValidCommand_whenCallsCreateVideo_shouldReturnVideoid() {
+    public void givenAValidCommand_whenCallsCreateVideo_shouldReturnVideoId() {
         // given
         final var expectedTitle = Fixture.title();
         final var expectedDescription = Fixture.Videos.description();
