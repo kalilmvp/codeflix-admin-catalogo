@@ -388,7 +388,7 @@ public class CreateVideoUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenAValidCommandWithoutResources_whenCallsCreateVideo_shouldReturnVideoid() {
+    public void givenAValidCommandWithoutResources_whenCallsCreateVideo_shouldReturnVideoId() {
         // given
         final var expectedTitle = Fixture.title();
         final var expectedDescription = Fixture.Videos.description();
@@ -418,9 +418,9 @@ public class CreateVideoUseCaseTest extends UseCaseTest {
                 expectedOpened,
                 expectedPublished,
                 expectedRating.getName(),
-                asString(expectedCategories),
-                asString(expectedGenres),
-                asString(expectedCastMembers),
+                this.asString(expectedCategories),
+                this.asString(expectedGenres),
+                this.asString(expectedCastMembers),
                 expectedVideo,
                 expectedTrailer,
                 expectedBanner,

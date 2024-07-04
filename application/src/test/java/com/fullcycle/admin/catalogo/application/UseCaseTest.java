@@ -34,8 +34,8 @@ public abstract class UseCaseTest implements BeforeEachCallback {
                 .toList();
     }
 
-    protected Set<String> asString(final Set<? extends Identifier> categories) {
-        return categories.stream()
+    protected Set<String> asString(final Set<? extends Identifier> values) {
+        return values.stream()
                 .map(Identifier::getValue)
                 .collect(Collectors.toSet());
     }
