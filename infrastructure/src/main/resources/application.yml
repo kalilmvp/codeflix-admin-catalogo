@@ -74,6 +74,7 @@ spring:
     port: ${amqp.port}
     username: ${amqp.username}
     password: ${amqp.password}
+    dynamic: ${amqp.admin.auto-create}
 
 storage:
   catalogo-videos:
