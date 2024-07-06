@@ -86,11 +86,11 @@ public class DefaultUpdateVideoUseCase extends UpdateVideoUseCase {
             final var aThumbnailHalfMedia = aCommand.getThumbnailHalf().map(it -> this.mediaResourceGateway.storeImage(anId, VideoResource.with(it, THUMBNAIL_HALF))).orElse(null);
 
             return this.videoGateway.update(aVideo
-                    .setVideo(aVideoMedia)
-                    .setTrailer(aTrailerMedia)
-                    .setBanner(aBannerMedia)
-                    .setThumbnail(aThumbnailMedia)
-                    .setThumbnailHalf(aThumbnailHalfMedia));
+                    .updateVideoMedia(aVideoMedia)
+                    .updateTrailerMedia(aTrailerMedia)
+                    .updateBannerMedia(aBannerMedia)
+                    .updateThumbnailMedia(aThumbnailMedia)
+                    .updateThumbnailHalfMedia(aThumbnailHalfMedia));
         } catch (final Throwable t) {
             throw InternalErrorException.with("An error on update video ocurred [videoId:%s]".formatted(anId.getValue()), t);
         }

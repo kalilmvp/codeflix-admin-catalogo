@@ -92,11 +92,11 @@ public class DefaultCreateVideoUseCase extends CreateVideoUseCase {
             final var aThumbnailHalfMedia = aCommand.getThumbnailHalf().map(it -> this.mediaResourceGateway.storeImage(anId, VideoResource.with(it, THUMBNAIL_HALF))).orElse(null);
 
             return this.videoGateway.create(aVideo
-                    .setVideo(aVideoMedia)
-                    .setTrailer(aTrailerMedia)
-                    .setBanner(aBannerMedia)
-                    .setThumbnail(aThumbnailMedia)
-                    .setThumbnailHalf(aThumbnailHalfMedia));
+                    .updateVideoMedia(aVideoMedia)
+                    .updateTrailerMedia(aTrailerMedia)
+                    .updateBannerMedia(aBannerMedia)
+                    .updateThumbnailMedia(aThumbnailMedia)
+                    .updateThumbnailHalfMedia(aThumbnailHalfMedia));
         } catch (final Throwable t) {
             this.mediaResourceGateway.clearResources(anId);
             throw InternalErrorException.with("An error on create video ocurred [videoId:%s]".formatted(anId.getValue()), t);

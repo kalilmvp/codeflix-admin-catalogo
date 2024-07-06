@@ -3,6 +3,7 @@ package com.fullcycle.admin.catalogo.domain.video;
 import com.fullcycle.admin.catalogo.domain.AggregateRoot;
 import com.fullcycle.admin.catalogo.domain.castmember.CastMemberID;
 import com.fullcycle.admin.catalogo.domain.category.CategoryID;
+import com.fullcycle.admin.catalogo.domain.events.DomainEvent;
 import com.fullcycle.admin.catalogo.domain.genre.GenreID;
 import com.fullcycle.admin.catalogo.domain.utils.InstantUtils;
 import com.fullcycle.admin.catalogo.domain.validation.ValidationHandler;
@@ -61,8 +62,9 @@ public class Video extends AggregateRoot<VideoID> {
                   final ImageMedia aThumbHalf,
                   final Set<CategoryID> categories,
                   final Set<GenreID> genres,
-                  final Set<CastMemberID> castMembers) {
-        super(anId);
+                  final Set<CastMemberID> castMembers,
+                  final List<DomainEvent> domainEvents) {
+        super(anId, domainEvents);
         this.title = aTitle;
         this.description = aDescription;
         this.launchedAt = aLaunchYear;
@@ -83,34 +85,46 @@ public class Video extends AggregateRoot<VideoID> {
     }
 
 
-    public Video setBanner(final ImageMedia banner) {
+    public Video updateBannerMedia(final ImageMedia banner) {
         this.banner = banner;
         this.updatedAt = InstantUtils.now();
         return this;
     }
 
-    public Video setThumbnail(final ImageMedia thumbnail) {
+    public Video updateThumbnailMedia(final ImageMedia thumbnail) {
         this.thumbnail = thumbnail;
         this.updatedAt = InstantUtils.now();
         return this;
     }
 
-    public Video setThumbnailHalf(final ImageMedia thumbnailHalf) {
+    public Video updateThumbnailHalfMedia(final ImageMedia thumbnailHalf) {
         this.thumbnailHalf = thumbnailHalf;
         this.updatedAt = InstantUtils.now();
         return this;
     }
 
-    public Video setTrailer(final AudioVideoMedia trailer) {
+    public Video updateTrailerMedia(final AudioVideoMedia trailer) {
         this.trailer = trailer;
         this.updatedAt = InstantUtils.now();
+
+        this.onAudioVideoMediaUpdated(trailer);
+
         return this;
     }
 
-    public Video setVideo(final AudioVideoMedia video) {
+    public Video updateVideoMedia(final AudioVideoMedia video) {
         this.video = video;
         this.updatedAt = InstantUtils.now();
+
+        this.onAudioVideoMediaUpdated(video);
+
         return this;
+    }
+
+    private void onAudioVideoMediaUpdated(AudioVideoMedia media) {
+        if (media != null && media.isPendingEncoded()) {
+            this.registerEvent(new VideoMediaCreated(this.getId().getValue(), media.rawLocation()));
+        }
     }
 
     private void setCategories(final Set<CategoryID> categories) {
@@ -151,9 +165,10 @@ public class Video extends AggregateRoot<VideoID> {
                         null,
                         null,
                         null,
-                        new HashSet<>(categories),
-                        new HashSet<>(genres),
-                        new HashSet<>(castMembers));
+                        categories,
+                        genres,
+                        castMembers,
+                        null);
     }
 
     public Video update(final String aTitle,
@@ -199,9 +214,10 @@ public class Video extends AggregateRoot<VideoID> {
                 aVideo.getBanner().orElse(null),
                 aVideo.getThumbnail().orElse(null),
                 aVideo.getThumbnailHalf().orElse(null),
-                aVideo.getCategories(),
-                aVideo.getGenres(),
-                aVideo.getCastMembers()
+                new HashSet<>(aVideo.getCategories()),
+                new HashSet<>(aVideo.getGenres()),
+                new HashSet<>(aVideo.getCastMembers()),
+                aVideo.getDomainEvents()
         );
     }
 
@@ -241,7 +257,8 @@ public class Video extends AggregateRoot<VideoID> {
                 aThumbHalf,
                 categories,
                 genres,
-                castMembers
+                castMembers,
+                null
         );
     }
 
@@ -320,18 +337,18 @@ public class Video extends AggregateRoot<VideoID> {
 
     public Video processing(VideoMediaType aType) {
         if (VIDEO == aType) {
-            this.getVideo().ifPresent(media -> this.setVideo(media.processing()));
+            this.getVideo().ifPresent(media -> this.updateVideoMedia(media.processing()));
         } else if (TRAILER == aType) {
-            this.getTrailer().ifPresent(media -> this.setTrailer(media.processing()));
+            this.getTrailer().ifPresent(media -> this.updateTrailerMedia(media.processing()));
         }
         return this;
     }
 
     public Video completed(VideoMediaType aType, String encodedPath) {
         if (VIDEO == aType) {
-            this.getVideo().ifPresent(media -> this.setVideo(media.completed(encodedPath)));
+            this.getVideo().ifPresent(media -> this.updateVideoMedia(media.completed(encodedPath)));
         } else if (TRAILER == aType) {
-            this.getTrailer().ifPresent(media -> this.setTrailer(media.completed(encodedPath)));
+            this.getTrailer().ifPresent(media -> this.updateTrailerMedia(media.completed(encodedPath)));
         }
         return this;
     }

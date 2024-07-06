@@ -3,8 +3,6 @@ package com.fullcycle.admin.catalogo.application.video.retrieve.get;
 import com.fullcycle.admin.catalogo.application.UseCaseTest;
 import com.fullcycle.admin.catalogo.domain.Fixture;
 import com.fullcycle.admin.catalogo.domain.exceptions.NotFoundException;
-import com.fullcycle.admin.catalogo.domain.resource.Resource;
-import com.fullcycle.admin.catalogo.domain.utils.IdUtils;
 import com.fullcycle.admin.catalogo.domain.video.*;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -72,11 +70,11 @@ public class GetVideoByIdUseCastTest extends UseCaseTest {
                 expectedGenres,
                 expectedCastMembers
         )
-                .setVideo(expectedVideo)
-                .setTrailer(expectedTrailer)
-                .setBanner(expectedBanner)
-                .setThumbnail(expectedThumbnail)
-                .setThumbnailHalf(expectedThumbnailHalf);
+                .updateVideoMedia(expectedVideo)
+                .updateTrailerMedia(expectedTrailer)
+                .updateBannerMedia(expectedBanner)
+                .updateThumbnailMedia(expectedThumbnail)
+                .updateThumbnailHalfMedia(expectedThumbnailHalf);
 
         when(this.videoGateway.findById(any()))
                 .thenReturn(Optional.of(Video.with(aVideo)));

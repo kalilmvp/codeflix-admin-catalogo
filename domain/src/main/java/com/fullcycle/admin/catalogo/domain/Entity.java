@@ -1,7 +1,12 @@
 package com.fullcycle.admin.catalogo.domain;
 
+import com.fullcycle.admin.catalogo.domain.events.DomainEvent;
+import com.fullcycle.admin.catalogo.domain.events.DomainEventPublisher;
 import com.fullcycle.admin.catalogo.domain.validation.ValidationHandler;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -11,15 +16,33 @@ import java.util.Objects;
  */
 public abstract class Entity<ID extends Identifier> {
 
-    protected final ID id;
+    private final ID id;
+    private final List<DomainEvent> domainEvents;
 
-    protected Entity(final ID id) {
+    protected Entity(final ID id, List<DomainEvent> domainEvents) {
         Objects.requireNonNull(id, "'id' must not be null");
         this.id = id;
+        this.domainEvents = new ArrayList<>(domainEvents == null ? Collections.emptyList() : domainEvents);
     }
 
     public ID getId() {
         return id;
+    }
+
+    public List<DomainEvent> getDomainEvents() {
+        return Collections.unmodifiableList(this.domainEvents);
+    }
+
+    public void publishDomainEvent(final DomainEventPublisher publisher) {
+        if (publisher == null) return;
+        this.getDomainEvents().forEach(publisher::publishEvent);
+        this.domainEvents.clear();
+    }
+
+    public void registerEvent(final DomainEvent domainEvent) {
+        if (domainEvent != null) {
+            this.domainEvents.add(domainEvent);
+        }
     }
 
     public abstract void validate(ValidationHandler handler);

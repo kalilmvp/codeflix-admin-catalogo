@@ -98,4 +98,8 @@ public class AudioVideoMedia extends ValueObject {
                 encodedPath,
                 MediaStatus.COMPLETED);
     }
+
+    public boolean isPendingEncoded() {
+        return MediaStatus.PENDING.equals(this.status());
+    }
 }

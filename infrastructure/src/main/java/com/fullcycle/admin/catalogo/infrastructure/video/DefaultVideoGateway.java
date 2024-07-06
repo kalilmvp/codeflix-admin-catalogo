@@ -3,6 +3,8 @@ package com.fullcycle.admin.catalogo.infrastructure.video;
 import com.fullcycle.admin.catalogo.domain.Identifier;
 import com.fullcycle.admin.catalogo.domain.pagination.Pagination;
 import com.fullcycle.admin.catalogo.domain.video.*;
+import com.fullcycle.admin.catalogo.infrastructure.configuration.annotations.VideoCreatedQueue;
+import com.fullcycle.admin.catalogo.infrastructure.services.EventService;
 import com.fullcycle.admin.catalogo.infrastructure.video.persistence.VideoJPAEntity;
 import com.fullcycle.admin.catalogo.infrastructure.video.persistence.VideoRepository;
 import org.springframework.data.domain.PageRequest;
@@ -24,9 +26,12 @@ import static com.fullcycle.admin.catalogo.infrastructure.utils.SqlUtils.upper;
  */
 @Component
 public class DefaultVideoGateway implements VideoGateway {
+    private final EventService eventService;
     private final VideoRepository videoRepository;
 
-    public DefaultVideoGateway(VideoRepository videoRepository) {
+    public DefaultVideoGateway(@VideoCreatedQueue final EventService eventService,
+                               final VideoRepository videoRepository) {
+        this.eventService = eventService;
         this.videoRepository = videoRepository;
     }
 
@@ -85,6 +90,8 @@ public class DefaultVideoGateway implements VideoGateway {
     }
 
     private Video save(Video aVideo) {
-        return this.videoRepository.save(VideoJPAEntity.from(aVideo)).toAggregate();
+        final var result = this.videoRepository.save(VideoJPAEntity.from(aVideo)).toAggregate();
+        aVideo.publishDomainEvent(this.eventService::send);
+        return result;
     }
 }

@@ -9,7 +9,7 @@ import java.util.Optional;
  * @email kalilmvp@gmail.com
  */
 public enum Rating {
-    ER("18"),
+    ER("ER"),
     L("L"),
     AGE_10("10"),
     AGE_12("12"),

@@ -14,6 +14,7 @@ import com.fullcycle.admin.catalogo.domain.resource.Resource;
 import com.fullcycle.admin.catalogo.domain.utils.IdUtils;
 import com.fullcycle.admin.catalogo.domain.video.*;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
@@ -132,24 +133,31 @@ public class UpdateVideoUseCaseTest extends UseCaseTest {
 
         verify(this.videoGateway).findById(eq(aVideo.getId()));
 
-        verify(this.videoGateway).update(argThat(actualVideo ->
-                Objects.equals(expectedTitle, actualVideo.getTitle())
-                        && Objects.equals(expectedDescription, actualVideo.getDescription())
-                        && Objects.equals(expectedLaunchYear, actualVideo.getLaunchedAt())
-                        && Objects.equals(expectedRating, actualVideo.getRating())
-                        && Objects.equals(expectedOpened, actualVideo.getOpened())
-                        && Objects.equals(expectedPublished, actualVideo.getPublished())
-                        && Objects.equals(expectedCategories, actualVideo.getCategories())
-                        && Objects.equals(expectedGenres, actualVideo.getGenres())
-                        && Objects.equals(expectedCastMembers, actualVideo.getCastMembers())
-                        && Objects.equals(expectedVideo.name(), actualVideo.getVideo().get().name())
-                        && Objects.equals(expectedBanner.name(), actualVideo.getBanner().get().name())
-                        && Objects.equals(expectedTrailer.name(), actualVideo.getTrailer().get().name())
-                        && Objects.equals(expectedThumbnail.name(), actualVideo.getThumbnail().get().name())
-                        && Objects.equals(expectedThumbnailHalf.name(), actualVideo.getThumbnailHalf().get().name())
-                        && Objects.equals(aVideo.getCreatedAt(), actualVideo.getCreatedAt())
-                        && aVideo.getUpdatedAt().isBefore(actualVideo.getUpdatedAt()))
-        );
+        final var videoCaptor = ArgumentCaptor.forClass(Video.class);
+
+        verify(this.videoGateway, times(1)).update(videoCaptor.capture());
+
+        final var actualVideo = videoCaptor.getValue();
+
+        System.out.println(expectedRating);
+        System.out.println(actualVideo.getRating());
+
+        assertEquals(expectedTitle, actualVideo.getTitle());
+        assertEquals(expectedDescription, actualVideo.getDescription());
+        assertEquals(expectedLaunchYear, actualVideo.getLaunchedAt());
+        assertEquals(expectedRating, actualVideo.getRating());
+        assertEquals(expectedOpened, actualVideo.getOpened());
+        assertEquals(expectedPublished, actualVideo.getPublished());
+        assertEquals(expectedCategories, actualVideo.getCategories());
+        assertEquals(expectedGenres, actualVideo.getGenres());
+        assertEquals(expectedCastMembers, actualVideo.getCastMembers());
+        assertEquals(expectedVideo.name(), actualVideo.getVideo().get().name());
+        assertEquals(expectedBanner.name(), actualVideo.getBanner().get().name());
+        assertEquals(expectedTrailer.name(), actualVideo.getTrailer().get().name());
+        assertEquals(expectedThumbnail.name(), actualVideo.getThumbnail().get().name());
+        assertEquals(expectedThumbnailHalf.name(), actualVideo.getThumbnailHalf().get().name());
+        assertEquals(aVideo.getCreatedAt(), actualVideo.getCreatedAt());
+        assertTrue(aVideo.getUpdatedAt().isBefore(actualVideo.getUpdatedAt()));
     }
 
     @Test
