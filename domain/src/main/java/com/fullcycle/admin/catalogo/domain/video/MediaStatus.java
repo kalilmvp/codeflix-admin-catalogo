@@ -6,5 +6,5 @@ package com.fullcycle.admin.catalogo.domain.video;
  * @email kalilmvp@gmail.com
  */
 public enum MediaStatus {
-    PENDING, PROCESSING, COMPLETED;
+    PENDING, PROCESSING, COMPLETED, ERROR;
 }
