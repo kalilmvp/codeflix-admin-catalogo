@@ -25,7 +25,6 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.Year;
-import java.util.ArrayList;
 import java.util.Set;
 
 import static com.fullcycle.admin.catalogo.domain.video.VideoMediaType.*;
