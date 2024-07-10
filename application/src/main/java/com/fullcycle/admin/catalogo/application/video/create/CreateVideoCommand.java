@@ -26,21 +26,21 @@ public record CreateVideoCommand(String title,
                                  Resource thumbnail,
                                  Resource thumbnailHalf) {
 
-    public static CreateVideoCommand with(String aTitle,
-                                          String aDescription,
-                                          Integer anLaunchedAt,
-                                          Double aDuration,
-                                          Boolean aOpened,
-                                          Boolean aPublished,
-                                          String aRating,
-                                          Set<String> aCategories,
-                                          Set<String> aGenres,
-                                          Set<String> aCastMembers,
-                                          Resource aVideo,
-                                          Resource aTrailer,
-                                          Resource aBanner,
-                                          Resource aThumbnail,
-                                          Resource aThumbnailHalf) {
+    public static CreateVideoCommand with(final String aTitle,
+                                          final String aDescription,
+                                          final Integer anLaunchedAt,
+                                          final Double aDuration,
+                                          final Boolean aOpened,
+                                          final Boolean aPublished,
+                                          final String aRating,
+                                          final Set<String> aCategories,
+                                          final Set<String> aGenres,
+                                          final Set<String> aCastMembers,
+                                          final Resource aVideo,
+                                          final Resource aTrailer,
+                                          final Resource aBanner,
+                                          final Resource aThumbnail,
+                                          final Resource aThumbnailHalf) {
         return new CreateVideoCommand(
                 aTitle,
                 aDescription,
@@ -57,6 +57,34 @@ public record CreateVideoCommand(String title,
                 aTrailer,
                 aThumbnail,
                 aThumbnailHalf);
+    }
+
+    public static CreateVideoCommand with(final String aTitle,
+                                          final String aDescription,
+                                          final Integer anLaunchedAt,
+                                          final Double aDuration,
+                                          final Boolean aOpened,
+                                          final Boolean aPublished,
+                                          final String aRating,
+                                          final Set<String> aCategories,
+                                          final Set<String> aGenres,
+                                          final Set<String> aCastMembers) {
+        return new CreateVideoCommand(
+                aTitle,
+                aDescription,
+                anLaunchedAt,
+                aDuration,
+                aOpened,
+                aPublished,
+                aRating,
+                aCategories,
+                aGenres,
+                aCastMembers,
+                null,
+                null,
+                null,
+                null,
+                null);
     }
 
     public Optional<Resource> getVideo() {
