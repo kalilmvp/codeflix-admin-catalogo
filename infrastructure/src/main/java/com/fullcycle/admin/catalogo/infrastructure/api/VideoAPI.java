@@ -6,6 +6,7 @@ import com.fullcycle.admin.catalogo.infrastructure.genre.models.GenreListRespons
 import com.fullcycle.admin.catalogo.infrastructure.genre.models.GenreResponse;
 import com.fullcycle.admin.catalogo.infrastructure.genre.models.UpdateGenreRequest;
 import com.fullcycle.admin.catalogo.infrastructure.video.models.CreateVideoRequest;
+import com.fullcycle.admin.catalogo.infrastructure.video.models.UpdateVideoRequest;
 import com.fullcycle.admin.catalogo.infrastructure.video.models.VideoResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -68,6 +69,21 @@ public interface VideoAPI {
     })
     ResponseEntity<?> createPartial(@RequestBody CreateVideoRequest payload);
 
+    @PutMapping(
+            value = "{id}",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @Operation(summary = "Update a video by it's identifier")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Updated successfully"),
+            @ApiResponse(responseCode = "404", description = "Video was not found"),
+            @ApiResponse(responseCode = "422", description = "A validation error"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error"),
+    })
+    ResponseEntity<?> updateVideo(@PathVariable(name = "id") String id,
+                                  @RequestBody UpdateVideoRequest payload);
+
     @GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Get a video by ID")
     @ApiResponses(value = {
@@ -76,6 +92,16 @@ public interface VideoAPI {
             @ApiResponse(responseCode = "500", description = "Internal Server Error"),
     })
     VideoResponse getById(@PathVariable(name = "id") String id);
+
+    @DeleteMapping(value = "{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Delete a video by ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Video deleted"),
+            @ApiResponse(responseCode = "404", description = "Video was not found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error"),
+    })
+    void deleteById(@PathVariable(name = "id") String id);
 }
 
 

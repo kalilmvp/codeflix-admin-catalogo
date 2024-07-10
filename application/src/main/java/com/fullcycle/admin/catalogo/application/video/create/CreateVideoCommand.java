@@ -69,7 +69,7 @@ public record CreateVideoCommand(String title,
                                           final Set<String> aCategories,
                                           final Set<String> aGenres,
                                           final Set<String> aCastMembers) {
-        return new CreateVideoCommand(
+        return with(
                 aTitle,
                 aDescription,
                 anLaunchedAt,

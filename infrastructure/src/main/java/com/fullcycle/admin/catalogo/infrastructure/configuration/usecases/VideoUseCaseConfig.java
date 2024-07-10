@@ -12,11 +12,15 @@ import com.fullcycle.admin.catalogo.application.genre.update.DefaultUpdateGenreU
 import com.fullcycle.admin.catalogo.application.genre.update.UpdateGenreUseCase;
 import com.fullcycle.admin.catalogo.application.video.create.CreateVideoUseCase;
 import com.fullcycle.admin.catalogo.application.video.create.DefaultCreateVideoUseCase;
+import com.fullcycle.admin.catalogo.application.video.delete.DefaultDeleteVideoUseCase;
+import com.fullcycle.admin.catalogo.application.video.delete.DeleteVideoUseCase;
 import com.fullcycle.admin.catalogo.application.video.media.update.DefaultUpdateMediaStatusUseCase;
 import com.fullcycle.admin.catalogo.application.video.media.update.UpdateMediaStatusCommand;
 import com.fullcycle.admin.catalogo.application.video.media.update.UpdateMediaStatusUseCase;
 import com.fullcycle.admin.catalogo.application.video.retrieve.get.DefaultGetVideoByIdUseCase;
 import com.fullcycle.admin.catalogo.application.video.retrieve.get.GetVideoByIdUseCase;
+import com.fullcycle.admin.catalogo.application.video.update.DefaultUpdateVideoUseCase;
+import com.fullcycle.admin.catalogo.application.video.update.UpdateVideoUseCase;
 import com.fullcycle.admin.catalogo.domain.castmember.CastMemberGateway;
 import com.fullcycle.admin.catalogo.domain.category.CategoryGateway;
 import com.fullcycle.admin.catalogo.domain.genre.GenreGateway;
@@ -54,10 +58,19 @@ public class VideoUseCaseConfig {
     @Bean
     public CreateVideoUseCase createVideoUseCase() {
         return new DefaultCreateVideoUseCase(this.categoryGateway,
-                                             this.genreGateway,
-                                             this.castMemberGateway,
-                                             this.videoGateway,
-                                             this.mediaResourceGateway);
+                this.genreGateway,
+                this.castMemberGateway,
+                this.videoGateway,
+                this.mediaResourceGateway);
+    }
+
+    @Bean
+    public UpdateVideoUseCase updateVideoUseCase() {
+        return new DefaultUpdateVideoUseCase(this.categoryGateway,
+                this.genreGateway,
+                this.castMemberGateway,
+                this.videoGateway,
+                this.mediaResourceGateway);
     }
 
     @Bean
@@ -68,5 +81,11 @@ public class VideoUseCaseConfig {
     @Bean
     public UpdateMediaStatusUseCase updateMediaStatusUseCase() {
         return new DefaultUpdateMediaStatusUseCase(this.videoGateway);
+    }
+
+    @Bean
+    public DeleteVideoUseCase deleteVideoUseCase() {
+        return new DefaultDeleteVideoUseCase(this.videoGateway,
+                                             this.mediaResourceGateway);
     }
 }

@@ -62,6 +62,36 @@ public record UpdateVideoCommand(String id,
                 aThumbnailHalf);
     }
 
+    public static UpdateVideoCommand with(String anId,
+                                          String aTitle,
+                                          String aDescription,
+                                          Integer anLaunchedAt,
+                                          Double aDuration,
+                                          Boolean aOpened,
+                                          Boolean aPublished,
+                                          String aRating,
+                                          Set<String> aCategories,
+                                          Set<String> aGenres,
+                                          Set<String> aCastMembers) {
+        return with(
+                anId,
+                aTitle,
+                aDescription,
+                anLaunchedAt,
+                aDuration,
+                aOpened,
+                aPublished,
+                aRating,
+                aCategories,
+                aGenres,
+                aCastMembers,
+                null,
+                null,
+                null,
+                null,
+                null);
+    }
+
     public Optional<Resource> getVideo() {
         return Optional.ofNullable(this.video);
     }
