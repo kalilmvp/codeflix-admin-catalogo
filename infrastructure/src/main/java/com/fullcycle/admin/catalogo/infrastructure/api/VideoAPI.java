@@ -129,6 +129,22 @@ public interface VideoAPI {
     })
     ResponseEntity<byte[]> getMediaByType(@PathVariable(name = "id") String id,
                                           @PathVariable(name = "type") String type);
+
+    @PostMapping(
+            value = "{id}/media/{type}",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @Operation(summary = "Upload a video by it's type")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Upload media successfully"),
+            @ApiResponse(responseCode = "422", description = "A validation error"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error"),
+    })
+    ResponseEntity<?> uploadMedia(@PathVariable(name = "id") String id,
+                                  @PathVariable(name = "type") String type,
+                                  @RequestParam(name = "media_file") MultipartFile mediaFile);
+
 }
 
 

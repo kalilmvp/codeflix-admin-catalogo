@@ -8,6 +8,9 @@ import com.fullcycle.admin.catalogo.application.video.delete.DeleteVideoUseCase;
 import com.fullcycle.admin.catalogo.application.video.media.get.GetMediaCommand;
 import com.fullcycle.admin.catalogo.application.video.media.get.GetMediaUseCase;
 import com.fullcycle.admin.catalogo.application.video.media.get.MediaOutput;
+import com.fullcycle.admin.catalogo.application.video.media.upload.UploadMediaCommand;
+import com.fullcycle.admin.catalogo.application.video.media.upload.UploadMediaOutput;
+import com.fullcycle.admin.catalogo.application.video.media.upload.UploadMediaUseCase;
 import com.fullcycle.admin.catalogo.application.video.retrieve.get.GetVideoByIdUseCase;
 import com.fullcycle.admin.catalogo.application.video.retrieve.get.VideoOutput;
 import com.fullcycle.admin.catalogo.application.video.retrieve.list.ListVideosUseCase;
@@ -48,6 +51,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpHeaders.*;
+import static org.springframework.http.MediaType.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -74,6 +78,9 @@ public class VideoAPITest {
 
     @MockBean
     private GetMediaUseCase getMediaUseCase;
+
+    @MockBean
+    private UploadMediaUseCase uploadMediaUseCase;
 
     @Test
     public void givenAValidCommand_whenCallsCreateFull_shouldReturnAnId() throws Exception {
@@ -123,8 +130,8 @@ public class VideoAPITest {
                 .param("cast_members_id", castMemberKalil.getId().getValue()
                         .concat(",")
                         .concat(castMemberWesley.getId().getValue()))
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.MULTIPART_FORM_DATA);
+                .accept(APPLICATION_JSON)
+                .contentType(MULTIPART_FORM_DATA);
 
         this.mockMvc.perform(aRequest)
                 .andExpect(status().isCreated())
@@ -191,8 +198,8 @@ public class VideoAPITest {
 
         // when
         final var aRequest = post("/videos")
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
                 .content(Json.writeValueAsString(aCmd));
 
         this.mockMvc.perform(aRequest)
@@ -271,7 +278,7 @@ public class VideoAPITest {
 
         // when
         final var aRequest = get("/videos/{id}", expectedId)
-                .accept(MediaType.APPLICATION_JSON);
+                .accept(APPLICATION_JSON);
 
         final var response = this.mockMvc.perform(aRequest);
 
@@ -359,8 +366,8 @@ public class VideoAPITest {
 
         // when
         final var aRequest = put("/videos/{id}", expectedId)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
                 .content(Json.writeValueAsString(aCmd));
 
         this.mockMvc.perform(aRequest)
@@ -431,8 +438,8 @@ public class VideoAPITest {
 
         // when
         final var aRequest = put("/videos/{id}", expectedId)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
                 .content(Json.writeValueAsString(aCmd));
 
         final var response = this.mockMvc.perform(aRequest);
@@ -495,7 +502,7 @@ public class VideoAPITest {
                 .queryParam("categories_ids", expectedCategories)
                 .queryParam("genres_ids", expectedGenres)
                 .queryParam("cast_members_ids", expectedCastMembers)
-                .accept(MediaType.APPLICATION_JSON);
+                .accept(APPLICATION_JSON);
 
         final var response = this.mockMvc.perform(aRequest);
 
@@ -547,7 +554,7 @@ public class VideoAPITest {
 
         // when
         final var aRequest = get("/videos/")
-                .accept(MediaType.APPLICATION_JSON);
+                .accept(APPLICATION_JSON);
 
         final var response = this.mockMvc.perform(aRequest);
 
@@ -609,6 +616,64 @@ public class VideoAPITest {
 
         assertEquals(expectedId.getValue(), actualCmd.videoId());
         assertEquals(expectedMedia.name(), actualCmd.mediaType());
+    }
+
+    @Test
+    public void givenAValidVideoIdAndFile_whenCallsUploadMedia_shouldStoreIt() throws Exception {
+        // given
+        final var expectedId = VideoID.unique();
+        final var expectedType = VIDEO;
+        final var expectedResource = Fixture.Videos.resource(expectedType);
+        final var expectedVideo = new MockMultipartFile("media_file", expectedResource.name(), expectedResource.contentType(), expectedResource.content());
+
+        when(this.uploadMediaUseCase.execute(any())).thenReturn(new UploadMediaOutput(expectedId.getValue(), expectedType));
+
+        // when
+        final var aRequest = multipart("/videos/{id}/media/{type}", expectedId.getValue(), expectedType.name())
+                .file(expectedVideo)
+                .accept(APPLICATION_JSON)
+                .contentType(MULTIPART_FORM_DATA);
+
+        final var aResponse = this.mockMvc.perform(aRequest);
+
+        // then
+        aResponse.andExpect(status().isCreated())
+                .andExpect(header().string(LOCATION, "/videos/%s/media/%s".formatted(expectedId.getValue(), expectedType.name())))
+                .andExpect(header().string(CONTENT_TYPE, APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.video_id", equalTo(expectedId.getValue())))
+                .andExpect(jsonPath("$.media_type", equalTo(expectedType.name())));
+
+
+        final var aCmdCaptor = ArgumentCaptor.forClass(UploadMediaCommand.class);
+        verify(this.uploadMediaUseCase).execute(aCmdCaptor.capture());
+
+        final var actualCmd = aCmdCaptor.getValue();
+
+        assertEquals(expectedId.getValue(), actualCmd.videoId());
+        assertEquals(expectedResource.name(), actualCmd.videoResource().resource().name());
+        assertEquals(expectedResource.contentType(), actualCmd.videoResource().resource().contentType());
+        assertEquals(expectedType, actualCmd.videoResource().type());
+    }
+
+    @Test
+    public void givenAnInvalidMediaType_whenCallsUploadMedia_shouldReturnError() throws Exception {
+        // given
+        final var expectedId = VideoID.unique();
+        final var expectedResource = Fixture.Videos.resource(VIDEO);
+        final var expectedVideo = new MockMultipartFile("media_file", expectedResource.name(), expectedResource.contentType(), expectedResource.content());
+
+        // when
+        final var aRequest = multipart("/videos/{id}/media/INVALID", expectedId.getValue())
+                .file(expectedVideo)
+                .accept(APPLICATION_JSON)
+                .contentType(MULTIPART_FORM_DATA);
+
+        final var aResponse = this.mockMvc.perform(aRequest);
+
+        // then
+        aResponse.andExpect(status().isUnprocessableEntity())
+                .andExpect(header().string(CONTENT_TYPE, APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.message", equalTo("Invalid INVALID for VideoMediaType")));
     }
 }
 

@@ -1,5 +1,6 @@
 package com.fullcycle.admin.catalogo.infrastructure.video.presenters;
 
+import com.fullcycle.admin.catalogo.application.video.media.upload.UploadMediaOutput;
 import com.fullcycle.admin.catalogo.application.video.retrieve.get.VideoOutput;
 import com.fullcycle.admin.catalogo.application.video.retrieve.list.VideosListOutput;
 import com.fullcycle.admin.catalogo.application.video.update.UpdateVideoOutput;
@@ -36,7 +37,7 @@ public interface VideoApiPresenter {
                 present(output.thumbnailHalf()));
     }
 
-    static AudioVideoMediaResponse present(AudioVideoMedia media) {
+    static AudioVideoMediaResponse present(final AudioVideoMedia media) {
         if (media == null) return null;
         return new AudioVideoMediaResponse(media.id(),
                 media.checksum(),
@@ -46,7 +47,7 @@ public interface VideoApiPresenter {
                 media.status().name());
     }
 
-    static ImageMediaResponse present(ImageMedia media) {
+    static ImageMediaResponse present(final ImageMedia media) {
         if (media == null) return null;
         return new ImageMediaResponse(media.id(),
                 media.checksum(),
@@ -54,15 +55,22 @@ public interface VideoApiPresenter {
                 media.location());
     }
 
-    static UpdateVideoResponse present(UpdateVideoOutput updateOutput) {
+    static UpdateVideoResponse present(final UpdateVideoOutput updateOutput) {
         return new UpdateVideoResponse(updateOutput.id());
     }
 
-    static VideoListResponse present(VideosListOutput videosListOutput) {
+    static VideoListResponse present(final VideosListOutput videosListOutput) {
         return new VideoListResponse(videosListOutput.id(),
                 videosListOutput.title(),
                 videosListOutput.description(),
                 videosListOutput.createdAt(),
                 videosListOutput.updatedAt());
+    }
+
+    static UploadMediaResponse present(final UploadMediaOutput uploadMediaOutput) {
+        return new UploadMediaResponse(
+                uploadMediaOutput.videoId(),
+                uploadMediaOutput.mediaType()
+        );
     }
 }
