@@ -119,6 +119,16 @@ public interface VideoAPI {
             @ApiResponse(responseCode = "500", description = "Internal Server Error"),
     })
     void deleteById(@PathVariable(name = "id") String id);
+
+    @GetMapping(value = "{id}/media/{type}")
+    @Operation(summary = "Get a video media by it's type")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Media retrieved successfully"),
+            @ApiResponse(responseCode = "404", description = "Media was not found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error"),
+    })
+    ResponseEntity<byte[]> getMediaByType(@PathVariable(name = "id") String id,
+                                          @PathVariable(name = "type") String type);
 }
 
 

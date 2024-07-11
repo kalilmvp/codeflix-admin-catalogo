@@ -3,6 +3,8 @@ package com.fullcycle.admin.catalogo.infrastructure.api.controllers;
 import com.fullcycle.admin.catalogo.application.video.create.CreateVideoCommand;
 import com.fullcycle.admin.catalogo.application.video.create.CreateVideoUseCase;
 import com.fullcycle.admin.catalogo.application.video.delete.DeleteVideoUseCase;
+import com.fullcycle.admin.catalogo.application.video.media.get.GetMediaCommand;
+import com.fullcycle.admin.catalogo.application.video.media.get.GetMediaUseCase;
 import com.fullcycle.admin.catalogo.application.video.retrieve.get.GetVideoByIdUseCase;
 import com.fullcycle.admin.catalogo.application.video.retrieve.list.ListVideosUseCase;
 import com.fullcycle.admin.catalogo.application.video.update.UpdateVideoCommand;
@@ -11,18 +13,16 @@ import com.fullcycle.admin.catalogo.domain.castmember.CastMemberID;
 import com.fullcycle.admin.catalogo.domain.category.CategoryID;
 import com.fullcycle.admin.catalogo.domain.genre.GenreID;
 import com.fullcycle.admin.catalogo.domain.pagination.Pagination;
-import com.fullcycle.admin.catalogo.domain.pagination.SearchQuery;
 import com.fullcycle.admin.catalogo.domain.resource.Resource;
-import com.fullcycle.admin.catalogo.domain.utils.CollectionUtils;
 import com.fullcycle.admin.catalogo.domain.video.VideoSearchQuery;
 import com.fullcycle.admin.catalogo.infrastructure.api.VideoAPI;
-import com.fullcycle.admin.catalogo.infrastructure.presenters.CategoryApiPresenter;
 import com.fullcycle.admin.catalogo.infrastructure.utils.HashingUtils;
 import com.fullcycle.admin.catalogo.infrastructure.video.models.CreateVideoRequest;
 import com.fullcycle.admin.catalogo.infrastructure.video.models.UpdateVideoRequest;
 import com.fullcycle.admin.catalogo.infrastructure.video.models.VideoListResponse;
 import com.fullcycle.admin.catalogo.infrastructure.video.models.VideoResponse;
 import com.fullcycle.admin.catalogo.infrastructure.video.presenters.VideoApiPresenter;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,6 +32,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import static com.fullcycle.admin.catalogo.domain.utils.CollectionUtils.mapTo;
+import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 
 /**
  * @author kalil.peixoto
@@ -46,17 +47,20 @@ public class VideoController implements VideoAPI {
     private final GetVideoByIdUseCase getVideoByIdUseCase;
     private final ListVideosUseCase listVideosUseCase;
     private final DeleteVideoUseCase deleteVideoUseCase;
+    private final GetMediaUseCase getMediaUseCase;
 
     public VideoController(final CreateVideoUseCase createVideoUseCase,
                            final UpdateVideoUseCase updateVideoUseCase,
                            final GetVideoByIdUseCase getVideoByIdUseCase,
                            final ListVideosUseCase listVideosUseCase,
-                           final DeleteVideoUseCase deleteVideoUseCase) {
+                           final DeleteVideoUseCase deleteVideoUseCase,
+                           final GetMediaUseCase getMediaUseCase) {
         this.createVideoUseCase = Objects.requireNonNull(createVideoUseCase);
         this.updateVideoUseCase = Objects.requireNonNull(updateVideoUseCase);
         this.getVideoByIdUseCase = Objects.requireNonNull(getVideoByIdUseCase);
         this.listVideosUseCase = Objects.requireNonNull(listVideosUseCase);
         this.deleteVideoUseCase = Objects.requireNonNull(deleteVideoUseCase);
+        this.getMediaUseCase = Objects.requireNonNull(getMediaUseCase);
     }
 
     @Override
@@ -171,6 +175,17 @@ public class VideoController implements VideoAPI {
     public void deleteById(String anId) {
         this.deleteVideoUseCase.execute(anId);
 
+    }
+
+    @Override
+    public ResponseEntity<byte[]> getMediaByType(String anId, String aType) {
+        final var aMedia = this.getMediaUseCase.execute(GetMediaCommand.with(anId, aType));
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.valueOf(aMedia.contentType()))
+                .contentLength(aMedia.content().length)
+                .header(CONTENT_DISPOSITION, "attachment; filename-%s".formatted(aMedia.name()))
+                .body(aMedia.content());
     }
 
     private Resource resourceOf(MultipartFile aMultiPartFile) {
