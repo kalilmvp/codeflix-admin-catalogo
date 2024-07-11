@@ -1,13 +1,11 @@
 package com.fullcycle.admin.catalogo.infrastructure.video.presenters;
 
 import com.fullcycle.admin.catalogo.application.video.retrieve.get.VideoOutput;
+import com.fullcycle.admin.catalogo.application.video.retrieve.list.VideosListOutput;
 import com.fullcycle.admin.catalogo.application.video.update.UpdateVideoOutput;
 import com.fullcycle.admin.catalogo.domain.video.AudioVideoMedia;
 import com.fullcycle.admin.catalogo.domain.video.ImageMedia;
-import com.fullcycle.admin.catalogo.infrastructure.video.models.AudioVideoMediaResponse;
-import com.fullcycle.admin.catalogo.infrastructure.video.models.ImageMediaResponse;
-import com.fullcycle.admin.catalogo.infrastructure.video.models.UpdateVideoResponse;
-import com.fullcycle.admin.catalogo.infrastructure.video.models.VideoResponse;
+import com.fullcycle.admin.catalogo.infrastructure.video.models.*;
 
 /**
  * @author kalil.peixoto
@@ -58,5 +56,13 @@ public interface VideoApiPresenter {
 
     static UpdateVideoResponse present(UpdateVideoOutput updateOutput) {
         return new UpdateVideoResponse(updateOutput.id());
+    }
+
+    static VideoListResponse present(VideosListOutput videosListOutput) {
+        return new VideoListResponse(videosListOutput.id(),
+                videosListOutput.title(),
+                videosListOutput.description(),
+                videosListOutput.createdAt(),
+                videosListOutput.updatedAt());
     }
 }

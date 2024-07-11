@@ -7,6 +7,7 @@ import com.fullcycle.admin.catalogo.infrastructure.genre.models.GenreResponse;
 import com.fullcycle.admin.catalogo.infrastructure.genre.models.UpdateGenreRequest;
 import com.fullcycle.admin.catalogo.infrastructure.video.models.CreateVideoRequest;
 import com.fullcycle.admin.catalogo.infrastructure.video.models.UpdateVideoRequest;
+import com.fullcycle.admin.catalogo.infrastructure.video.models.VideoListResponse;
 import com.fullcycle.admin.catalogo.infrastructure.video.models.VideoResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -92,6 +93,22 @@ public interface VideoAPI {
             @ApiResponse(responseCode = "500", description = "Internal Server Error"),
     })
     VideoResponse getById(@PathVariable(name = "id") String id);
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "List videos paginated")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Videos retrieved successfully"),
+            @ApiResponse(responseCode = "422", description = "Query param was invalid"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error"),
+    })
+    Pagination<VideoListResponse> list(@RequestParam(name = "search", required = false, defaultValue = "") final String search,
+                                       @RequestParam(name = "page", required = false, defaultValue = "0") final int page,
+                                       @RequestParam(name = "perPage", required = false, defaultValue = "25") final int perPage,
+                                       @RequestParam(name = "sort", required = false, defaultValue = "title") final String sort,
+                                       @RequestParam(name = "dir", required = false, defaultValue = "asc") final String direction,
+                                       @RequestParam(name = "categories_ids", required = false, defaultValue = "") final Set<String> categories,
+                                       @RequestParam(name = "genres_ids", required = false, defaultValue = "") final Set<String> genres,
+                                       @RequestParam(name = "cast_members_ids", required = false, defaultValue = "") final Set<String> castMembers);
 
     @DeleteMapping(value = "{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

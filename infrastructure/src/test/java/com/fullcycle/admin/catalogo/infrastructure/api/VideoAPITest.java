@@ -7,6 +7,8 @@ import com.fullcycle.admin.catalogo.application.video.create.CreateVideoUseCase;
 import com.fullcycle.admin.catalogo.application.video.delete.DeleteVideoUseCase;
 import com.fullcycle.admin.catalogo.application.video.retrieve.get.GetVideoByIdUseCase;
 import com.fullcycle.admin.catalogo.application.video.retrieve.get.VideoOutput;
+import com.fullcycle.admin.catalogo.application.video.retrieve.list.ListVideosUseCase;
+import com.fullcycle.admin.catalogo.application.video.retrieve.list.VideosListOutput;
 import com.fullcycle.admin.catalogo.application.video.update.UpdateVideoCommand;
 import com.fullcycle.admin.catalogo.application.video.update.UpdateVideoOutput;
 import com.fullcycle.admin.catalogo.application.video.update.UpdateVideoUseCase;
@@ -15,10 +17,13 @@ import com.fullcycle.admin.catalogo.domain.castmember.CastMemberID;
 import com.fullcycle.admin.catalogo.domain.category.CategoryID;
 import com.fullcycle.admin.catalogo.domain.exceptions.NotificationException;
 import com.fullcycle.admin.catalogo.domain.genre.GenreID;
+import com.fullcycle.admin.catalogo.domain.pagination.Pagination;
 import com.fullcycle.admin.catalogo.domain.utils.CollectionUtils;
 import com.fullcycle.admin.catalogo.domain.validation.Error;
 import com.fullcycle.admin.catalogo.domain.video.Video;
 import com.fullcycle.admin.catalogo.domain.video.VideoID;
+import com.fullcycle.admin.catalogo.domain.video.VideoPreview;
+import com.fullcycle.admin.catalogo.domain.video.VideoSearchQuery;
 import com.fullcycle.admin.catalogo.infrastructure.api.controllers.VideoController;
 import com.fullcycle.admin.catalogo.infrastructure.configuration.json.Json;
 import com.fullcycle.admin.catalogo.infrastructure.video.models.CreateVideoRequest;
@@ -32,6 +37,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.Year;
+import java.util.List;
 import java.util.Set;
 
 import static com.fullcycle.admin.catalogo.domain.video.VideoMediaType.*;
@@ -57,6 +63,9 @@ public class VideoAPITest {
 
     @MockBean
     private GetVideoByIdUseCase getVideoByIdUseCase;
+
+    @MockBean
+    private ListVideosUseCase listVideosUseCase;
 
     @MockBean
     private DeleteVideoUseCase deleteVideoUseCase;
@@ -450,4 +459,123 @@ public class VideoAPITest {
 
         verify(this.deleteVideoUseCase).execute(any());
     }
+
+    @Test
+    public void givenAValidParams_whenCallListVideos_shouldReturnListPaginated() throws Exception {
+        // given
+        final var aVideo = new VideoPreview(Fixture.video());
+        final var expectedPage = 50;
+        final var expectedPerPage = 50;
+        final var expectedTerms = "algo";
+        final var expectedSort = "title";
+        final var expectedDirection = "asc";
+        final var expectedCategories = "cast1";
+        final var expectedGenres = "gen1";
+        final var expectedCastMembers = "cat1";
+
+        final var expectedItemsCount = 1;
+        final var expectedTotal = 1;
+        final var expectedItems = List.of(VideosListOutput.from(aVideo));
+
+        when(this.listVideosUseCase.execute(any()))
+                .thenReturn(new Pagination<>(expectedPage, expectedPerPage, expectedTotal, expectedItems));
+
+        // when
+        final var aRequest = get("/videos/")
+                .queryParam("page", String.valueOf(expectedPage))
+                .queryParam("perPage", String.valueOf(expectedPerPage))
+                .queryParam("sort", expectedSort)
+                .queryParam("dir", expectedDirection)
+                .queryParam("search", expectedTerms)
+                .queryParam("categories_ids", expectedCategories)
+                .queryParam("genres_ids", expectedGenres)
+                .queryParam("cast_members_ids", expectedCastMembers)
+                .accept(MediaType.APPLICATION_JSON);
+
+        final var response = this.mockMvc.perform(aRequest);
+
+        // then
+        response
+                .andExpect(status().isOk())
+                .andExpect(header().string("Content-Type", MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.current_page", equalTo(expectedPage)))
+                .andExpect(jsonPath("$.per_page", equalTo(expectedPerPage)))
+                .andExpect(jsonPath("$.total", equalTo(expectedTotal)))
+                .andExpect(jsonPath("$.items", hasSize(expectedItemsCount)))
+                .andExpect(jsonPath("$.items[0].id", equalTo(aVideo.id())))
+                .andExpect(jsonPath("$.items[0].title", equalTo(aVideo.title())))
+                .andExpect(jsonPath("$.items[0].description", equalTo(aVideo.description())))
+                .andExpect(jsonPath("$.items[0].created_at", equalTo(aVideo.createdAt().toString())))
+                .andExpect(jsonPath("$.items[0].updated_at", equalTo(aVideo.updatedAt().toString())));
+
+        final var aCmdCaptor = ArgumentCaptor.forClass(VideoSearchQuery.class);
+        verify(this.listVideosUseCase).execute(aCmdCaptor.capture());
+
+        final var actualCmd = aCmdCaptor.getValue();
+
+        assertEquals(expectedPage, actualCmd.page());
+        assertEquals(expectedPerPage, actualCmd.perPage());
+        assertEquals(expectedSort, actualCmd.sort());
+        assertEquals(expectedDirection, actualCmd.direction());
+        assertEquals(expectedTerms, actualCmd.terms());
+        assertEquals(Set.of(CategoryID.from(expectedCategories)), actualCmd.categories());
+        assertEquals(Set.of(GenreID.from(expectedGenres)), actualCmd.genres());
+        assertEquals(Set.of(CastMemberID.from(expectedCastMembers)), actualCmd.castMembers());
+    }
+
+    @Test
+    public void givenEmptyParams_whenCallListVideosWithDefaultValues_shouldReturnListPaginated() throws Exception {
+        // given
+        final var aVideo = new VideoPreview(Fixture.video());
+        final var expectedPage = 0;
+        final var expectedPerPage = 25;
+        final var expectedTerms = "";
+        final var expectedSort = "title";
+        final var expectedDirection = "asc";
+        final var expectedCategories = "";
+        final var expectedGenres = "";
+        final var expectedCastMembers = "";
+
+        final var expectedItemsCount = 1;
+        final var expectedTotal = 1;
+        final var expectedItems = List.of(VideosListOutput.from(aVideo));
+
+        when(this.listVideosUseCase.execute(any()))
+                .thenReturn(new Pagination<>(expectedPage, expectedPerPage, expectedTotal, expectedItems));
+
+        // when
+        final var aRequest = get("/videos/")
+                .accept(MediaType.APPLICATION_JSON);
+
+        final var response = this.mockMvc.perform(aRequest);
+
+        // then
+        response
+                .andExpect(status().isOk())
+                .andExpect(header().string("Content-Type", MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.current_page", equalTo(expectedPage)))
+                .andExpect(jsonPath("$.per_page", equalTo(expectedPerPage)))
+                .andExpect(jsonPath("$.total", equalTo(expectedTotal)))
+                .andExpect(jsonPath("$.items", hasSize(expectedItemsCount)))
+                .andExpect(jsonPath("$.items[0].id", equalTo(aVideo.id())))
+                .andExpect(jsonPath("$.items[0].title", equalTo(aVideo.title())))
+                .andExpect(jsonPath("$.items[0].description", equalTo(aVideo.description())))
+                .andExpect(jsonPath("$.items[0].created_at", equalTo(aVideo.createdAt().toString())))
+                .andExpect(jsonPath("$.items[0].updated_at", equalTo(aVideo.updatedAt().toString())));
+
+        final var aCmdCaptor = ArgumentCaptor.forClass(VideoSearchQuery.class);
+        verify(this.listVideosUseCase).execute(aCmdCaptor.capture());
+
+        final var actualCmd = aCmdCaptor.getValue();
+
+        assertEquals(expectedPage, actualCmd.page());
+        assertEquals(expectedPerPage, actualCmd.perPage());
+        assertEquals(expectedSort, actualCmd.sort());
+        assertEquals(expectedDirection, actualCmd.direction());
+        assertEquals(expectedTerms, actualCmd.terms());
+        assertTrue(actualCmd.categories().isEmpty());
+        assertTrue(actualCmd.genres().isEmpty());
+        assertTrue(actualCmd.castMembers().isEmpty());
+    }
 }
+

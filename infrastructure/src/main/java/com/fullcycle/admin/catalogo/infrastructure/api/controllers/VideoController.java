@@ -4,13 +4,23 @@ import com.fullcycle.admin.catalogo.application.video.create.CreateVideoCommand;
 import com.fullcycle.admin.catalogo.application.video.create.CreateVideoUseCase;
 import com.fullcycle.admin.catalogo.application.video.delete.DeleteVideoUseCase;
 import com.fullcycle.admin.catalogo.application.video.retrieve.get.GetVideoByIdUseCase;
+import com.fullcycle.admin.catalogo.application.video.retrieve.list.ListVideosUseCase;
 import com.fullcycle.admin.catalogo.application.video.update.UpdateVideoCommand;
 import com.fullcycle.admin.catalogo.application.video.update.UpdateVideoUseCase;
+import com.fullcycle.admin.catalogo.domain.castmember.CastMemberID;
+import com.fullcycle.admin.catalogo.domain.category.CategoryID;
+import com.fullcycle.admin.catalogo.domain.genre.GenreID;
+import com.fullcycle.admin.catalogo.domain.pagination.Pagination;
+import com.fullcycle.admin.catalogo.domain.pagination.SearchQuery;
 import com.fullcycle.admin.catalogo.domain.resource.Resource;
+import com.fullcycle.admin.catalogo.domain.utils.CollectionUtils;
+import com.fullcycle.admin.catalogo.domain.video.VideoSearchQuery;
 import com.fullcycle.admin.catalogo.infrastructure.api.VideoAPI;
+import com.fullcycle.admin.catalogo.infrastructure.presenters.CategoryApiPresenter;
 import com.fullcycle.admin.catalogo.infrastructure.utils.HashingUtils;
 import com.fullcycle.admin.catalogo.infrastructure.video.models.CreateVideoRequest;
 import com.fullcycle.admin.catalogo.infrastructure.video.models.UpdateVideoRequest;
+import com.fullcycle.admin.catalogo.infrastructure.video.models.VideoListResponse;
 import com.fullcycle.admin.catalogo.infrastructure.video.models.VideoResponse;
 import com.fullcycle.admin.catalogo.infrastructure.video.presenters.VideoApiPresenter;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +30,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.net.URI;
 import java.util.Objects;
 import java.util.Set;
+
+import static com.fullcycle.admin.catalogo.domain.utils.CollectionUtils.mapTo;
 
 /**
  * @author kalil.peixoto
@@ -32,15 +44,18 @@ public class VideoController implements VideoAPI {
     private final CreateVideoUseCase createVideoUseCase;
     private final UpdateVideoUseCase updateVideoUseCase;
     private final GetVideoByIdUseCase getVideoByIdUseCase;
+    private final ListVideosUseCase listVideosUseCase;
     private final DeleteVideoUseCase deleteVideoUseCase;
 
     public VideoController(final CreateVideoUseCase createVideoUseCase,
                            final UpdateVideoUseCase updateVideoUseCase,
                            final GetVideoByIdUseCase getVideoByIdUseCase,
+                           final ListVideosUseCase listVideosUseCase,
                            final DeleteVideoUseCase deleteVideoUseCase) {
         this.createVideoUseCase = Objects.requireNonNull(createVideoUseCase);
         this.updateVideoUseCase = Objects.requireNonNull(updateVideoUseCase);
         this.getVideoByIdUseCase = Objects.requireNonNull(getVideoByIdUseCase);
+        this.listVideosUseCase = Objects.requireNonNull(listVideosUseCase);
         this.deleteVideoUseCase = Objects.requireNonNull(deleteVideoUseCase);
     }
 
@@ -130,6 +145,26 @@ public class VideoController implements VideoAPI {
     @Override
     public VideoResponse getById(String anId) {
         return VideoApiPresenter.present(this.getVideoByIdUseCase.execute(anId));
+    }
+
+    @Override
+    public Pagination<VideoListResponse> list(final String search,
+                                              final int page,
+                                              final int perPage,
+                                              final String sort,
+                                              final String direction,
+                                              final Set<String> categories,
+                                              final Set<String> genres,
+                                              final Set<String> castMembers) {
+        return this.listVideosUseCase.execute(new VideoSearchQuery(page,
+                        perPage,
+                        search,
+                        sort,
+                        direction,
+                        mapTo(categories, CategoryID::from),
+                        mapTo(genres, GenreID::from),
+                        mapTo(castMembers, CastMemberID::from)))
+                .map(VideoApiPresenter::present);
     }
 
     @Override
