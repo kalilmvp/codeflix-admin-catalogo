@@ -1,0 +1,91 @@
+### Get all videos
+GET http://localhost:8081/api/videos
+
+### Get one
+GET http://localhost:8081/api/videos/94263cb563ff41e9a27477c06ba7a8f7
+
+### Get video and media
+GET http://localhost:8081/api/videos/94263cb563ff41e9a27477c06ba7a8f7/media/VIDEO
+
+### Create one full
+POST http://localhost:8081/api/videos
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="title"
+
+The movie
+--WebAppBoundary
+Content-Disposition: form-data; name="description"
+
+one random movie
+--WebAppBoundary
+Content-Disposition: form-data; name="year_launched"
+
+2023
+--WebAppBoundary
+Content-Disposition: form-data; name="duration"
+
+1
+--WebAppBoundary
+Content-Disposition: form-data; name="rating"
+
+L
+--WebAppBoundary
+Content-Disposition: form-data; name="opened"
+
+1
+--WebAppBoundary
+Content-Disposition: form-data; name="published"
+
+1
+--WebAppBoundary
+Content-Disposition: form-data; name="categories_id"
+
+74e1d98bedc1447994eb7aa37684681f
+--WebAppBoundary
+Content-Disposition: form-data; name="genres_id"
+
+0ac9a8ef68cd4586a8517c60de27ffea
+--WebAppBoundary
+Content-Disposition: form-data; name="cast_members_id"
+
+0225b6a1c3b248f5a24038679df1e2a4
+--WebAppBoundary
+Content-Disposition: form-data; name="video_file"; filename="video1.mp4"
+Content-Type: video.mp4
+
+< /Users/kalilmvp/Desktop/video1.mp4
+--WebAppBoundary
+Content-Disposition: form-data; name="trailer_file"; filename="video1.mp4"
+Content-Type: video/mp4
+
+< /Users/kalilmvp/Desktop/video1.mp4
+--WebAppBoundary
+Content-Disposition: form-data; name="banner_file"; filename="image1.jpg"
+Content-Type: image/jpeg
+
+< /Users/kalilmvp/Desktop/image1.jpg
+--WebAppBoundary
+Content-Disposition: form-data; name="thumb_file"; filename="image1.jpg"
+Content-Type: image/jpeg
+
+< /Users/kalilmvp/Desktop/image1.jpg
+--WebAppBoundary
+Content-Disposition: form-data; name="thumb_half_file"; filename="image1.jpg"
+Content-Type: image/jpeg
+
+< /Users/kalilmvp/Desktop/image1.jpg
+
+### Update a video by it's type
+POST http://localhost:8081/api/videos/94263cb563ff41e9a27477c06ba7a8f7/media/VIDEO
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="video_file"; filename="video1.mp4"
+Content-Type: video.mp4
+
+< /Users/kalilmvp/Desktop/video1.mp4
+
+### Delete a video by it's id
+DELETE http://localhost:8081/api/videos/94263cb563ff41e9a27477c06ba7a8f7
