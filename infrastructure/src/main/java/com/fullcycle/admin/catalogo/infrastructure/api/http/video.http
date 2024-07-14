@@ -5,7 +5,7 @@ GET http://localhost:8081/api/videos
 GET http://localhost:8081/api/videos/94263cb563ff41e9a27477c06ba7a8f7
 
 ### Get video and media
-GET http://localhost:8081/api/videos/94263cb563ff41e9a27477c06ba7a8f7/media/VIDEO
+GET http://localhost:8081/api/videos/01d384e7f2b24e66bc9cfb1122b30d69/media/THUMBNAIL_HALF
 
 ### Create one full
 POST http://localhost:8081/api/videos
@@ -53,7 +53,7 @@ Content-Disposition: form-data; name="cast_members_id"
 0225b6a1c3b248f5a24038679df1e2a4
 --WebAppBoundary
 Content-Disposition: form-data; name="video_file"; filename="video1.mp4"
-Content-Type: video.mp4
+Content-Type: video/mp4
 
 < /Users/kalilmvp/Desktop/video1.mp4
 --WebAppBoundary

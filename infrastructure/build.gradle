@@ -8,7 +8,7 @@ buildscript {
 }
 
 plugins {
-    id 'java'
+    id 'java-conventions'
     id 'application'
     id 'org.springframework.boot' version '2.6.7'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
@@ -16,15 +16,10 @@ plugins {
 }
 
 group 'com.fullcycle.admin.catalogo.infrastructure'
-version '1.0-SNAPSHOT'
 
 bootJar {
     archiveFileName = 'application.jar'
     destinationDirectory.set(file("${rootProject.buildDir}/libs"))
-}
-
-repositories {
-    mavenCentral()
 }
 
 dependencies {
@@ -35,8 +30,6 @@ dependencies {
     implementation("com.google.guava:guava:31.1-jre")
 
     implementation("mysql:mysql-connector-java")
-
-    implementation 'io.vavr:vavr:0.10.4'
 
     implementation('org.springframework.boot:spring-boot-starter-web') {
         exclude module: 'spring-boot-starter-tomcat'
@@ -70,8 +63,4 @@ flyway {
     user = System.getenv('FLYWAY_USER') ?: 'root'
     password = System.getenv('FLYWAY_PASS') ?: '123456'
     cleanDisabled = false
-}
-
-test {
-    useJUnitPlatform()
 }
