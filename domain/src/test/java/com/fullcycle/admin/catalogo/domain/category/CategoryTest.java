@@ -1,5 +1,6 @@
 package com.fullcycle.admin.catalogo.domain.category;
 
+import com.fullcycle.admin.catalogo.domain.UnitTests;
 import com.fullcycle.admin.catalogo.domain.exceptions.DomainException;
 import com.fullcycle.admin.catalogo.domain.validation.handlers.ThrowsValidationHandler;
 import org.junit.jupiter.api.Assertions;
@@ -10,7 +11,7 @@ import org.junit.jupiter.api.Test;
  * @date 2/15/23 14:08
  * @email kalilmvp@gmail.com
  */
-public class CategoryTest {
+public class CategoryTest extends UnitTests {
 
     @Test
     public void givenValidParams_whenCallNewCategory_thenInstantiateCategory() {

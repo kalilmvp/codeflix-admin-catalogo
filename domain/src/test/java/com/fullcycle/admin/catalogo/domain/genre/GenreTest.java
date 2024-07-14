@@ -1,5 +1,6 @@
 package com.fullcycle.admin.catalogo.domain.genre;
 
+import com.fullcycle.admin.catalogo.domain.UnitTests;
 import com.fullcycle.admin.catalogo.domain.category.CategoryID;
 import com.fullcycle.admin.catalogo.domain.exceptions.NotificationException;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @date 11/28/23 12:09
  * @email kalilmvp@gmail.com
  */
-public class GenreTest {
+public class GenreTest extends UnitTests {
 
     @Test
     public void givenValidParams_whenCallNewGenre_thenInstantiateGenre() {

@@ -1,5 +1,6 @@
 package com.fullcycle.admin.catalogo.domain.castmember;
 
+import com.fullcycle.admin.catalogo.domain.UnitTests;
 import com.fullcycle.admin.catalogo.domain.exceptions.NotificationException;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @date 3/25/24 10:09
  * @email kalilmvp@gmail.com
  */
-public class CastMemberTest {
+public class CastMemberTest extends UnitTests {
 
     @Test
     public void givenValidParams_whenCallNewMember_thenInstantiateNewCastMember() {

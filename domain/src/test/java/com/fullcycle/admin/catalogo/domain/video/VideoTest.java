@@ -1,5 +1,6 @@
 package com.fullcycle.admin.catalogo.domain.video;
 
+import com.fullcycle.admin.catalogo.domain.UnitTests;
 import com.fullcycle.admin.catalogo.domain.castmember.CastMemberID;
 import com.fullcycle.admin.catalogo.domain.category.CategoryID;
 import com.fullcycle.admin.catalogo.domain.genre.GenreID;
@@ -17,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @date 4/24/24 21:17
  * @email kalilmvp@gmail.com
  */
-public class VideoTest {
+public class VideoTest extends UnitTests {
 
     @Test
     public void givenValidParams_whenCallsNewVideo_shouldInstantiate() {

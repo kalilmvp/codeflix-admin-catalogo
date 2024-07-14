@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @date 7/5/24 23:14
  * @email kalilmvp@gmail.com
  */
-public class EntityTest {
+public class EntityTest extends UnitTests {
 
     @Test
     public void givenNullAsEvents_whenInstantiate_shouldBeOk() {
