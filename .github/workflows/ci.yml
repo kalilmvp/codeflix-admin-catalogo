@@ -11,6 +11,7 @@ jobs:
   tests:
     name: Tests runner
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     # configure job steps
     steps:

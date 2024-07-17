@@ -69,7 +69,6 @@ public class UpdateCastMemberUseCaseIT {
         assertTrue(aCastMember.getUpdatedAt().isBefore(persistedCastMember.getUpdatedAt()));
 
         verify(this.castMemberGateway).update(any());
-
     }
 
     @Test
