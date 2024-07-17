@@ -1,6 +1,7 @@
 package com.fullcycle.admin.catalogo.domain.category;
 
 import com.fullcycle.admin.catalogo.domain.AggregateRoot;
+import com.fullcycle.admin.catalogo.domain.utils.InstantUtils;
 import com.fullcycle.admin.catalogo.domain.validation.ValidationHandler;
 
 import java.time.Instant;
@@ -39,7 +40,7 @@ public class Category extends AggregateRoot<CategoryID> implements Cloneable {
 
 
     public static Category newCategory(final String name, final String description, final boolean isActive) {
-        final Instant now = Instant.now();
+        final Instant now = InstantUtils.now();
         final var deletedAt = isActive ? null : now;
         return new Category(CategoryID.unique(), name, description, isActive, now, now, deletedAt);
     }
@@ -76,11 +77,11 @@ public class Category extends AggregateRoot<CategoryID> implements Cloneable {
 
     public Category deactivate() {
         if (this.getDeletedAt() == null) {
-            this.deletedAt = Instant.now();
+            this.deletedAt = InstantUtils.now();
         }
 
         this.active = Boolean.FALSE;
-        this.updatedAt = Instant.now();
+        this.updatedAt = InstantUtils.now();
         return this;
     }
 
@@ -88,7 +89,7 @@ public class Category extends AggregateRoot<CategoryID> implements Cloneable {
     public Category activate() {
         this.deletedAt = null;
         this.active = Boolean.TRUE;
-        this.updatedAt = Instant.now();
+        this.updatedAt = InstantUtils.now();
 
         return this;
     }
@@ -103,7 +104,7 @@ public class Category extends AggregateRoot<CategoryID> implements Cloneable {
 
         this.name = aName;
         this.description = aDescription;
-        this.updatedAt = Instant.now();
+        this.updatedAt = InstantUtils.now();
 
         return this;
     }

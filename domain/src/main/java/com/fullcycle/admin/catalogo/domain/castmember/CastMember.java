@@ -2,6 +2,7 @@ package com.fullcycle.admin.catalogo.domain.castmember;
 
 import com.fullcycle.admin.catalogo.domain.AggregateRoot;
 import com.fullcycle.admin.catalogo.domain.exceptions.NotificationException;
+import com.fullcycle.admin.catalogo.domain.utils.InstantUtils;
 import com.fullcycle.admin.catalogo.domain.validation.ValidationHandler;
 import com.fullcycle.admin.catalogo.domain.validation.handlers.Notification;
 
@@ -34,7 +35,7 @@ public class CastMember extends AggregateRoot<CastMemberID> implements Cloneable
     }
 
     public static CastMember newCastMember(final String name, final CastMemberType type) {
-        final Instant now = Instant.now();
+        final Instant now = InstantUtils.now();
         return new CastMember(CastMemberID.unique(), name, type, now, now);
     }
 
@@ -76,7 +77,7 @@ public class CastMember extends AggregateRoot<CastMemberID> implements Cloneable
     public CastMember update(final String aName, final CastMemberType aType) {
         this.name = aName;
         this.type = aType;
-        this.updatedAt = Instant.now();
+        this.updatedAt = InstantUtils.now();
 
         this.selfValidate();
 

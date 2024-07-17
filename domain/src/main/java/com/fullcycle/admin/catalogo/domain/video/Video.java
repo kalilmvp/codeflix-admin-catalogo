@@ -149,7 +149,7 @@ public class Video extends AggregateRoot<VideoID> {
                                  final Set<CategoryID> categories,
                                  final Set<GenreID> genres,
                                  final Set<CastMemberID> castMembers) {
-        final var now = Instant.now();
+        final var now = InstantUtils.now();
         return new Video(VideoID.unique(),
                         aTitle,
                         aDescription,
