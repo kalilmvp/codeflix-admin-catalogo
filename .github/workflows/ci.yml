@@ -25,6 +25,6 @@ jobs:
           distribution: 'adopt'
       # 3 - configure JDK
       - name: Run application tests
-        run: ./gradlew test
+        run: ./gradlew unitTests
 
 
