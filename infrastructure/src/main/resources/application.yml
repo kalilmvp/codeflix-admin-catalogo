@@ -27,7 +27,7 @@ google:
 
 logging:
   level:
-    ROOT: info
+    ROOT: DEBUG
     com.fullcycle.admin.catalogo: DEBUG
 
 
