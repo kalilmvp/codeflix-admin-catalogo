@@ -24,6 +24,8 @@ jacoco {
 
 tasks.named('test') {
     useJUnitPlatform()
+    testLogging.showStandardStreams = true
+    testLogging.exceptionFormat = 'full'
 }
 
 task unitTests(type: Test, group: 'verification') {

@@ -35,7 +35,7 @@ jobs:
           distribution: 'adopt'
       # 3 - configure JDK
       - name: Run application tests
-        run: ./gradlew e2eTests
+        run: ./gradlew e2eTests --stacktrace
   # job to build application
   build:
     name: Build Runner
