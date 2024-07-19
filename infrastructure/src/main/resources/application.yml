@@ -27,8 +27,9 @@ google:
 
 logging:
   level:
-    ROOT: DEBUG
+    ROOT: INFO
     com.fullcycle.admin.catalogo: DEBUG
+    org.testcontainers.containers: DEBUG
 
 
 server:
