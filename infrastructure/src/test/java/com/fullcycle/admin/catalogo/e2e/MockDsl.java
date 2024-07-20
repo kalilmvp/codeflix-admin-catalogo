@@ -32,6 +32,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @email kalilmvp@gmail.com
  */
 public interface MockDsl {
+    String MYSQL_VERSION = "mysql:8.2.0";
+
     MockMvc mock();
 
     /**
