@@ -139,9 +139,6 @@ public class UpdateVideoUseCaseTest extends UseCaseTest {
 
         final var actualVideo = videoCaptor.getValue();
 
-        System.out.println(expectedRating);
-        System.out.println(actualVideo.getRating());
-
         assertEquals(expectedTitle, actualVideo.getTitle());
         assertEquals(expectedDescription, actualVideo.getDescription());
         assertEquals(expectedLaunchYear, actualVideo.getLaunchedAt());
