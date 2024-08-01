@@ -1,5 +1,6 @@
 ### Get all videos
 GET http://localhost:8081/api/videos
+Authorization: Bearer {{access_token}}
 
 ### Get one
 GET http://localhost:8081/api/videos/94263cb563ff41e9a27477c06ba7a8f7

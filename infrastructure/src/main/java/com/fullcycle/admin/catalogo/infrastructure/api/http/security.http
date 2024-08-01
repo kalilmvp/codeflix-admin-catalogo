@@ -1,0 +1,14 @@
+### Send POST request with body as parameters
+POST http://localhost:8443/realms/fc3-codeflix/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type = password &
+client_id = fc3-admin-do-catalogo &
+client_secret = wj29YA5PSfqRwFwS9Lw5J3knyyLEZptN &
+username = ailsa.coto &
+password = 123123aA
+
+> {%
+    client.global.set("access_token", response.body.access_token);
+    client.global.set("refresh_token", response.body.refresh_token);
+%}

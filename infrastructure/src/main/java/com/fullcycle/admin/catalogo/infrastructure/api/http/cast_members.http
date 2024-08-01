@@ -1,5 +1,6 @@
 ### Get all cast members
 GET http://localhost:8081/api/cast_members
+Authorization: Bearer {{access_token}}
 
 ### Get all cast members filtered
 GET http://localhost:8081/api/cast_members?search=sp

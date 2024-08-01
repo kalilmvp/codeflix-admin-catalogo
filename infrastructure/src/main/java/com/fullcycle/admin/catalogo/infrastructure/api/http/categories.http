@@ -1,5 +1,6 @@
 ### Get all categories
 GET http://localhost:8081/api/categories
+Authorization: Bearer {{access_token}}
 
 ### Get unique category
 GET http://localhost:8081/api/categories/ca9ed232-f562-4cdd-821f-a1154bc65cbd
