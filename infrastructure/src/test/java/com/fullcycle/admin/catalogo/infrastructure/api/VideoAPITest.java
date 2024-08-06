@@ -1,5 +1,6 @@
 package com.fullcycle.admin.catalogo.infrastructure.api;
 
+import com.fullcycle.admin.catalogo.ApiTest;
 import com.fullcycle.admin.catalogo.ControllerTest;
 import com.fullcycle.admin.catalogo.application.video.create.CreateVideoCommand;
 import com.fullcycle.admin.catalogo.application.video.create.CreateVideoOutput;
@@ -134,6 +135,7 @@ public class VideoAPITest {
                 .param("cast_members_id", castMemberKalil.getId().getValue()
                         .concat(",")
                         .concat(castMemberWesley.getId().getValue()))
+                .with(ApiTest.VIDEO_JWT)
                 .accept(APPLICATION_JSON)
                 .contentType(MULTIPART_FORM_DATA);
 
@@ -172,7 +174,10 @@ public class VideoAPITest {
         when(this.createVideoUseCase.execute(any())).thenThrow(NotificationException.with(new Error(expectedErrorMessage)));
 
         // when
-        final var aRequest = multipart("/videos").accept(APPLICATION_JSON).contentType(MULTIPART_FORM_DATA);
+        final var aRequest = multipart("/videos")
+                .with(ApiTest.VIDEO_JWT)
+                .accept(APPLICATION_JSON)
+                .contentType(MULTIPART_FORM_DATA);
 
         final var aResponse = this.mockMvc.perform(aRequest);
 
@@ -218,6 +223,7 @@ public class VideoAPITest {
 
         // when
         final var aRequest = post("/videos")
+                .with(ApiTest.VIDEO_JWT)
                 .accept(APPLICATION_JSON)
                 .contentType(APPLICATION_JSON)
                 .content(Json.writeValueAsString(aCmd));
@@ -257,7 +263,9 @@ public class VideoAPITest {
         when(this.createVideoUseCase.execute(any())).thenThrow(NotificationException.with(new Error(expectedErrorMessage)));
 
         // when
-        final var aRequest = post("/videos").accept(APPLICATION_JSON).contentType(APPLICATION_JSON).content("""
+        final var aRequest = post("/videos")
+                .with(ApiTest.VIDEO_JWT)
+                .accept(APPLICATION_JSON).contentType(APPLICATION_JSON).content("""
                   {
                     "title": "anything"
                   } 
@@ -275,7 +283,8 @@ public class VideoAPITest {
         final var expectedErrorMessage = "'title' is required";
 
         // when
-        final var aRequest = post("/videos").accept(APPLICATION_JSON).contentType(APPLICATION_JSON);
+        final var aRequest = post("/videos").accept(APPLICATION_JSON).contentType(APPLICATION_JSON)
+                .with(ApiTest.VIDEO_JWT);
 
         final var aResponse = this.mockMvc.perform(aRequest);
 
@@ -332,6 +341,7 @@ public class VideoAPITest {
 
         // when
         final var aRequest = get("/videos/{id}", expectedId)
+                .with(ApiTest.VIDEO_JWT)
                 .accept(APPLICATION_JSON);
 
         final var response = this.mockMvc.perform(aRequest);
@@ -393,6 +403,7 @@ public class VideoAPITest {
 
         // when
         final var aRequest = get("/videos/{id}", expectedId)
+                .with(ApiTest.VIDEO_JWT)
                 .accept(APPLICATION_JSON);
 
         final var response = this.mockMvc.perform(aRequest);
@@ -442,6 +453,7 @@ public class VideoAPITest {
 
         // when
         final var aRequest = put("/videos/{id}", expectedId)
+                .with(ApiTest.VIDEO_JWT)
                 .accept(APPLICATION_JSON)
                 .contentType(APPLICATION_JSON)
                 .content(Json.writeValueAsString(aCmd));
@@ -514,6 +526,7 @@ public class VideoAPITest {
 
         // when
         final var aRequest = put("/videos/{id}", expectedId)
+                .with(ApiTest.VIDEO_JWT)
                 .accept(APPLICATION_JSON)
                 .contentType(APPLICATION_JSON)
                 .content(Json.writeValueAsString(aCmd));
@@ -538,7 +551,8 @@ public class VideoAPITest {
         doNothing().when(this.deleteVideoUseCase).execute(any());
 
         // when
-        final var aRequest = delete("/videos/".concat(expectedId.getValue()));
+        final var aRequest = delete("/videos/".concat(expectedId.getValue()))
+                .with(ApiTest.VIDEO_JWT);
         final var aResponse = this.mockMvc.perform(aRequest);
 
         // then
@@ -570,6 +584,7 @@ public class VideoAPITest {
 
         // when
         final var aRequest = get("/videos/")
+                .with(ApiTest.VIDEO_JWT)
                 .queryParam("page", String.valueOf(expectedPage))
                 .queryParam("perPage", String.valueOf(expectedPerPage))
                 .queryParam("sort", expectedSort)
@@ -630,6 +645,7 @@ public class VideoAPITest {
 
         // when
         final var aRequest = get("/videos/")
+                .with(ApiTest.VIDEO_JWT)
                 .accept(APPLICATION_JSON);
 
         final var response = this.mockMvc.perform(aRequest);
@@ -675,7 +691,8 @@ public class VideoAPITest {
         when(this.getMediaUseCase.execute(any())).thenReturn(expectedMedia);
 
         // when
-        final var aRequest = get("/videos/{id}/media/{type}", expectedId.getValue(), expectedMedia.name());
+        final var aRequest = get("/videos/{id}/media/{type}", expectedId.getValue(), expectedMedia.name())
+                .with(ApiTest.VIDEO_JWT);
         final var aResponse = this.mockMvc.perform(aRequest);
 
         // then
@@ -707,6 +724,7 @@ public class VideoAPITest {
         // when
         final var aRequest = multipart("/videos/{id}/media/{type}", expectedId.getValue(), expectedType.name())
                 .file(expectedVideo)
+                .with(ApiTest.VIDEO_JWT)
                 .accept(APPLICATION_JSON)
                 .contentType(MULTIPART_FORM_DATA);
 
@@ -741,6 +759,7 @@ public class VideoAPITest {
         // when
         final var aRequest = multipart("/videos/{id}/media/INVALID", expectedId.getValue())
                 .file(expectedVideo)
+                .with(ApiTest.VIDEO_JWT)
                 .accept(APPLICATION_JSON)
                 .contentType(MULTIPART_FORM_DATA);
 

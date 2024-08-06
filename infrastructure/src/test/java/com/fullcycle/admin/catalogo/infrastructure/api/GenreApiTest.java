@@ -7,6 +7,7 @@ import static org.mockito.Mockito.*;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.argThat;
 
+import com.fullcycle.admin.catalogo.ApiTest;
 import com.fullcycle.admin.catalogo.application.genre.retrieve.list.GenreListOutput;
 import com.fullcycle.admin.catalogo.application.genre.retrieve.list.ListGenreUseCase;
 import com.fullcycle.admin.catalogo.application.genre.update.UpdateGenreOutput;
@@ -77,6 +78,7 @@ public class GenreApiTest {
 
         // when
         final var aRequest = post("/genres")
+                .with(ApiTest.GENRES_JWT)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.objectMapper.writeValueAsString(aCommand));
 
@@ -110,6 +112,7 @@ public class GenreApiTest {
 
         // when
         final var aRequest = post("/genres")
+                .with(ApiTest.GENRES_JWT)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.objectMapper.writeValueAsString(aCommand));
 
@@ -146,6 +149,7 @@ public class GenreApiTest {
 
         // when
         final var aRequest = get("/genres/{id}", expectedId)
+                .with(ApiTest.GENRES_JWT)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON);
 
@@ -174,6 +178,7 @@ public class GenreApiTest {
 
         // when
         final var aRequest = get("/genres/{id}", expectedId.getValue())
+                .with(ApiTest.GENRES_JWT)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON);
 
@@ -204,6 +209,7 @@ public class GenreApiTest {
 
         // when
         final var aRequest = put("/genres/{id}", expectedId)
+                .with(ApiTest.GENRES_JWT)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.objectMapper.writeValueAsString(aCommand));
 
@@ -239,6 +245,7 @@ public class GenreApiTest {
 
         // when
         final var aRequest = put("/genres/{id}", expectedId)
+                .with(ApiTest.GENRES_JWT)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.objectMapper.writeValueAsString(aCommand));
 
@@ -265,6 +272,7 @@ public class GenreApiTest {
                 .when(this.deleteGenreUseCase).execute(expectedId);
         // when
         final var aRequest = delete("/genres/{id}", expectedId)
+                .with(ApiTest.GENRES_JWT)
                 .accept(MediaType.APPLICATION_JSON);
         final var result = this.mvc.perform(aRequest);
 
@@ -295,6 +303,7 @@ public class GenreApiTest {
                 .thenReturn(new Pagination<>(expectedPage, expectedPerPage, expectedTotal, expectedItems));
         // when
         final var aRequest = get("/genres")
+                .with(ApiTest.GENRES_JWT)
                 .queryParam("page", String.valueOf(expectedPage))
                 .queryParam("perPage", String.valueOf(expectedPerPage))
                 .queryParam("sort", expectedSort)
