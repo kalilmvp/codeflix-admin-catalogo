@@ -1,5 +1,6 @@
 package com.fullcycle.admin.catalogo.e2e.genre;
 
+import com.fullcycle.admin.catalogo.ApiTest;
 import com.fullcycle.admin.catalogo.E2ETest;
 import com.fullcycle.admin.catalogo.domain.category.CategoryID;
 import com.fullcycle.admin.catalogo.domain.genre.GenreID;
@@ -204,7 +205,8 @@ public class GenreE2ETest implements MockDsl {
         assertTrue(MYSQL_CONTAINER.isRunning());
         assertEquals(0, this.genreRepository.count());
 
-        final var aRequest = get("/genres/123");
+        final var aRequest = get("/genres/123")
+                .with(ApiTest.GENRES_JWT);;
 
         this.mockMvc.perform(aRequest)
                 .andExpect(status().isNotFound())

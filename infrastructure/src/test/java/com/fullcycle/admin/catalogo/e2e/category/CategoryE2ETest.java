@@ -1,5 +1,6 @@
 package com.fullcycle.admin.catalogo.e2e.category;
 
+import com.fullcycle.admin.catalogo.ApiTest;
 import com.fullcycle.admin.catalogo.E2ETest;
 import com.fullcycle.admin.catalogo.e2e.MockDsl;
 import com.fullcycle.admin.catalogo.infrastructure.category.models.UpdateCategoryRequest;
@@ -180,7 +181,8 @@ public class CategoryE2ETest implements MockDsl {
         assertTrue(MYSQL_CONTAINER.isRunning());
         assertEquals(0, this.categoryRepository.count());
 
-        final var aRequest = get("/categories/123");
+        final var aRequest = get("/categories/123")
+                .with(ApiTest.CATEGORIES_JWT);;
 
         this.mockMvc.perform(aRequest)
                 .andExpect(status().isNotFound())
