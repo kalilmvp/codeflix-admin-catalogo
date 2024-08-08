@@ -1,5 +1,5 @@
 ### Get all categories
-GET http://localhost:8081/api/categories
+GET http://localhost:8080/api/categories
 Authorization: Bearer {{access_token}}
 
 ### Get unique category

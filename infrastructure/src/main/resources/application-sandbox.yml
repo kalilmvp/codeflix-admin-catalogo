@@ -17,7 +17,7 @@ mysql:
   url: ${DATABASE_MYSQL_URL:localhost:3306}
 
 server:
-  port: 8081
+  port: 8080
   undertow:
     threads:
       worker: 10

@@ -7,6 +7,8 @@ mkdir -m 777 .docker
 mkdir -m 777 .docker/keycloak
 
 docker-compose -f services/docker-compose.yml up -d
+sleep 10
+docker-compose -f app/docker-compose.yml up -d
 
 echo "Initializing containers...."
 
