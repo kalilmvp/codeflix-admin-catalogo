@@ -3,6 +3,7 @@ package com.fullcycle.admin.catalogo.infrastructure.configuration;
 import com.nimbusds.jose.shaded.json.JSONObject;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,6 +31,7 @@ import java.util.stream.Stream;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
+@Profile({"!development"})
 public class SecurityConfig {
     private static final String CATALOGO_ADMIN = "CATALOGO_ADMIN";
     private static final String CATALOGO_CAST_MEMBERS = "CATALOGO_CAST_MEMBERS";

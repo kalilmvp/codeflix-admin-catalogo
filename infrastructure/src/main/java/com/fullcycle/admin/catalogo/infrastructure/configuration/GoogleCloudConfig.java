@@ -25,7 +25,7 @@ import java.util.Objects;
  * @email kalilmvp@gmail.com
  */
 @Configuration
-@Profile({"development", "production"})
+@Profile({"!development & !test-integration & !test-e2e"})
 public class GoogleCloudConfig {
 
     @Bean

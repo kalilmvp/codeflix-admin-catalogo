@@ -1,26 +1,11 @@
 services:
-  app:
-    container_name: admin_videos_app
-#    build: .
-    image: kalilmvp/codeflix-admin-catalogo:main-4
-    profiles: ["app"]
-    restart: no
-    env_file:
-      - .env.local
-    ports:
-      - "8080:8080"
-    depends_on:
-      - mysql
-      - rabbit
-    networks:
-      - adm_videos_network
-
   mysql:
     container_name: adm_videos_mysql
     image: mysql:latest
     environment:
-      - MYSQL_ROOT_PASSWORD=123456
-      - MYSQL_DATABASE=adm_videos
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: adm_videos
+      MYSQL_ROOT_HOST: '%'
     security_opt:
       - seccomp:unconfined
     ports:
@@ -28,7 +13,7 @@ services:
     volumes:
       - ../.docker/mysql:/var/lib/mysql:rw
     networks:
-      - adm_videos_network
+      - adm_videos_services
 
   rabbit:
     image: rabbitmq:3-management
@@ -41,7 +26,7 @@ services:
       - 15672:15672
       - 5672:5672
     networks:
-      - adm_videos_network
+      - adm_videos_services
 
   keycloak:
     container_name: adm_videos_keycloak
@@ -57,9 +42,10 @@ services:
     volumes:
       - ../.docker/keycloak:/opt/keycloak/data/h2:rw
     networks:
-      - adm_videos_network
+      - adm_videos_services
 #    extra_hosts:
 #      - "keycloak.internal:127.0.0.1"
 
 networks:
-  adm_videos_network:
+  adm_videos_services:
+    external: true
