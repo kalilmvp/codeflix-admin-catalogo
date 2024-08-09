@@ -206,7 +206,7 @@ public class GenreE2ETest implements MockDsl {
         assertEquals(0, this.genreRepository.count());
 
         final var aRequest = get("/genres/123")
-                .with(ApiTest.GENRES_JWT);;
+                .with(ApiTest.ADMIN_JWT);;
 
         this.mockMvc.perform(aRequest)
                 .andExpect(status().isNotFound())

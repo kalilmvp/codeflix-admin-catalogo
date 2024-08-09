@@ -182,7 +182,7 @@ public class CategoryE2ETest implements MockDsl {
         assertEquals(0, this.categoryRepository.count());
 
         final var aRequest = get("/categories/123")
-                .with(ApiTest.CATEGORIES_JWT);;
+                .with(ApiTest.ADMIN_JWT);;
 
         this.mockMvc.perform(aRequest)
                 .andExpect(status().isNotFound())
